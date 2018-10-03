@@ -9,12 +9,15 @@
             document.addEventListener('DOMContentLoaded', () => {
                 var months = ["Jan", "Feb", "Mar"];
                 var current_month = 0;
+                
                 document.getElementById("month").innerHTML = months[current_month];
            
                 
                 document.getElementById("month_button").addEventListener("click", clickEvent => {
                     current_month ++;
                     console.log(current_month)
+                    
+                    document.getElementById("month").innerHTML = months[current_month];
                 });
             });
 
