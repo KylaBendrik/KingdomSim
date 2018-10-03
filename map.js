@@ -6,7 +6,12 @@ const map = [
         { x: 1, y: 0, background: 'grass', foreground: 'nothing'},
         { x: 2, y: 0, background: 'grass', foreground: 'nothing'},
         { x: 3, y: 0, background: 'grass', foreground: 'tree'},
-        { x: 4, y: 0, background: 'grass', foreground: 'nothing'}
+        { x: 4, y: 0, background: 'grass', foreground: 'nothing'},
+        { x: 5, y: 0, background: 'grass', foreground: 'nothing'},
+        { x: 6, y: 0, background: 'grass', foreground: 'nothing'},
+        { x: 7, y: 0, background: 'grass', foreground: 'nothing'},
+        { x: 8, y: 0, background: 'grass', foreground: 'nothing'},
+        { x: 9, y: 0, background: 'grass', foreground: 'nothing'},
     ],
     [
         { x: 0, y: 1, background: 'grass', foreground: 'tree'},
