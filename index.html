@@ -5,6 +5,10 @@
         <title>Hello World!</title>
 
         <script src="map.js"></script>
+        <script>
+            var month = 1;
+            document.getElementById("month").innerHTML = month;
+        </script>
 
         <style>
             html, body {
@@ -40,7 +44,8 @@
     </head>
     <body>
         <canvas id="map"></canvas>
-        <div id="menu">Nov 304 BC<br>
+        <div id="menu">
+            <span id="month"></span> 304 BC<br>
             <button type="button">Next Month</button><br>
             <button type="button">Peeps</button><br>
         </div>

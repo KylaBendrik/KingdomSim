@@ -1,5 +1,7 @@
 const loadTextures = require('./textures');
 
+
+
 const map = [
     [
         { x: 0, y: 0, background: 'grass', foreground: 'nothing'},
