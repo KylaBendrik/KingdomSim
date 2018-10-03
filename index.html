@@ -11,7 +11,7 @@
                 var current_month = 0;
                 var year = 1;
                 
-                document.getElementById("date").innerHTML = (months[current_month] + " " + year + "AD");
+                document.getElementById("date").innerHTML = (months[current_month] + ", Year " + year);
            
                 
                 document.getElementById("month_button").addEventListener("click", clickEvent => {
@@ -24,7 +24,7 @@
                     
                     console.log(current_month)
                     
-                    document.getElementById("date").innerHTML = (months[current_month] + " " + year + "AD");
+                    document.getElementById("date").innerHTML = (months[current_month] + ", Year " + year);
                     if (current_month == 3){
                         document.getElementById("alert").innerHTML = "It's April! Make sure you seed your fields this month.";
                     } else {
@@ -64,23 +64,70 @@
                 width: 150px;
                 height: 95%;
 
-                background-color: lightgray;
+                background-color: rgb(209, 209, 209);
                 border-radius: 5px;
 
-                font-size: 20pt;
+                font-size: 14pt;
             }
             #alert {
                 font-size: 14pt;
                 color: darkred;
             }
+            #date {
+                font-size: 22pt;
+            }
+            .menubtn {
+                background-color: rgb(190, 190, 190);
+                color: black;
+                padding: 16px;
+                font-size: 14px;
+                border: none;
+            }
+            .dropbtn {
+                background-color: rgb(190, 190, 190);
+                color: black;
+                padding: 16px;
+                font-size: 14px;
+                border: none;
+            }
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f1f1f1;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+            .dropdown-content a:hover {background-color: #ddd;}
+            .dropdown:hover .dropdown-content {display: block;}
+            .dropdown:hover .dropbtn {background-color: rgb(160, 160, 160)}
+            .menubtn:hover .menubtn {background-color: rgb(160, 160, 160)}
         </style>
     </head>
     <body>
         <canvas id="map"></canvas>
         <div id="menu">
             <span id="date"></span><br>
-            <button id="month_button" type="button">Next Month</button><br>
-            <button type="button">Peeps</button><br>
+            <button class="menubtn" id="month_button" type="button">Next Month</button><br>
+
+            <div class="dropdown">
+                <button class="dropbtn">Build</button>
+                <div class="dropdown-content">
+                  <a href="#">House</a>
+                  <a href="#">Farmland</a>
+                </div>
+            </div>
+
             <div id="alert"></div>
         </div>
     </body>
