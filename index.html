@@ -25,6 +25,15 @@
                     console.log(current_month)
                     
                     document.getElementById("date").innerHTML = (months[current_month] + " " + year + "AD");
+                    if (current_month == 3){
+                        document.getElementById("alert").innerHTML = "It's April! Make sure you seed your fields this month.";
+                    } else {
+                        if (current_month == 9){
+                            document.getElementById("alert").innerHTML = "It's October! Make sure you harvest your fields this month.";
+                        } else {
+                            document.getElementById("alert").innerHTML = "";
+                        }
+                    }
                 });
             });
 
@@ -60,6 +69,10 @@
 
                 font-size: 20pt;
             }
+            #alert {
+                font-size: 14pt;
+                color: darkred;
+            }
         </style>
     </head>
     <body>
@@ -68,6 +81,7 @@
             <span id="date"></span><br>
             <button id="month_button" type="button">Next Month</button><br>
             <button type="button">Peeps</button><br>
+            <div id="alert"></div>
         </div>
     </body>
 </html>
