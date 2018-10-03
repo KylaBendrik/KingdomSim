@@ -10,10 +10,17 @@
                 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                 var current_month = 0;
                 var year = 1;
+                var mouse = {
+                    x: undefined,
+                    y: undefined
+                }
+                var gridClick = {   
+                    x: undefined,
+                    y: undefined
+                }
                 
                 document.getElementById("date").innerHTML = (months[current_month] + ", Year " + year);
-           
-                
+
                 document.getElementById("month_button").addEventListener("click", clickEvent => {
                     current_month ++;
 
@@ -21,8 +28,6 @@
                         current_month = 0;
                         year ++;
                     }
-                    
-                    console.log(current_month)
                     
                     document.getElementById("date").innerHTML = (months[current_month] + ", Year " + year);
                     if (current_month == 3){
@@ -35,6 +40,15 @@
                         }
                     }
                 });
+
+                //clicking - yes, there is probably a better spot for this
+                window.addEventListener('mousedown', function(event) {
+                    mouse.x = event.clientX - 175;
+                    mouse.y = event.clientY;
+                    gridClick.x = Math.floor(mouse.x / 64)
+                    gridClick.y = Math.floor(mouse.y / 64)
+                    console.log(mouse.x + ", " + mouse.y + "; " + gridClick.x + ", " + gridClick.y);
+                })
             });
 
         </script>
@@ -79,15 +93,17 @@
             .menubtn {
                 background-color: rgb(190, 190, 190);
                 color: black;
+                width: 140px;
                 padding: 16px;
-                font-size: 14px;
+                font-size: 16px;
                 border: none;
             }
             .dropbtn {
                 background-color: rgb(190, 190, 190);
-                color: black;
+                color: black; 
+                width: 140px;
                 padding: 16px;
-                font-size: 14px;
+                font-size: 16px;
                 border: none;
             }
             .dropdown {
@@ -129,6 +145,7 @@
             </div>
 
             <div id="alert"></div>
+            <div id="window"></div>
         </div>
     </body>
 </html>

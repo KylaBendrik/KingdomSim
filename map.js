@@ -4,6 +4,7 @@ const loadTextures = require('./textures');
 
 const map = []
 
+//making the map randomly
 for (var y = 0; y < 8; y++){
     var newLine = [];
 
@@ -27,9 +28,11 @@ for (var y = 0; y < 8; y++){
     map.push(newLine);
 }
 
+//adding default houses
+map[3][2].foreground = 'house1';
 map[3][3].foreground = 'house1';
-map[3][4].foreground = 'house1';
 
+//applying textures to the above array
 const MapView = {
     draw(context, textures) {
         for (const row of map) {
