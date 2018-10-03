@@ -7,17 +7,24 @@
         <script src="map.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                var months = ["Jan", "Feb", "Mar"];
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                 var current_month = 0;
+                var year = 1;
                 
-                document.getElementById("month").innerHTML = months[current_month];
+                document.getElementById("date").innerHTML = (months[current_month] + " " + year + "AD");
            
                 
                 document.getElementById("month_button").addEventListener("click", clickEvent => {
                     current_month ++;
+
+                    if (current_month == 12){
+                        current_month = 0;
+                        year ++;
+                    }
+                    
                     console.log(current_month)
                     
-                    document.getElementById("month").innerHTML = months[current_month];
+                    document.getElementById("date").innerHTML = (months[current_month] + " " + year + "AD");
                 });
             });
 
@@ -58,7 +65,7 @@
     <body>
         <canvas id="map"></canvas>
         <div id="menu">
-            <span id="month"></span> 304 BC<br>
+            <span id="date"></span><br>
             <button id="month_button" type="button">Next Month</button><br>
             <button type="button">Peeps</button><br>
         </div>
