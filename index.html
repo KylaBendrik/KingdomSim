@@ -13,11 +13,12 @@
                 var mouse = {
                     x: undefined,
                     y: undefined
-                }
+                };
                 var gridClick = {   
-                    x: undefined,
-                    y: undefined
-                }
+                    x: -1,
+                    y: -1
+                };
+                var buildChoice = undefined;
                 
                 document.getElementById("date").innerHTML = (months[current_month] + ", Year " + year);
 
@@ -48,7 +49,20 @@
                     gridClick.x = Math.floor(mouse.x / 64)
                     gridClick.y = Math.floor(mouse.y / 64)
                     console.log(mouse.x + ", " + mouse.y + "; " + gridClick.x + ", " + gridClick.y);
+
+                    if (gridClick.x > 0) {
+                        if (buildChoice == 'house1'){
+                            console.log("trying to build house on grid" + gridClick.x + ", " + gridClick.y)
+                        }
+                        if (buildChoice == 'farmland'){
+                            console.log("trying to build farmland on grid" + gridClick.x + ", " + gridClick.y)
+                        }
+                    }
                 })
+
+                
+            
+                
             });
 
         </script>
@@ -139,10 +153,21 @@
             <div class="dropdown">
                 <button class="dropbtn">Build</button>
                 <div class="dropdown-content">
-                  <a href="#">House</a>
-                  <a href="#">Farmland</a>
+                  <a href="#" onclick="buildChoiceHouse1()">House</a>
+                  <a href="#" onclick="buildChoiceFarmland()">Farmland</a>
                 </div>
             </div>
+
+            <script>
+                function buildChoiceHouse1() {
+                    console.log("clicked 'house'");
+                    buildChoice = 'house1';
+                }
+                function buildChoiceFarmland() {
+                    console.log("clicked 'farmland'");
+                    buildChoice = 'farmland';
+                }
+            </script>
 
             <div id="alert"></div>
             <div id="window"></div>
