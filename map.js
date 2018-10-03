@@ -2,68 +2,22 @@ const loadTextures = require('./textures');
 
 
 
-const map = [
-    [
-        { x: 0, y: 0, background: 'grass', foreground: 'nothing'},
-        { x: 1, y: 0, background: 'grass', foreground: 'nothing'},
-        { x: 2, y: 0, background: 'grass', foreground: 'nothing'},
-        { x: 3, y: 0, background: 'grass', foreground: 'tree'},
-        { x: 4, y: 0, background: 'grass', foreground: 'nothing'},
-        { x: 5, y: 0, background: 'grass', foreground: 'nothing'},
-        { x: 6, y: 0, background: 'grass', foreground: 'nothing'},
-        { x: 7, y: 0, background: 'grass', foreground: 'tree'},
-        { x: 8, y: 0, background: 'grass', foreground: 'nothing'},
-        { x: 9, y: 0, background: 'grass', foreground: 'nothing'},
-    ],
-    [
-        { x: 0, y: 1, background: 'grass', foreground: 'nothing'},
-        { x: 1, y: 1, background: 'grass', foreground: 'tree'},
-        { x: 2, y: 1, background: 'grass', foreground: 'nothing'},
-        { x: 3, y: 1, background: 'grass', foreground: 'nothing'},
-        { x: 4, y: 1, background: 'grass', foreground: 'nothing'},
-        { x: 5, y: 1, background: 'grass', foreground: 'nothing'},
-        { x: 6, y: 1, background: 'grass', foreground: 'tree'},
-        { x: 7, y: 1, background: 'grass', foreground: 'nothing'},
-        { x: 8, y: 1, background: 'grass', foreground: 'tree'},
-        { x: 9, y: 1, background: 'grass', foreground: 'nothing'},
-    ],
-    [
-        { x: 0, y: 2, background: 'grass', foreground: 'nothing'},
-        { x: 1, y: 2, background: 'grass', foreground: 'nothing'},
-        { x: 2, y: 2, background: 'grass', foreground: 'nothing'},
-        { x: 3, y: 2, background: 'grass', foreground: 'nothing'},
-        { x: 4, y: 2, background: 'grass', foreground: 'house1'},
-        { x: 5, y: 2, background: 'grass', foreground: 'farmland'},
-        { x: 6, y: 2, background: 'grass', foreground: 'nothing'},
-        { x: 7, y: 2, background: 'grass', foreground: 'nothing'},
-        { x: 8, y: 2, background: 'grass', foreground: 'nothing'},
-        { x: 9, y: 2, background: 'grass', foreground: 'nothing'},
-    ],
-    [
-        { x: 0, y: 3, background: 'grass', foreground: 'nothing'},
-        { x: 1, y: 3, background: 'grass', foreground: 'nothing'},
-        { x: 2, y: 3, background: 'grass', foreground: 'tree'},
-        { x: 3, y: 3, background: 'grass', foreground: 'nothing'},
-        { x: 4, y: 3, background: 'grass', foreground: 'nothing'},
-        { x: 5, y: 3, background: 'grass', foreground: 'tree'},
-        { x: 6, y: 3, background: 'grass', foreground: 'tree'},
-        { x: 7, y: 3, background: 'grass', foreground: 'tree'},
-        { x: 8, y: 3, background: 'grass', foreground: 'nothing'},
-        { x: 9, y: 3, background: 'grass', foreground: 'nothing'},
-    ],
-    [
-        { x: 0, y: 4, background: 'grass', foreground: 'tree'},
-        { x: 1, y: 4, background: 'grass', foreground: 'tree'},
-        { x: 2, y: 4, background: 'grass', foreground: 'nothing'},
-        { x: 3, y: 4, background: 'grass', foreground: 'tree'},
-        { x: 4, y: 4, background: 'grass', foreground: 'nothing'},
-        { x: 5, y: 4, background: 'grass', foreground: 'nothing'},
-        { x: 6, y: 4, background: 'grass', foreground: 'nothing'},
-        { x: 7, y: 4, background: 'grass', foreground: 'tree'},
-        { x: 8, y: 4, background: 'grass', foreground: 'tree'},
-        { x: 9, y: 4, background: 'grass', foreground: 'nothing'},
-    ]
-]
+const map = []
+
+for (var y = 0; y < 8; y++){
+    var newLine = [];
+
+    for (var x = 0; x < 9; x++){
+        ifTree = Math.floor(Math.random() * 4)
+        if (ifTree < 3){
+            newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree'})
+        } else {
+            newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing'})
+        }
+    };
+    
+    map.push(newLine);
+}
 
 const MapView = {
     draw(context, textures) {
