@@ -6,8 +6,18 @@
 
         <script src="map.js"></script>
         <script>
-            var month = 1;
-            document.getElementById("month").innerHTML = month;
+            document.addEventListener('DOMContentLoaded', () => {
+                var months = ["Jan", "Feb", "Mar"];
+                var current_month = 0;
+                document.getElementById("month").innerHTML = months[current_month];
+           
+                
+                document.getElementById("month_button").addEventListener("click", clickEvent => {
+                    current_month ++;
+                    console.log(current_month)
+                });
+            });
+
         </script>
 
         <style>
@@ -46,7 +56,7 @@
         <canvas id="map"></canvas>
         <div id="menu">
             <span id="month"></span> 304 BC<br>
-            <button type="button">Next Month</button><br>
+            <button id="month_button" type="button">Next Month</button><br>
             <button type="button">Peeps</button><br>
         </div>
     </body>
