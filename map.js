@@ -34,15 +34,21 @@ for (var y = 0; y < NUM_ROWS; y++){
 
 //adding default houses
 const MapUtil = {
-    addHouse1(x, y) {
+    addHouse1_complete(x, y) {
         map[x][y].foreground = 'house1';
+        map[x][y+1].foreground= 'nothing';
+        map[x+1][y].foreground= 'nothing';
+        map[x+1][y+1].foreground= 'nothing';
+    },
+    addHouse1(x, y) {
+        map[x][y].foreground = 'house1_con';
         map[x][y+1].foreground= 'nothing';
         map[x+1][y].foreground= 'nothing';
         map[x+1][y+1].foreground= 'nothing';
     }
 }
 
-MapUtil.addHouse1(3,3);
+MapUtil.addHouse1_complete(3,3);
 MapUtil.addHouse1(3,6);
 
 //applying textures to the above array
