@@ -62,8 +62,8 @@ const MapView = {
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('map');
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
     const context = canvas.getContext('2d');
 
     loadTextures

@@ -53,9 +53,11 @@
                     if (gridClick.x > -1) {
                         if (buildChoice == 'house1'){
                             console.log("trying to build house on grid" + gridClick.x + ", " + gridClick.y)
+                            console.log(map[gridClick.y][gridClick.x].foreground)
                         }
                         if (buildChoice == 'farmland'){
-                            console.log("trying to build farmland on grid" + gridClick.x + ", " + gridClick.y)
+                            console.log("trying to build farmland on grid" + gridClick.x + ", " + gridClick.y)                            
+                            console.log(map[gridClick.y][gridClick.x].foreground)
                         }
                     }
                 });
@@ -85,11 +87,15 @@
             body {
                 display: grid;
                 grid-template-areas: "menu viewport";
-                grid-template-columns: 150 px 1fr;
+                grid-template-rows: 1fr;
+                grid-template-columns: calc(150px + 0.8em) 1fr;
             }
 
             #map {
                 grid-area: viewport;
+
+                width: 100%;
+                height: 100%;
             }
             #menu {
                 grid-area: menu;
