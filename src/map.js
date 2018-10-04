@@ -40,12 +40,16 @@ const MapUtil = {
         map[row][col+1].foreground= 'structure';
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
+        
+        State.houses.push({pointsLeft: 0})
     },
     addHouse1(row, col) {
         map[row][col].foreground = 'house1_con';
         map[row][col+1].foreground= 'structure';
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
+
+        State.houses.push({pointsLeft: 20})
     }
 }
 
@@ -55,9 +59,10 @@ MapUtil.addHouse1_complete(3,6);
 //applying textures to the above array
 const MapView = {
     init(canvas){
-        window.addEventListener('resize', () => MapView.resize(canvas));
+        window.addEventListener('resize', () => MapView.render(canvas));
         canvas.addEventListener('click', click => MapView.handleClick(click, canvas));
-        MapView.resize(canvas);
+        canvas.addEventListener('mousemove', move => MapView.handleMove(move, canvas));
+        MapView.render(canvas);
     },
 
     handleClick({layerX, layerY}, canvas){
@@ -68,12 +73,39 @@ const MapView = {
 
         if (State.buildingChoice === 'house1') {
             MapUtil.addHouse1(row, col);
-            MapView.resize(canvas);
+            MapView.render(canvas);
+            State.buildingChoice = undefined;
         }
         if (State.buildingChoice === 'farmland') {
-            MapUtil.addHouse1(row, col);
-            MapView.resize(canvas);
+            MapUtil.addFarmland(row, col);
+            MapView.render(canvas);
+            State.buildingChoice = undefined;
         }
+    },
+
+    handleMove({layerX, layerY}, canvas){
+        const row = Math.floor(layerY / 32);   
+        const col = Math.floor(layerX / 32);
+
+        MapView
+            .render(canvas)
+            .then(textures => {
+                const context = canvas.getContext('2d');
+
+                if (map[row][col].foreground === 'house1') {
+                    context.clearRect(col*32, row *32, 64, 64);
+                    context.drawImage(textures.grass, col * 32, row * 32);
+                    context.drawImage(textures.house1_open, col * 32, row * 32);
+                }
+                if (map[row][col].foreground === 'house1_con') {
+                    context.fillStyle = 'rgb(200, 200, 200)'
+                    context.fillRect(col * 32 + 64, row * 32 + 5, 32, 32)
+                    context.fillStyle = 'rgb(10, 10, 10)'
+                    context.fillText('20/20', col * 32 + 64, row * 32 + 16)
+                }
+                context.strokeRect(col * 32, row *32, 32, 32);
+            })
+
     },
 
     draw(context, textures) {
@@ -92,16 +124,16 @@ const MapView = {
             }
         }
         
-        
+    return textures;
     },
 
-    resize(canvas) {    
+    render(canvas) {    
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
         const context = canvas.getContext('2d');
 
-        loadTextures
+        return loadTextures
             .then(textures => MapView.draw(context, textures));
     }
 };

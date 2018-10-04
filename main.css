@@ -9,8 +9,9 @@ html, body {
 
 body {
     display: grid;
-    grid-template-areas: "menu viewport";
-    grid-template-rows: 1fr;
+    grid-template-areas: "menu viewport"
+                        "menu peeps";
+    grid-template-rows: 1fr 150px;
     grid-template-columns: calc(150px + 0.8em) 1fr;
 }
 
@@ -35,6 +36,9 @@ body {
 }
 #date {
     font-size: 22pt;
+}
+#peeps {
+    grid-area:peeps;
 }
 .menubtn {
     background-color: rgb(190, 190, 190);
