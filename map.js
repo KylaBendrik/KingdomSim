@@ -33,8 +33,17 @@ for (var y = 0; y < NUM_ROWS; y++){
 }
 
 //adding default houses
-map[3][2].foreground = 'house1';
-map[3][4].foreground = 'house1';
+const MapUtil = {
+    addHouse1(x, y) {
+        map[x][y].foreground = 'house1';
+        map[x][y+1].foreground= 'nothing';
+        map[x+1][y].foreground= 'nothing';
+        map[x+1][y+1].foreground= 'nothing';
+    }
+}
+
+MapUtil.addHouse1(3,3);
+MapUtil.addHouse1(3,6);
 
 //applying textures to the above array
 const MapView = {
