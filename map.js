@@ -1,14 +1,18 @@
 const loadTextures = require('./textures');
 
-
+const range = function range(n) {
+    return [...Array(n).keys()];
+}
 
 const map = []
+const NUM_ROWS = 14;
+const NUM_COLS = 20;
 
 //making the map randomly
-for (var y = 0; y < 8; y++){
+for (var y = 0; y < NUM_ROWS; y++){
     var newLine = [];
 
-    for (var x = 0; x < 9; x++){
+    for (var x = 0; x < NUM_COLS; x++){
         ifTree = Math.floor(Math.random() * 4)
         if (ifTree == 0){
             newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1'})
@@ -30,32 +34,26 @@ for (var y = 0; y < 8; y++){
 
 //adding default houses
 map[3][2].foreground = 'house1';
-map[3][3].foreground = 'house1';
+map[3][4].foreground = 'house1';
 
 //applying textures to the above array
 const MapView = {
     draw(context, textures) {
-        for (const row of map) {
-            for (const tile of row) {      
-                context.drawImage(textures.grass, tile.x * 64, tile.y * 64)
+        for (const row of range(Math.floor(NUM_ROWS / 2))) {
+            for (const col of range(Math.floor(NUM_COLS / 2))){
+                context.drawImage(textures.grass, col * 64, row * 64)
+            }
+        }
 
-                if (tile.foreground === 'tree1'){
-                    context.drawImage(textures.tree1, tile.x * 64, tile.y * 64)
-                }
-                if (tile.foreground === 'tree2'){
-                    context.drawImage(textures.tree2, tile.x * 64, tile.y * 64)
-                }
-                if (tile.foreground === 'tree3'){
-                    context.drawImage(textures.tree3, tile.x * 64, tile.y * 64)
-                }
-                if (tile.foreground === 'house1'){
-                    context.drawImage(textures.house1, tile.x * 64, tile.y * 64)
-                }
-                if (tile.foreground === 'farmland'){
-                    context.drawImage(textures.farmland, tile.x * 64, tile.y * 64)
+        for (const row of map) {
+            for (const tile of row) {
+                if (tile.foreground !== 'nothing'){                    
+                    context.drawImage(textures[tile.foreground], tile.x * 32, tile.y * 32)
                 }
             }
         }
+        
+        
     },
 
     resize(canvas) {    

@@ -105,7 +105,6 @@
                 border: solid darkgray 2px;
 
                 background-color: rgb(209, 209, 209);
-                border-radius: 5px;
 
             }
             #alert {
@@ -155,7 +154,22 @@
             .menubtn:hover {
                 background-color: rgb(160, 160, 160);
                 cursor: pointer;
-                }
+            }
+            .menubtn:focus:not(:hover) {
+                background-color: rgb(200, 200, 200);
+            }
+            .menubtn:focus {
+                outline: none;
+                box-shadow: -2px 0 2px black;
+            }
+
+            .dropbtn:focus:not(:hover){
+                background-color: rgb(200, 200, 200);
+            }
+            .dropbtn:focus{    
+                outline: none;
+                box-shadow: -2px 0 2px black;
+            }
         </style>
     </head>
     <body>
