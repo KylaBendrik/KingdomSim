@@ -81,7 +81,8 @@
                 height: 100%;
                 padding: 0;
                 margin: 0;
-                font-size: 0;                
+                
+                font-size: 14pt;         
             }
 
             body {
@@ -106,7 +107,6 @@
                 background-color: rgb(209, 209, 209);
                 border-radius: 5px;
 
-                font-size: 14pt;
             }
             #alert {
                 font-size: 14pt;
@@ -152,14 +152,18 @@
             .dropdown-content a:hover {background-color: #ddd;}
             .dropdown:hover .dropdown-content {display: block;}
             .dropdown:hover .dropbtn {background-color: rgb(160, 160, 160)}
-            .menubtn:hover .menubtn {background-color: rgb(160, 160, 160)}
+            .menubtn:hover {
+                background-color: rgb(160, 160, 160);
+                cursor: pointer;
+                }
         </style>
     </head>
     <body>
         <canvas id="map"></canvas>
         <div id="menu">
             <span id="date"></span><br>
-            <button class="menubtn" id="month_button" type="button">Next Month</button><br>
+            <button class="menubtn" id="month_button">Next Month</button><br>
+            <button class="menubtn" id="peeps">Peeps</button><br>
 
             <div class="dropdown">
                 <button class="dropbtn">Build</button>
