@@ -56,17 +56,24 @@ const MapView = {
                 }
             }
         }
+    },
+
+    resize(canvas) {    
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        const context = canvas.getContext('2d');
+
+        loadTextures
+            .then(textures => MapView.draw(context, textures));
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('map');
 
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-    const context = canvas.getContext('2d');
+    window.addEventListener('resize', () => MapView.resize(canvas));
 
-    loadTextures
-        .then(textures => MapView.draw(context, textures));
+    MapView.resize(canvas);
 });
 
