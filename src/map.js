@@ -1,4 +1,5 @@
 const loadTextures = require('./textures');
+const State = require('./state');
 
 const range = function range(n) {
     return [...Array(n).keys()];
@@ -34,26 +35,49 @@ for (var y = 0; y < NUM_ROWS; y++){
 
 //adding default houses
 const MapUtil = {
-    addHouse1_complete(x, y) {
-        map[x][y].foreground = 'house1';
-        map[x][y+1].foreground= 'nothing';
-        map[x+1][y].foreground= 'nothing';
-        map[x+1][y+1].foreground= 'nothing';
+    addHouse1_complete(row, col) {
+        map[row][col].foreground = 'house1';
+        map[row][col+1].foreground= 'structure';
+        map[row+1][col].foreground= 'structure';
+        map[row+1][col+1].foreground= 'structure';
     },
-    addHouse1(x, y) {
-        map[x][y].foreground = 'house1_con';
-        map[x][y+1].foreground= 'nothing';
-        map[x+1][y].foreground= 'nothing';
-        map[x+1][y+1].foreground= 'nothing';
+    addHouse1(row, col) {
+        map[row][col].foreground = 'house1_con';
+        map[row][col+1].foreground= 'structure';
+        map[row+1][col].foreground= 'structure';
+        map[row+1][col+1].foreground= 'structure';
     }
 }
 
 MapUtil.addHouse1_complete(3,3);
-MapUtil.addHouse1(3,6);
+MapUtil.addHouse1_complete(3,6);
 
 //applying textures to the above array
 const MapView = {
+    init(canvas){
+        window.addEventListener('resize', () => MapView.resize(canvas));
+        canvas.addEventListener('click', click => MapView.handleClick(click, canvas));
+        MapView.resize(canvas);
+    },
+
+    handleClick({layerX, layerY}, canvas){
+        const row = Math.floor(layerY / 32);   
+        const col = Math.floor(layerX / 32);
+
+        console.log(row, col, State.buildingChoice)
+
+        if (State.buildingChoice === 'house1') {
+            MapUtil.addHouse1(row, col);
+            MapView.resize(canvas);
+        }
+        if (State.buildingChoice === 'farmland') {
+            MapUtil.addHouse1(row, col);
+            MapView.resize(canvas);
+        }
+    },
+
     draw(context, textures) {
+        
         for (const row of range(Math.floor(NUM_ROWS / 2))) {
             for (const col of range(Math.floor(NUM_COLS / 2))){
                 context.drawImage(textures.grass, col * 64, row * 64)
@@ -62,7 +86,7 @@ const MapView = {
 
         for (const row of map) {
             for (const tile of row) {
-                if (tile.foreground !== 'nothing'){                    
+                if (tile.foreground in textures){                    
                     context.drawImage(textures[tile.foreground], tile.x * 32, tile.y * 32)
                 }
             }
@@ -82,11 +106,5 @@ const MapView = {
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('map');
-
-    window.addEventListener('resize', () => MapView.resize(canvas));
-
-    MapView.resize(canvas);
-});
+module.exports = MapView;
 
