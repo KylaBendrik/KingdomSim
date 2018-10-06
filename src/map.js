@@ -8,6 +8,7 @@ const range = function range(n) {
 const map = []
 const NUM_ROWS = 14;
 const NUM_COLS = 20;
+var houseNum = 0;
 
 //making the map randomly
 for (var y = 0; y < NUM_ROWS; y++){
@@ -41,7 +42,9 @@ const MapUtil = {
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
         
-        State.houses.push({pointsLeft: 0})
+        State.houses.push({id: houseNum, pointsLeft: 0})
+        houseNum ++;
+        console.log(State.houses)
     },
     addHouse1(row, col) {
         map[row][col].foreground = 'house1_con';
@@ -49,7 +52,8 @@ const MapUtil = {
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
 
-        State.houses.push({pointsLeft: 20})
+        State.houses.push({id: houseNum, pointsLeft: 20})
+        houseNum ++;
     }
 }
 
