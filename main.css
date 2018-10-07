@@ -13,6 +13,16 @@ body {
     grid-template-rows: 1fr;
     grid-template-columns: calc(150px + 0.8em) 1fr;
 }
+.viewport {
+    grid-area: viewport;
+
+    width: 100%;
+    height: 100%;
+}
+#portrait {
+    width: 300;
+    height: 400;
+}
 
 #map {
     grid-area: viewport;

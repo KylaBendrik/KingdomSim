@@ -4,6 +4,7 @@ const State = {
     currentYear: 1,
     buildingChoice: undefined,
     houses: [],
+    peeps: [{name: 'Adam', job: 'unassigned', house: '0', buildSkill: 0, farmSkill: 0, gatherSkill: 0}],
     structures: [],
 
     findStructure(id) {
