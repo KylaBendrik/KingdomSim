@@ -9,6 +9,7 @@ const map = []
 const NUM_ROWS = 14;
 const NUM_COLS = 20;
 var houseNum = 0;
+var structureNum= 0;
 
 //making the map randomly
 for (var y = 0; y < NUM_ROWS; y++){
@@ -17,15 +18,18 @@ for (var y = 0; y < NUM_ROWS; y++){
     for (var x = 0; x < NUM_COLS; x++){
         ifTree = Math.floor(Math.random() * 4)
         if (ifTree == 0){
-            newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1'})
+            newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structure: structureNum})
+            structureNum++;
         } else {
             if (ifTree == 1){
-                newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree2'})
+                newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree2', structure: structureNum})
+                structureNum++;
             } else {
                 if (ifTree == 2){
-                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree3'})
+                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree3', structure: structureNum})
+                    structureNum++;
                 } else{    
-                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing'})
+                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing', structure: undefined})
                 }
             }
         }
@@ -42,8 +46,14 @@ const MapUtil = {
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
         
-        State.houses.push({id: houseNum, pointsLeft: 0})
+        map[row][col].structure = structureNum;
+        map[row][col+1].structure= structureNum;
+        map[row+1][col].structure= structureNum;
+        map[row+1][col+1].structure= structureNum;
+        
+        State.houses.push({id: houseNum, pointsLeft: 0, structure: structureNum})
         houseNum ++;
+        structureNum ++;
         console.log(State.houses)
     },
     addHouse1(row, col) {
@@ -52,12 +62,20 @@ const MapUtil = {
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
 
+        map[row][col].structure = structureNum;
+        map[row][col+1].structure= structureNum;
+        map[row+1][col].structure= structureNum;
+        map[row+1][col+1].structure= structureNum;
+
         State.houses.push({id: houseNum, pointsLeft: 20})
-        houseNum ++;
+        houseNum ++;        
+        structureNum ++;
     }
 }
 
 MapUtil.addHouse1_complete(3,3);
+
+console.log(structureNum)
 MapUtil.addHouse1_complete(3,6);
 
 //applying textures to the above array
