@@ -18,18 +18,21 @@ for (var y = 0; y < NUM_ROWS; y++){
     for (var x = 0; x < NUM_COLS; x++){
         ifTree = Math.floor(Math.random() * 4)
         if (ifTree == 0){
-            newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structure: structureNum})
+            newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structureNum: structureNum})
+            State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x})
             structureNum++;
         } else {
             if (ifTree == 1){
-                newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree2', structure: structureNum})
+                newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree2', structureNum: structureNum})
+                State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x})
                 structureNum++;
             } else {
                 if (ifTree == 2){
-                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree3', structure: structureNum})
+                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree3', structureNum: structureNum})
+                    State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x})
                     structureNum++;
                 } else{    
-                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing', structure: undefined})
+                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing', structureNum: undefined})
                 }
             }
         }
@@ -46,15 +49,17 @@ const MapUtil = {
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
         
-        map[row][col].structure = structureNum;
-        map[row][col+1].structure= structureNum;
-        map[row+1][col].structure= structureNum;
-        map[row+1][col+1].structure= structureNum;
+        map[row][col].structureNum = structureNum;
+        map[row][col+1].structureNum = structureNum;
+        map[row+1][col].structureNum = structureNum;
+        map[row+1][col+1].structureNum = structureNum;
         
         State.houses.push({id: houseNum, pointsLeft: 0, structure: structureNum})
+        State.structures.push({structureNum: structureNum, type: 'house1', originRow: row, originCol: col})
+
         houseNum ++;
         structureNum ++;
-        console.log(State.houses)
+        console.log(structureNum)
     },
     addHouse1(row, col) {
         map[row][col].foreground = 'house1_con';
@@ -62,21 +67,23 @@ const MapUtil = {
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
 
-        map[row][col].structure = structureNum;
-        map[row][col+1].structure= structureNum;
-        map[row+1][col].structure= structureNum;
-        map[row+1][col+1].structure= structureNum;
+        map[row][col].structureNum = structureNum;
+        map[row][col+1].structureNum = structureNum;
+        map[row+1][col].structureNum = structureNum;
+        map[row+1][col+1].structureNum = structureNum;
 
-        State.houses.push({id: houseNum, pointsLeft: 20})
+        State.houses.push({id: houseNum, pointsLeft: 20, structure: structureNum})
+        State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col})
         houseNum ++;        
         structureNum ++;
+        console.log(structureNum)
     }
 }
 
 MapUtil.addHouse1_complete(3,3);
-
-console.log(structureNum)
 MapUtil.addHouse1_complete(3,6);
+
+console.log(State.structures)
 
 //applying textures to the above array
 const MapView = {
@@ -114,16 +121,23 @@ const MapView = {
             .then(textures => {
                 const context = canvas.getContext('2d');
 
-                if (map[row][col].foreground === 'house1') {
-                    context.clearRect(col*32, row *32, 64, 64);
-                    context.drawImage(textures.grass, col * 32, row * 32);
-                    context.drawImage(textures.house1_open, col * 32, row * 32);
+                console.log(map[row][col].structureNum);
+                const structure = State.findStructure(map[row][col].structureNum).type
+                const originCol = State.findStructure(map[row][col].structureNum).originCol
+                const originRow = State.findStructure(map[row][col].structureNum).originRow
+
+                console.log(structure);
+
+                if (structure === 'house1') {
+                    context.clearRect(originCol*32, originRow *32, 64, 64);
+                    context.drawImage(textures.grass, originCol * 32, originRow * 32);
+                    context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
                 }
-                if (map[row][col].foreground === 'house1_con') {
+                if (structure === 'house1_con') {
                     context.fillStyle = 'rgb(200, 200, 200)'
-                    context.fillRect(col * 32 + 64, row * 32 + 5, 32, 32)
+                    context.fillRect(originCol * 32 + 64, originRow * 32 + 5, 32, 32)
                     context.fillStyle = 'rgb(10, 10, 10)'
-                    context.fillText('20/20', col * 32 + 64, row * 32 + 16)
+                    context.fillText('20/20', originCol * 32 + 64, originRow * 32 + 16)
                 }
                 context.strokeRect(col * 32, row *32, 32, 32);
             })
