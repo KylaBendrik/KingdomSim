@@ -112,36 +112,48 @@ const MapView = {
         }
     },
 
+    drawHovered(context, textures, structure) {
+        const {type, originRow, originCol} = structure;
+
+        if (type === 'house1') {
+            context.clearRect(originCol*32, originRow *32, 64, 64);
+            context.drawImage(textures.grass, originCol * 32, originRow * 32);
+            context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
+        }
+        if (type === 'house1_con') {
+            context.fillStyle = 'rgb(200, 200, 200)'
+            context.fillRect(originCol * 32 + 64, originRow * 32 + 5, 32, 32)
+            context.fillStyle = 'rgb(10, 10, 10)'
+            context.fillText('20/20', originCol * 32 + 64, originRow * 32 + 16)
+        }
+        
+    },
+
     handleMove({layerX, layerY}, canvas){
         const row = Math.floor(layerY / 32);   
         const col = Math.floor(layerX / 32);
 
-        MapView
-            .render(canvas)
-            .then(textures => {
-                const context = canvas.getContext('2d');
+        if (MapView.isOverMap(row, col)) {
+            const tile = map[row][col];
+            const structure = State.findStructure(tile.structureNum)
+            
+            const context = canvas.getContext('2d');
+            
+            MapView
+                .render(canvas)
+                .then(textures => {
+                    if (structure){
+                        MapView.drawHovered(context, textures, structure);
+                    }                        
+                    context.strokeRect(col * 32, row *32, 32, 32);
+                });
+            
+            
+        }
+    },
 
-                console.log(map[row][col].structureNum);
-                const structure = State.findStructure(map[row][col].structureNum).type
-                const originCol = State.findStructure(map[row][col].structureNum).originCol
-                const originRow = State.findStructure(map[row][col].structureNum).originRow
-
-                console.log(structure);
-
-                if (structure === 'house1') {
-                    context.clearRect(originCol*32, originRow *32, 64, 64);
-                    context.drawImage(textures.grass, originCol * 32, originRow * 32);
-                    context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
-                }
-                if (structure === 'house1_con') {
-                    context.fillStyle = 'rgb(200, 200, 200)'
-                    context.fillRect(originCol * 32 + 64, originRow * 32 + 5, 32, 32)
-                    context.fillStyle = 'rgb(10, 10, 10)'
-                    context.fillText('20/20', originCol * 32 + 64, originRow * 32 + 16)
-                }
-                context.strokeRect(col * 32, row *32, 32, 32);
-            })
-
+    isOverMap(row,col) {
+        return map[row] && map[row][col];
     },
 
     draw(context, textures) {
