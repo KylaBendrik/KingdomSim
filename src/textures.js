@@ -6,7 +6,7 @@ const house1 = new Image();
 const house1_con = new Image();
 const house1_open = new Image();
 
-const farmland = new Image();
+const farmland_1 = new Image();
 
 const grassPromise = new Promise((resolve, _reject) => {
     grass.addEventListener('load', () => {
@@ -47,9 +47,9 @@ const house1_openPromise = new Promise((resolve, _reject) => {
     });
 });
 
-const farmlandPromise = new Promise((resolve, _reject) => {
-    farmland.addEventListener('load', () => {
-        resolve({ farmland });
+const farmland_1Promise = new Promise((resolve, _reject) => {
+    farmland_1.addEventListener('load', () => {
+        resolve({ farmland_1 });
     });
 });
 
@@ -61,10 +61,10 @@ tree3.src = './textures/village_map/map/buildings/tree3.png';
 house1.src = './textures/village_map/map/buildings/house1.png';
 house1_con.src = './textures/village_map/map/buildings/house1_inconstruction.png';
 house1_open.src = './textures/village_map/map/buildings/house1_open.png';
-farmland.src = './textures/village_map/map/buildings/farmland_empty.png';
+farmland_1.src = './textures/village_map/map/buildings/farmland_empty.png';
 
 const allLoaded = Promise
-    .all([grassPromise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmlandPromise])
+    .all([grassPromise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmland_1Promise])
     .then(images => Object.assign(...images));
 
 module.exports = allLoaded;

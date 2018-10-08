@@ -23,6 +23,7 @@ const NUM_ROWS = 14;
 const NUM_COLS = 20;
 var houseNum = 0;
 var structureNum= 0;
+var queueOrder = 0;
 
 //making the map randomly
 for (var y = 0; y < NUM_ROWS; y++){
@@ -56,16 +57,26 @@ for (var y = 0; y < NUM_ROWS; y++){
 
 //adding default houses
 const MapUtil = {
+    addStructure(tiles, texture, structureNum){
+        const [origin, ...rest] = tiles;
+        origin.foreground = texture;
+
+        for(const tile of rest){
+            tile.foreground = 'structure';
+        }
+        for(const tile of tiles){
+            tile.structureNum = structureNum;
+        }
+    },
     addHouse1_complete(row, col) {
-        map[row][col].foreground = 'house1';
-        map[row][col+1].foreground= 'structure';
-        map[row+1][col].foreground= 'structure';
-        map[row+1][col+1].foreground= 'structure';
-        
-        map[row][col].structureNum = structureNum;
-        map[row][col+1].structureNum = structureNum;
-        map[row+1][col].structureNum = structureNum;
-        map[row+1][col+1].structureNum = structureNum;
+        const tiles = [
+            map[row][col],
+            map[row][col + 1],
+            map[row + 1][col],
+            map[row + 1][col + 1]
+        ]
+
+        MapUtil.addStructure(tiles, 'house1', structureNum);
         
         State.houses.push({houseNum: houseNum, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'house1', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 20})
@@ -76,36 +87,55 @@ const MapUtil = {
     },
     addHouse1(row, col) {
         var points = 20;
-        
-        //WILLIAM: Please make this better. I'm sorry it's bad....
-        const structureList = [State.findStructure(map[row][col].structureNum), State.findStructure(map[row][col+1].structureNum), State.findStructure(map[row+1][col].structureNum),State.findStructure(map[row+1][col+1].structureNum)]
 
-        for (i=0; i < 4; i++){
-            if (structureList[i] != undefined){
-                if(structureList[i].type === 'tree'){
-                    points = points + 5
-                }
+        const tiles = [
+            map[row][col],
+            map[row][col + 1],
+            map[row + 1][col],
+            map[row + 1][col + 1]
+        ]
+
+        const structureList = tiles.map(tile => State.findStructure(tile.structureNum));
+
+        for (const structure of structureList){
+            if (structure !== undefined && structure.type === 'tree'){
+                points += 5;
             }
         }
-        
 
-        map[row][col].foreground = 'house1_con';
-        map[row][col+1].foreground= 'structure';
-        map[row+1][col].foreground= 'structure';
-        map[row+1][col+1].foreground= 'structure';
-
-
-        map[row][col].structureNum = structureNum;
-        map[row][col+1].structureNum = structureNum;
-        map[row+1][col].structureNum = structureNum;
-        map[row+1][col+1].structureNum = structureNum;
+        MapUtil.addStructure(tiles, 'house1_con', structureNum);
 
         State.houses.push({houseNum: houseNum, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
+        State.buildingQueue.push({queueOrder: queueOrder, structure: structureNum})
         
+        queueOrder ++;
         houseNum ++;        
         structureNum ++;
         console.log(structureNum)
+        console.log(State.buildingQueue)
+    },
+    addFarmland_1(row, col) {
+        var points = 0;
+
+        const tiles = [
+            map[row][col],
+            map[row][col + 1],
+            map[row + 1][col],
+            map[row + 1][col + 1]
+        ]
+
+        const isNothing = tile => tile.foreground==='nothing'
+
+        if (tiles.every(isNothing)){
+            MapUtil.addStructure(tiles, 'farmland_1', structureNum);
+
+            State.structures.push({structureNum: structureNum, type: 'farmland_1', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
+           
+            structureNum ++;
+            console.log(structureNum)
+        }
+        
     }
 }
 
@@ -134,8 +164,8 @@ const MapView = {
             MapView.render(canvas);
             State.buildingChoice = undefined;
         }
-        if (State.buildingChoice === 'farmland') {
-            MapUtil.addFarmland(row, col);
+        if (State.buildingChoice === 'farmland_1') {
+            MapUtil.addFarmland_1(row, col);
             MapView.render(canvas);
             State.buildingChoice = undefined;
         }
@@ -150,6 +180,7 @@ const MapView = {
 
     drawHovered(context, textures, structure) {
         const {type, originRow, originCol, pointsLeft, pointsStart} = structure;
+
 
         //hover text info - repeated multiple times, so outside the ifs
         const rectBegin = (originRow * 32 - 4)
@@ -177,16 +208,18 @@ const MapView = {
         }
 
         if (type === 'house1_con') {
+            const queueOrder = State.findQueueOrder(structure.structureNum).queueOrder;
+
             const peeps = State.findPeepsByJob('builder');
             context.fillStyle = 'rgb(200, 200, 200)'
-            context.fillRect(originCol * 32 + 64, rectBegin, 140, 24)
+            context.fillRect(originCol * 32 + 64, rectBegin, 190, 24)
             context.fillStyle = 'rgb(10, 10, 10)'
-            context.fillText(`${pointsLeft}/${pointsStart}`, originCol * 32 + 64, textBegin)
+            context.fillText(`${pointsLeft}/${pointsStart} Queue spot: ${queueOrder}`, originCol * 32 + 64, textBegin)
 
             //list builders
             for(i=0; i < peeps.length; i++){
                 context.fillStyle = 'rgb(200, 200, 200)'
-                context.fillRect(originCol * 32 + 64, rectBegin + ((i * 24) + 24), 140, 24)
+                context.fillRect(originCol * 32 + 64, rectBegin + ((i * 24) + 24), 190, 24)
                 
                 context.fillStyle = 'rgb(10, 10, 10)'
                 context.fillText(MapView.builderPeepsList(peeps, i), originCol * 32 + 64, textBegin + ((i * 24) + 24))
@@ -211,8 +244,13 @@ const MapView = {
                 .then(textures => {
                     if (structure){
                         MapView.drawHovered(context, textures, structure);
-                    }                        
-                    context.strokeRect(col * 32, row *32, 32, 32);
+                    }
+                                            
+                    if (State.buildingChoice !== undefined){
+                        context.strokeRect(col * 32, row *32, 64, 64);
+                    } else {
+                        context.strokeRect(col * 32, row *32, 32, 32);
+                    }
                 });
             
             

@@ -25,8 +25,67 @@ const DateView = {
             State.currentYear ++;
         }
 
+        //apply points
+        DateView.applyPoints();
+
         DateView.setDateText();
         DateView.displayAlerts();
+    },
+
+    minBy(values, callback){
+        const reducer = ({ minComp, minVal}, val) => {
+            const comp = callback(val);
+
+            if (comp < minComp) {
+                return {minComp: comp, minVal: val};
+            } else {
+                return {minComp, minVal};
+            }
+        };
+
+        return values.reduce(reducer, {
+            minComp: callback(values[0]),
+            minVal: values[0]
+        }).minVal;
+    },
+    updateQueue(queue){
+        for (const item of queue){
+            item.QueueOrder --;
+        }
+        return queue
+    },
+
+    applyPoints(){
+        const builders = State.findPeepsByJob('builder')
+        var buildPoints = 0
+
+        for (const builder of builders){
+            buildPoints += (10 + builder.buildSkill);
+        };
+        console.log(State.buildingQueue);
+        console.log('First Item in Queue has this many points left:');
+
+        while (buildPoints > 0){
+            firstItem = DateView.minBy(buildingQueue, item => item.QueueOrder)
+            firstItemIndex = buildingQueue.indexOf(firstItem);
+            
+            firstItemStructure = State.findStructure(firstItem.structureNum);
+            firstItemPoints = firstItemStructure.pointsLeft;
+
+            if (firstItemPoints <= buildPoints){
+                buildPoints -= firstItemPoints;
+                //remove item from queue
+                State.buildingQueue.splice(firstItemIndex, 1);
+                //update queue order
+                State.buildingQueue = DateView.updateQueue(buildingQueue);
+            }
+            if (firstItemPoints > buildPoints){
+                firstItemPoints -= buildPoints;
+                //update building Queue
+                State.buildingQueue[firstItemIndex].pointsLeft = firstItemPoints;
+            }
+        }
+        
     },
 
     displayAlerts() {

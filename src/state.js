@@ -1,4 +1,3 @@
-
 const State = {
     currentMonth: 0,
     currentYear: 1,
@@ -15,6 +14,10 @@ const State = {
 
     findHouse(structureNum){
         return State.houses.find(house => house.structure === structureNum)
+    },
+
+    findQueueOrder(structureNum){
+        return State.buildingQueue.find(structure => structure.structure === structureNum)
     },
 
     findPeepsByHouse(houseNum){

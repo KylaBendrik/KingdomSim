@@ -13,8 +13,10 @@ const BuildOptions = {
 
     chooseFarm() {
         console.log("clicked 'farmland");
-        State.buildingChoice = 'farmland';
+        State.buildingChoice = 'farmland_1';
     }
 }
+
+
 
 module.exports = BuildOptions;
