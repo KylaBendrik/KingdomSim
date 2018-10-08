@@ -27,9 +27,9 @@ const DateView = {
 
         //apply points if there is anything in the queue
         if (State.buildingQueue.length > 0){ 
-            DateView.applyPoints(MapView);
-            
+            DateView.applyPoints(MapView);    
         }
+        DateView.gathering();
 
         DateView.setDateText();
         DateView.displayAlerts();
@@ -96,6 +96,31 @@ const DateView = {
             }
         }
         
+    },
+    distance(x1, x2, y1, y2){
+        
+    },
+
+    closestTrees(originRow, originCol){
+        var trees = [], i = -1;
+        for(i=0; i < State.structures.length; i++){
+            if (State.structures[i].type === 'tree'){
+                trees.push(State.structures[i]);
+            }
+        }
+        return trees;
+    },
+
+    gathering() {
+        const gatherers = State.findPeepsByJob('gatherer');
+        for (gatherer of gatherers){
+            houseNum = gatherer.house;
+            
+            console.log (gatherer);
+            houseX = State.findMapCoordsByHouse(houseNum).x;
+            houseY = State.findMapCoordsByHouse(houseNum).y;
+            console.log (houseX, houseY)
+        }
     },
 
     displayAlerts() {

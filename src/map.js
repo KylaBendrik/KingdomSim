@@ -12,13 +12,14 @@ State.peeps.push(
     {name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0}
 );
 
-//resources - probably a better spot
+let wood = State.wood;
+
 
 
 
 //map stuff
 
-const map = []
+const map = State.map;
 const NUM_ROWS = 14;
 const NUM_COLS = 20;
 var houseNum = 0;
@@ -55,8 +56,18 @@ for (var y = 0; y < NUM_ROWS; y++){
     map.push(newLine);
 }
 
+//resources - probably a better spot
+
+document.addEventListener('DOMContentLoaded',() => {
+    return MapUtil.setWoodText();
+});
+
+
 //adding default houses
 const MapUtil = {
+    setWoodText() {   
+        document.getElementById("wood").innerHTML = wood;
+    },
     addStructure(tiles, texture, structureNum){
         const [origin, ...rest] = tiles;
         origin.foreground = texture;
@@ -87,6 +98,7 @@ const MapUtil = {
     },
     addHouse1(row, col) {
         var points = 20;
+        var woodRequired = 20;
 
         const tiles = [
             map[row][col],
@@ -100,8 +112,10 @@ const MapUtil = {
         for (const structure of structureList){
             if (structure !== undefined && structure.type === 'tree'){
                 points += 5;
+                woodRequired -= 2;
             }
         }
+        if (wood >= woodRequired){
 
         MapUtil.addStructure(tiles, 'house1_con', structureNum);
 
@@ -112,8 +126,11 @@ const MapUtil = {
         queueOrder ++;
         houseNum ++;        
         structureNum ++;
-        console.log(structureNum)
-        console.log(State.buildingQueue)
+        wood -= woodRequired;
+        MapUtil.setWoodText();
+        console.log(wood)
+        }
+        
     },
     addFarmland_1(row, col) {
         var points = 0;
@@ -158,7 +175,7 @@ const MapView = {
         const structure = State.findStructure(structureNum)
         if (structure.type === 'house1_con'){
 
-            map[structure.originRow][structure.originCol] = 'house1';
+            map[structure.originRow][structure.originCol].foreground = 'house1';
             structure.type = 'house1'
 
             MapView.render(mapCanvas);
