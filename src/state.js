@@ -15,8 +15,15 @@ const State = {
         return State.houses.find(house => house.structure === structureNum)
     },
 
-    findPeep(houseNum){
-        return State.peeps.find(peep => peep.house === houseNum)
+    findPeeps(houseNum){
+        var foundPeeps = [], i = -1;
+        for(i=0; i < State.peeps.length; i++){
+            if (State.peeps[i].house === houseNum){
+                foundPeeps.push(State.peeps[i]);
+            }
+        }
+        console.log('heres the list Im sending', foundPeeps);
+        return foundPeeps;
     }
 };
 
