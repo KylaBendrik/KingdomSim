@@ -21,17 +21,17 @@ for (var y = 0; y < NUM_ROWS; y++){
         ifTree = Math.floor(Math.random() * 4)
         if (ifTree == 0){
             newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structureNum: structureNum})
-            State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x})
+            State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
             structureNum++;
         } else {
             if (ifTree == 1){
                 newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree2', structureNum: structureNum})
-                State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x})
+                State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
                 structureNum++;
             } else {
                 if (ifTree == 2){
                     newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree3', structureNum: structureNum})
-                    State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x})
+                    State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
                     structureNum++;
                 } else{    
                     newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing', structureNum: undefined})
@@ -56,26 +56,41 @@ const MapUtil = {
         map[row+1][col].structureNum = structureNum;
         map[row+1][col+1].structureNum = structureNum;
         
-        State.houses.push({houseNum: houseNum, pointsLeft: 0, structure: structureNum})
-        State.structures.push({structureNum: structureNum, type: 'house1', originRow: row, originCol: col})
+        State.houses.push({houseNum: houseNum, structure: structureNum})
+        State.structures.push({structureNum: structureNum, type: 'house1', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 20})
 
         houseNum ++;
         structureNum ++;
         console.log(structureNum)
     },
     addHouse1(row, col) {
+        var points = 20;
+        
+        //WILLIAM: Please make this better. I'm sorry it's bad....
+        const structureList = [State.findStructure(map[row][col].structureNum), State.findStructure(map[row][col+1].structureNum), State.findStructure(map[row+1][col].structureNum),State.findStructure(map[row+1][col+1].structureNum)]
+
+        for (i=0; i < 4; i++){
+            if (structureList[i] != undefined){
+                if(structureList[i].type === 'tree'){
+                    points = points + 5
+                }
+            }
+        }
+        
+
         map[row][col].foreground = 'house1_con';
         map[row][col+1].foreground= 'structure';
         map[row+1][col].foreground= 'structure';
         map[row+1][col+1].foreground= 'structure';
+
 
         map[row][col].structureNum = structureNum;
         map[row][col+1].structureNum = structureNum;
         map[row+1][col].structureNum = structureNum;
         map[row+1][col+1].structureNum = structureNum;
 
-        State.houses.push({houseNum: houseNum, pointsLeft: 20, structure: structureNum})
-        State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col})
+        State.houses.push({houseNum: houseNum, structure: structureNum})
+        State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
         houseNum ++;        
         structureNum ++;
         console.log(structureNum)
@@ -117,23 +132,28 @@ const MapView = {
     housePeepsList(peeps, i){
         return (peeps[i].name + ", " + peeps[i].job);
     },
+    builderPeepsList(peeps, i){
+        return (peeps[i].name + ", Level " + peeps[i].buildSkill);
+    },
 
     drawHovered(context, textures, structure) {
-        const {type, originRow, originCol} = structure;
+        const {type, originRow, originCol, pointsLeft, pointsStart} = structure;
+
+        //hover text info - repeated multiple times, so outside the ifs
+        const rectBegin = (originRow * 32 - 4)
+        const textBegin = (originRow * 32 + 16)
+
+        context.font = '20px Arial';
 
         if (type === 'house1') {
             const house = State.findHouse(structure.structureNum);
-            const peeps = State.findPeeps(house.houseNum);
+            const peeps = State.findPeepsByHouse(house.houseNum);
 
             context.clearRect(originCol*32, originRow *32, 64, 64);
             context.drawImage(textures.grass, originCol * 32, originRow * 32);
             context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
 
             //list Peeps in this house
-            const rectBegin = (originRow * 32 - 4)
-            const textBegin = (originRow * 32 + 16)
-
-            context.font = '20px Arial';
 
             for(i=0; i < peeps.length; i++){
                 context.fillStyle = 'rgb(200, 200, 200)'
@@ -141,16 +161,25 @@ const MapView = {
                 
                 context.fillStyle = 'rgb(10, 10, 10)'
                 context.fillText(MapView.housePeepsList(peeps, i), originCol * 32 + 64, textBegin + (i * 24))
-                console.log(peeps[i].name, ",", peeps[i].job)
+            }
+        }
+
+        if (type === 'house1_con') {
+            const peeps = State.findPeepsByJob('builder');
+            context.fillStyle = 'rgb(200, 200, 200)'
+            context.fillRect(originCol * 32 + 64, rectBegin, 140, 24)
+            context.fillStyle = 'rgb(10, 10, 10)'
+            context.fillText(`${pointsLeft}/${pointsStart}`, originCol * 32 + 64, textBegin)
+
+            //list builders
+            for(i=0; i < peeps.length; i++){
+                context.fillStyle = 'rgb(200, 200, 200)'
+                context.fillRect(originCol * 32 + 64, rectBegin + ((i * 24) + 24), 140, 24)
+                
+                context.fillStyle = 'rgb(10, 10, 10)'
+                context.fillText(MapView.builderPeepsList(peeps, i), originCol * 32 + 64, textBegin + ((i * 24) + 24))
             }
 
-            console.log('house #', house.houseNum)
-        }
-        if (type === 'house1_con') {
-            context.fillStyle = 'rgb(200, 200, 200)'
-            context.fillRect(originCol * 32 + 64, originRow * 32 + 5, 32, 32)
-            context.fillStyle = 'rgb(10, 10, 10)'
-            context.fillText('20/20', originCol * 32 + 64, originRow * 32 + 16)
         }
         
     },
