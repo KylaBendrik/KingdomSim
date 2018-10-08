@@ -7,6 +7,7 @@ const State = {
     peeps: [],
     structures: [],
     buildingQueue: [],
+    wood: 50,
 
     findStructure(id) {
         return State.structures.find(structure => structure.structureNum === id)

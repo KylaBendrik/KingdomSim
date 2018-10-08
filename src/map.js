@@ -5,7 +5,18 @@ const range = function range(n) {
     return [...Array(n).keys()];
 }
 
-State.peeps.push({name: 'Adam', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0}, {name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0});
+//initialize
+
+State.peeps.push(
+    {name: 'Adam', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0}, 
+    {name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0}
+);
+
+//resources - probably a better spot
+
+
+
+//map stuff
 
 const map = []
 const NUM_ROWS = 14;
@@ -91,6 +102,7 @@ const MapUtil = {
 
         State.houses.push({houseNum: houseNum, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
+        
         houseNum ++;        
         structureNum ++;
         console.log(structureNum)
