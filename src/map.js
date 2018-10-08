@@ -142,8 +142,8 @@ const MapUtil = {
 MapUtil.addHouse1_complete(3,3);
 MapUtil.addHouse1_complete(3,6);
 
-console.log(State.structures)
-
+console.log(State.structures);
+let mapCanvas = null;
 //applying textures to the above array
 const MapView = {
     init(canvas){
@@ -151,6 +151,18 @@ const MapView = {
         canvas.addEventListener('click', click => MapView.handleClick(click, canvas));
         canvas.addEventListener('mousemove', move => MapView.handleMove(move, canvas));
         MapView.render(canvas);
+        mapCanvas = canvas;
+    },
+    
+    updateBuilding(structureNum){
+        const structure = State.findStructure(structureNum)
+        if (structure.type === 'house1_con'){
+
+            map[structure.originRow][structure.originCol] = 'house1';
+            structure.type = 'house1'
+
+            MapView.render(mapCanvas);
+        }
     },
 
     handleClick({layerX, layerY}, canvas){

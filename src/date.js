@@ -9,15 +9,15 @@ const alerts = {
 }
 
 const DateView = {
-    init(date, monthButton, alertElement) {
+    init(date, monthButton, alertElement, MapView) {
         Object.assign(elements, {date, monthButton, alertElement});
 
         DateView.setDateText(date);
 
-        monthButton.addEventListener('click', DateView.nextMonth);
+        monthButton.addEventListener('click', () => DateView.nextMonth(MapView));
     },
 
-    nextMonth() {
+    nextMonth(MapView) {
         State.currentMonth++;
 
         if (State.currentMonth === 12){
@@ -25,8 +25,11 @@ const DateView = {
             State.currentYear ++;
         }
 
-        //apply points
-        DateView.applyPoints();
+        //apply points if there is anything in the queue
+        if (State.buildingQueue.length > 0){ 
+            DateView.applyPoints(MapView);
+            
+        }
 
         DateView.setDateText();
         DateView.displayAlerts();
@@ -48,6 +51,7 @@ const DateView = {
             minVal: values[0]
         }).minVal;
     },
+
     updateQueue(queue){
         for (const item of queue){
             item.QueueOrder --;
@@ -55,34 +59,40 @@ const DateView = {
         return queue
     },
 
-    applyPoints(){
+    applyPoints(MapView){
         const builders = State.findPeepsByJob('builder')
-        var buildPoints = 0
+        let buildPoints = 0
 
         for (const builder of builders){
             buildPoints += (10 + builder.buildSkill);
         };
-        console.log(State.buildingQueue);
-        console.log('First Item in Queue has this many points left:');
 
         while (buildPoints > 0){
-            firstItem = DateView.minBy(buildingQueue, item => item.QueueOrder)
-            firstItemIndex = buildingQueue.indexOf(firstItem);
+            firstItem = DateView.minBy(State.buildingQueue, item => item.QueueOrder)
+            firstItemIndex = State.buildingQueue.indexOf(firstItem);
             
-            firstItemStructure = State.findStructure(firstItem.structureNum);
+            firstItemStructure = State.findStructure(firstItem.structure);
             firstItemPoints = firstItemStructure.pointsLeft;
 
             if (firstItemPoints <= buildPoints){
                 buildPoints -= firstItemPoints;
+                //update structure list
+                firstItemStructure.pointsLeft = firstItemPoints;
+                //update structure_con to finished version. (how to handle multiple kinds of construction?)
+                MapView.updateBuilding(firstItemStructure.structureNum);
                 //remove item from queue
+                console.log(State.buildingQueue);
                 State.buildingQueue.splice(firstItemIndex, 1);
+                console.log(State.buildingQueue);
                 //update queue order
-                State.buildingQueue = DateView.updateQueue(buildingQueue);
+                State.buildingQueue = DateView.updateQueue(State.buildingQueue);
+                
             }
             if (firstItemPoints > buildPoints){
                 firstItemPoints -= buildPoints;
-                //update building Queue
-                State.buildingQueue[firstItemIndex].pointsLeft = firstItemPoints;
+                buildPoints = 0;
+                //update structure list
+                firstItemStructure.pointsLeft = firstItemPoints;
             }
         }
         

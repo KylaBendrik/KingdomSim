@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded',() => {
     const elements = IDs.reduce(getElements, {});
 
     MapView.init(elements.map);
-    DateView.init(elements.date, elements.month_button, elements.alert);
+    DateView.init(elements.date, elements.month_button, elements.alert, MapView);
     BuildOptions.init(elements.buildChoiceHouse1, elements.buildChoiceFarmland);
 
 });
