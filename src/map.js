@@ -5,6 +5,8 @@ const range = function range(n) {
     return [...Array(n).keys()];
 }
 
+State.peeps.push({name: 'Adam', job: 'unassigned', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0});
+
 const map = []
 const NUM_ROWS = 14;
 const NUM_COLS = 20;
@@ -54,7 +56,7 @@ const MapUtil = {
         map[row+1][col].structureNum = structureNum;
         map[row+1][col+1].structureNum = structureNum;
         
-        State.houses.push({id: houseNum, pointsLeft: 0, structure: structureNum})
+        State.houses.push({houseNum: houseNum, pointsLeft: 0, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'house1', originRow: row, originCol: col})
 
         houseNum ++;
@@ -72,7 +74,7 @@ const MapUtil = {
         map[row+1][col].structureNum = structureNum;
         map[row+1][col+1].structureNum = structureNum;
 
-        State.houses.push({id: houseNum, pointsLeft: 20, structure: structureNum})
+        State.houses.push({houseNum: houseNum, pointsLeft: 20, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col})
         houseNum ++;        
         structureNum ++;
@@ -116,9 +118,23 @@ const MapView = {
         const {type, originRow, originCol} = structure;
 
         if (type === 'house1') {
+            const house = State.findHouse(structure.structureNum);
+            const peep = State.findPeep(house.houseNum);
+
             context.clearRect(originCol*32, originRow *32, 64, 64);
             context.drawImage(textures.grass, originCol * 32, originRow * 32);
             context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
+            console.log(State.peeps);
+
+            //list Peeps in this house
+            
+            context.fillStyle = 'rgb(200, 200, 200)'
+            context.fillRect(originCol * 32 + 64, originRow * 32 + 5, 32, 32)
+            context.fillStyle = 'rgb(10, 10, 10)'
+            context.fillText(peep.name, originCol * 32 + 64, originRow * 32 + 16)
+
+            console.log('house #', house.houseNum)
+            console.log('peep', peep.name)
         }
         if (type === 'house1_con') {
             context.fillStyle = 'rgb(200, 200, 200)'

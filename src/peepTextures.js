@@ -6,7 +6,7 @@ const defaultPortraitPromise = new Promise((resolve, _reject) => {
     });
 });
 
-defaultPortrait.src = './textures/peeps/default.png';
+defaultPortrait.src = './textures/peeps/defaultportrait.png';
 
 const allLoaded = Promise
     .all([defaultPortraitPromise])

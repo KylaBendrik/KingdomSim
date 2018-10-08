@@ -4,11 +4,19 @@ const State = {
     currentYear: 1,
     buildingChoice: undefined,
     houses: [],
-    peeps: [{name: 'Adam', job: 'unassigned', house: '0', buildSkill: 0, farmSkill: 0, gatherSkill: 0}],
+    peeps: [],
     structures: [],
 
     findStructure(id) {
         return State.structures.find(structure => structure.structureNum === id)
+    },
+
+    findHouse(structureNum){
+        return State.houses.find(house => house.structure === structureNum)
+    },
+
+    findPeep(houseNum){
+        return State.peeps.find(peep => peep.house === houseNum)
     }
 };
 
