@@ -9,10 +9,10 @@ const range = function range(n) {
 
 State.peeps.push(
     {name: 'Adam', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0}, 
-    {name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0}
+    {name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0},
+    {name: 'Bob', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0}, 
+    {name: 'Martha', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0},
 );
-
-let wood = State.wood;
 
 
 
@@ -59,14 +59,18 @@ for (var y = 0; y < NUM_ROWS; y++){
 //resources - probably a better spot
 
 document.addEventListener('DOMContentLoaded',() => {
-    return MapUtil.setWoodText();
+    MapUtil.setWoodText(State.wood);
+    MapUtil.setFoodText(State.food);
 });
 
 
 //adding default houses
 const MapUtil = {
-    setWoodText(woodAvailable) {   
-        document.getElementById("wood").innerHTML = woodAvailable;
+    setWoodText(wood) {   
+        document.getElementById("wood").innerHTML = wood;
+    },
+    setFoodText(food) {   
+        document.getElementById("food").innerHTML = food;
     },
     addStructure(tiles, texture, structureNum){
         const [origin, ...rest] = tiles;
@@ -115,7 +119,7 @@ const MapUtil = {
                 woodRequired -= 2;
             }
         }
-        if (wood >= woodRequired){
+        if (State.wood >= woodRequired){
 
             MapUtil.addStructure(tiles, 'house1_con', structureNum);
 
@@ -126,9 +130,9 @@ const MapUtil = {
             queueOrder ++;
             houseNum ++;        
             structureNum ++;
-            wood -= woodRequired;
-            MapUtil.setWoodText(wood);
-            console.log(wood)
+            State.wood -= woodRequired;
+            MapUtil.setWoodText(State.wood);
+            console.log('wood: ', State.wood)
 
         }
         
@@ -211,6 +215,7 @@ const MapView = {
     },
 
     housePeepsList(peeps, i){
+        console.log (peeps[i]);
         return (peeps[i].name + ", " + peeps[i].job);
     },
     builderPeepsList(peeps, i){

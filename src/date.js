@@ -25,13 +25,16 @@ const DateView = {
             State.currentYear ++;
         }
 
-        console.log ('buildingQueue length outside of apply points: ', State.buildingQueue.length);
-
         //apply points if there is anything in the queue
         DateView.building(MapView);
+        DateView.gathering(MapUtil, MapView);
+        DateView.farming();
 
-        DateView.gathering(MapUtil);
-
+        for (peep of State.peeps){
+            State.food -= 1;
+        }
+        
+        MapUtil.setFoodText(State.food);
         DateView.setDateText();
         DateView.displayAlerts();
     },
@@ -106,21 +109,12 @@ const DateView = {
             }
         }
 
-        console.log ('Build Points used this month', buildPointsUsed);
-
         //level up builders
         for (const builder of builders){
-            console.log (builder.name, 'Build Skill:', builder.buildSkill);
-            console.log (builder);
-            
             //A = total points used by all the builders
-            console.log ('A = ', buildPointsUsed)
             //B = total builders assigned
-            console.log ('B = ', builders.length)
-            
             //C = ridiculous equation (0.0000467346938776LEVEL^2-0.00746510204082LEVEL+0.257418367347)/10
             var c = (((((Math.pow(builder.buildSkill, 2)) * (0.0000467346938776)))-(0.00746510204082 * builder.buildSkill)) + 0.257418367347)/10;
-            console.log ('C = ', c)
             
             //X = Peep[i] gets this much XP
             builder.buildSkill += (buildPointsUsed/builders.length)*c;
@@ -146,39 +140,43 @@ const DateView = {
         trees = trees.sort(function (a, b){
             return a.distance - b.distance;
         });
-        
-        console.log ('trees: ', trees)
         return trees;
     },
 
-    gathering(MapUtil) {
+    gathering(MapUtil, MapView) {
         const gatherers = State.findPeepsByJob('gatherer');
         for (gatherer of gatherers){
             houseNum = gatherer.house;
             houseStructure = State.findStructurebyHouse(houseNum)
-            
-            console.log (gatherer);
-            
-            console.log (houseStructure)
             houseCol = houseStructure.originCol;
             houseRow = houseStructure.originRow;
-            console.log (houseRow, houseCol)
             const trees = DateView.closestTrees(houseRow, houseCol)
             pointsLeft = gatherer.gatherSkill + 10;
+            let pointsUsed = 0;
             while (pointsLeft > 0 && trees.length > 0){
                 if (pointsLeft >= 5){
                     var tree = trees[0];
                     pointsLeft -= 5;
-                    console.log ('tree to be deleted:', tree);
                     
                     MapView.updateBuilding(tree.structureNum);
-                    State.wood += 3;
+                    State.wood += 2;
                     MapUtil.setWoodText(State.wood);
                     trees.splice(0, 1);
+                    pointsUsed += 5;
+                    console.log (pointsUsed);
                 }
-                console.log ('pointsLeft: ', pointsLeft);
+
             }
+             //leveling up
+             var c = (((((Math.pow(gatherer.gatherSkill, 2)) * (0.0000467346938776)))-(0.00746510204082 * gatherer.gatherSkill)) + 0.257418367347)/10;
+                    
+             gatherer.gatherSkill += (pointsUsed)*c;
         }
+    },
+
+    farming(){
+        const farmers = State.findPeepsByJob('farmer');
+        console.log (farmers)
     },
 
     displayAlerts() {
@@ -186,6 +184,12 @@ const DateView = {
             elements.alertElement.textContent = alerts[State.currentMonth];
         } else {
             elements.alertElement.textContent = '';
+        }
+        if (State.food < (State.peeps.length *2)){
+            elements.alertElement.textContent = 'You are very low on food.';
+        }
+        if (State.food < 0){
+            elements.alertElement.textContent = 'Your people have died of starvation. Game Over.';
         }
     },
 

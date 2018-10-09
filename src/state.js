@@ -8,6 +8,7 @@ const State = {
     buildingQueue: [],
     map: [],
     wood: 50,
+    food: 50,
 
     findStructure(id) {
         return State.structures.find(structure => structure.structureNum === id)
