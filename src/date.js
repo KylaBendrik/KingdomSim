@@ -28,16 +28,9 @@ const DateView = {
         console.log ('buildingQueue length outside of apply points: ', State.buildingQueue.length);
 
         //apply points if there is anything in the queue
-        if (State.buildingQueue.length > 0){
-            console.log ('buildingQueue length at beginning: ', State.buildingQueue.length);
-            console.log ('buildingQueue: at beginning', State.buildingQueue);
+        DateView.applyPoints(MapView);
 
-            DateView.applyPoints(MapView);
-
-            console.log ('buildingQueue length at end of month: ', State.buildingQueue.length);
-            console.log ('buildingQueue: at end', State.buildingQueue);
-        }
-        //DateView.gathering();
+        DateView.gathering();
 
         DateView.setDateText();
         DateView.displayAlerts();
@@ -124,40 +117,54 @@ const DateView = {
             console.log ('A = ', buildPointsUsed)
             //B = total builders assigned
             console.log ('B = ', builders.length)
+            
+            //C = ridiculous equation (0.0000467346938776LEVEL^2-0.00746510204082LEVEL+0.257418367347)/10
             var c = (((((Math.pow(builder.buildSkill, 2)) * (0.0000467346938776)))-(0.00746510204082 * builder.buildSkill)) + 0.257418367347)/10;
             console.log ('C = ', c)
-
+            
+            //X = Peep[i] gets this much XP
             builder.buildSkill += (buildPointsUsed/builders.length)*c;
         };
-        //C = ridiculous equation (0.0000467346938776LEVEL^2-0.00746510204082LEVEL+0.257418367347)/10
-        //X = Peep[i] gets this much XP
         
     },
     // distance(x1, x2, y1, y2){
         
     // },
 
-    // closestTrees(originRow, originCol){
-    //     var trees = [], i = -1;
-    //     for(i=0; i < State.structures.length; i++){
-    //         if (State.structures[i].type === 'tree'){
-    //             trees.push(State.structures[i]);
-    //         }
-    //     }
-    //     return trees;
-    // },
+    //stuff for gathering
 
-    // gathering() {
-    //     const gatherers = State.findPeepsByJob('gatherer');
-    //     for (gatherer of gatherers){
-    //         houseNum = gatherer.house;
+    closestTrees(originRow, originCol){
+        const trees= State.structures.filter(structure => structure.type === 'tree');
+        
+        console.log ('trees: ', trees)
+        return trees;
+    },
+
+    gathering() {
+        const gatherers = State.findPeepsByJob('gatherer');
+        for (gatherer of gatherers){
+            houseNum = gatherer.house;
+            houseStructure = State.findStructurebyHouse(houseNum)
             
-    //         console.log (gatherer);
-    //         houseX = State.findMapCoordsByHouse(houseNum).x;
-    //         houseY = State.findMapCoordsByHouse(houseNum).y;
-    //         console.log (houseX, houseY)
-    //     }
-    // },
+            console.log (gatherer);
+            
+            console.log (houseStructure)
+            houseCol = houseStructure.originCol;
+            houseRow = houseStructure.originRow;
+            console.log (houseRow, houseCol)
+            const trees = DateView.closestTrees(houseRow, houseCol)
+            pointsLeft = gatherer.gatherSkill + 10;
+            while (pointsLeft > 0 && trees.length > 0){
+                if (pointsLeft >= 5){
+                    var tree = trees[Math.floor(Math.random() * trees.length)];
+                    pointsLeft -= 5;
+                    console.log (tree);
+                    MapView.updateBuilding(tree.structureNum);
+                }
+                console.log ('pointsLeft: ', pointsLeft);
+            }
+        }
+    },
 
     displayAlerts() {
         if (State.currentMonth in alerts) {

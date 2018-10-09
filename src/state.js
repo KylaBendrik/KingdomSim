@@ -13,9 +13,9 @@ const State = {
         return State.structures.find(structure => structure.structureNum === id)
     },
 
-    findStructurebyHouse(id) {
-        structureNum = State.findHouseByHouse.structure;
-        return State.structures.find(structure => structure.structureNum === id)
+    findStructurebyHouse(houseNum) {
+        structureNum = State.findHouseByHouse(houseNum).structure;
+        return State.structures.find(structure => structure.structureNum === structureNum)
     },
 
     findHouseByHouse(houseNum) {

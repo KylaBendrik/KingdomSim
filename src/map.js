@@ -180,6 +180,12 @@ const MapView = {
 
             MapView.render(mapCanvas);
         }
+        if (structure.type === 'tree'){
+            map[structure.originRow][structure.originCol].foreground = 'nothing';
+            structure.type = 'nothing'
+
+            MapView.render(mapCanvas);
+        }
     },
 
     handleClick({layerX, layerY}, canvas){
