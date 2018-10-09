@@ -204,7 +204,7 @@ const MapView = {
         return (peeps[i].name + ", " + peeps[i].job);
     },
     builderPeepsList(peeps, i){
-        return (peeps[i].name + ", Level " + peeps[i].buildSkill);
+        return (peeps[i].name + ", Level " + Math.floor(peeps[i].buildSkill));
     },
 
     drawHovered(context, textures, structure) {

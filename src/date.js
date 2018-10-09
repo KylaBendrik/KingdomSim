@@ -25,12 +25,15 @@ const DateView = {
             State.currentYear ++;
         }
 
+        console.log ('buildingQueue length outside of apply points: ', State.buildingQueue.length);
+
         //apply points if there is anything in the queue
         if (State.buildingQueue.length > 0){
             console.log ('buildingQueue length at beginning: ', State.buildingQueue.length);
-            
             console.log ('buildingQueue: at beginning', State.buildingQueue);
+
             DateView.applyPoints(MapView);
+
             console.log ('buildingQueue length at end of month: ', State.buildingQueue.length);
             console.log ('buildingQueue: at end', State.buildingQueue);
         }
@@ -70,10 +73,10 @@ const DateView = {
         let buildPointsUsed = 0
 
         for (const builder of builders){
-            buildPoints += (10 + builder.buildSkill);
+            buildPoints += (10 + Math.floor(builder.buildSkill))
         };
 
-        while (buildPoints > 0){
+        while (buildPoints > 0 && State.buildingQueue.length > 0){
 
             firstItem = DateView.minBy(State.buildingQueue, item => item.QueueOrder)
             firstItemIndex = State.buildingQueue.indexOf(firstItem);
@@ -113,8 +116,19 @@ const DateView = {
         console.log ('Build Points used this month', buildPointsUsed);
 
         //level up builders
-        //A = total points used by all the builders
-        //B = total builders assigned
+        for (const builder of builders){
+            console.log (builder.name, 'Build Skill:', builder.buildSkill);
+            console.log (builder);
+            
+            //A = total points used by all the builders
+            console.log ('A = ', buildPointsUsed)
+            //B = total builders assigned
+            console.log ('B = ', builders.length)
+            var c = (((((Math.pow(builder.buildSkill, 2)) * (0.0000467346938776)))-(0.00746510204082 * builder.buildSkill)) + 0.257418367347)/10;
+            console.log ('C = ', c)
+
+            builder.buildSkill += (buildPointsUsed/builders.length)*c;
+        };
         //C = ridiculous equation (0.0000467346938776LEVEL^2-0.00746510204082LEVEL+0.257418367347)/10
         //X = Peep[i] gets this much XP
         
