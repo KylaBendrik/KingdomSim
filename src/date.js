@@ -9,15 +9,15 @@ const alerts = {
 }
 
 const DateView = {
-    init(date, monthButton, alertElement, MapView) {
+    init(date, monthButton, alertElement, MapView, MapUtil) {
         Object.assign(elements, {date, monthButton, alertElement});
 
         DateView.setDateText(date);
 
-        monthButton.addEventListener('click', () => DateView.nextMonth(MapView));
+        monthButton.addEventListener('click', () => DateView.nextMonth(MapView, MapUtil));
     },
 
-    nextMonth(MapView) {
+    nextMonth(MapView, MapUtil) {
         State.currentMonth++;
 
         if (State.currentMonth === 12){
@@ -28,9 +28,9 @@ const DateView = {
         console.log ('buildingQueue length outside of apply points: ', State.buildingQueue.length);
 
         //apply points if there is anything in the queue
-        DateView.applyPoints(MapView);
+        DateView.building(MapView);
 
-        DateView.gathering();
+        DateView.gathering(MapUtil);
 
         DateView.setDateText();
         DateView.displayAlerts();
@@ -60,7 +60,7 @@ const DateView = {
         return queue
     },
 
-    applyPoints(MapView){
+    building(MapView){
         const builders = State.findPeepsByJob('builder')
         let buildPoints = 0
         let buildPointsUsed = 0
@@ -127,20 +127,31 @@ const DateView = {
         };
         
     },
-    // distance(x1, x2, y1, y2){
-        
-    // },
+    //distance between two points
+    distance(x1, x2, y1, y2){
+        xDiff = (x2 - x1);
+        yDiff = (y2 - y1);
+        distance = Math.sqrt((Math.pow(xDiff, 2))+(Math.pow(yDiff, 2)));
+        return distance
+    },
 
     //stuff for gathering
 
-    closestTrees(originRow, originCol){
-        const trees= State.structures.filter(structure => structure.type === 'tree');
+    closestTrees(houseRow, houseCol){
+        var trees= State.structures.filter(structure => structure.type === 'tree');
+        for (const tree of trees){
+            tree.distance = DateView.distance(houseRow, tree.originRow, houseCol, tree.originCol);
+        }
+
+        trees = trees.sort(function (a, b){
+            return a.distance - b.distance;
+        });
         
         console.log ('trees: ', trees)
         return trees;
     },
 
-    gathering() {
+    gathering(MapUtil) {
         const gatherers = State.findPeepsByJob('gatherer');
         for (gatherer of gatherers){
             houseNum = gatherer.house;
@@ -156,10 +167,14 @@ const DateView = {
             pointsLeft = gatherer.gatherSkill + 10;
             while (pointsLeft > 0 && trees.length > 0){
                 if (pointsLeft >= 5){
-                    var tree = trees[Math.floor(Math.random() * trees.length)];
+                    var tree = trees[0];
                     pointsLeft -= 5;
-                    console.log (tree);
+                    console.log ('tree to be deleted:', tree);
+                    
                     MapView.updateBuilding(tree.structureNum);
+                    State.wood += 3;
+                    MapUtil.setWoodText(State.wood);
+                    trees.splice(0, 1);
                 }
                 console.log ('pointsLeft: ', pointsLeft);
             }

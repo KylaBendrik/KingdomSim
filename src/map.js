@@ -65,8 +65,8 @@ document.addEventListener('DOMContentLoaded',() => {
 
 //adding default houses
 const MapUtil = {
-    setWoodText() {   
-        document.getElementById("wood").innerHTML = wood;
+    setWoodText(woodAvailable) {   
+        document.getElementById("wood").innerHTML = woodAvailable;
     },
     addStructure(tiles, texture, structureNum){
         const [origin, ...rest] = tiles;
@@ -117,18 +117,19 @@ const MapUtil = {
         }
         if (wood >= woodRequired){
 
-        MapUtil.addStructure(tiles, 'house1_con', structureNum);
+            MapUtil.addStructure(tiles, 'house1_con', structureNum);
 
-        State.houses.push({houseNum: houseNum, structure: structureNum})
-        State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
-        State.buildingQueue.push({queueOrder: queueOrder, structure: structureNum})
-        
-        queueOrder ++;
-        houseNum ++;        
-        structureNum ++;
-        wood -= woodRequired;
-        MapUtil.setWoodText();
-        console.log(wood)
+            State.houses.push({houseNum: houseNum, structure: structureNum})
+            State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
+            State.buildingQueue.push({queueOrder: queueOrder, structure: structureNum})
+            
+            queueOrder ++;
+            houseNum ++;        
+            structureNum ++;
+            wood -= woodRequired;
+            MapUtil.setWoodText(wood);
+            console.log(wood)
+
         }
         
     },
@@ -182,7 +183,10 @@ const MapView = {
         }
         if (structure.type === 'tree'){
             map[structure.originRow][structure.originCol].foreground = 'nothing';
-            structure.type = 'nothing'
+            index = State.structures.indexOf(structure);
+            
+            console.log('tree deleted:', structure, index)
+            State.structures.splice(index, 1);
 
             MapView.render(mapCanvas);
         }
@@ -327,4 +331,7 @@ const MapView = {
 };
 
 module.exports = MapView;
-
+module.exports = {
+    MapView: MapView,
+    MapUtil: MapUtil
+}
