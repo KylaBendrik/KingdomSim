@@ -21,8 +21,6 @@ const State = {
     },
 
     findHouseByHouse(houseNum) {
-        console.log ('find house by house')
-        console.log(State.houses.find(house => house.houseNum === houseNum))
         return State.houses.find(house => house.houseNum === houseNum)
     },
 

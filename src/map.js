@@ -199,21 +199,28 @@ const MapView = {
 
             MapView.render(mapCanvas);
         }
-        if (structure.type === 'farmland_1' && State.currentMonth === 5){
+        if (structure.type === 'farmland_1' && State.currentMonth === 4){
             map[structure.originRow][structure.originCol].foreground = 'farmland_2';
             structure.type = 'farmland_2'
 
             MapView.render(mapCanvas);
         }
-        if (structure.type === 'farmland_2' && State.currentMonth === 7){
+        if (structure.type === 'farmland_2' && State.currentMonth === 6){
             map[structure.originRow][structure.originCol].foreground = 'farmland_3';
             structure.type = 'farmland_3'
 
             MapView.render(mapCanvas);
         }
-        if (structure.type === 'farmland_3' && State.currentMonth === 9){
+        if (structure.type === 'farmland_3' && State.currentMonth === 8){
             map[structure.originRow][structure.originCol].foreground = 'farmland_4';
             structure.type = 'farmland_4'
+
+            MapView.render(mapCanvas);
+        }
+        if ((structure.type === 'farmland_4' && State.currentMonth === 9) || (structure.type === 'farmland_dead' && State.currentMonth === 9)){
+            map[structure.originRow][structure.originCol].foreground = 'farmland_empty';
+            structure.type = 'farmland_empty'
+            structure.pointsLeft = 0;
 
             MapView.render(mapCanvas);
         }

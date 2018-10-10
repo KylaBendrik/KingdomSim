@@ -18,6 +18,15 @@ const DateView = {
     },
 
     nextMonth(MapView, MapUtil) {
+         //apply points for all the jobs
+        DateView.building(MapView);
+        DateView.gathering(MapUtil, MapView);
+        DateView.farming();
+
+        for (peep of State.peeps){
+            State.food -= 1;
+        }
+
         State.currentMonth++;
 
         if (State.currentMonth === 12){
@@ -25,17 +34,6 @@ const DateView = {
             State.currentYear ++;
         }
 
-        //apply points if there is anything in the queue
-        DateView.building(MapView);
-        DateView.gathering(MapUtil, MapView);
-        DateView.farming();
-
-        
-
-        for (peep of State.peeps){
-            State.food -= 1;
-        }
-        
         MapUtil.setFoodText(State.food);
         DateView.setDateText();
         DateView.displayAlerts();
@@ -187,11 +185,27 @@ const DateView = {
 
         if (State.farmingQueue.length > 0){
             const farms = State.farmingQueue;
+            
             for (farm of farms){
-                if (State.currentMonth > 3 && State.currentMonth < 10){
+                var plot = State.findStructure(farm.structure);
+                console.log ('currentMonth: ', State.currentMonth);
+                console.log ('farm.type: ', plot.type)
+                if (State.currentMonth === 3 && plot.type === "farmland_1"){
+                    console.log ('pointsLeft in April:', pointsLeft);
+                    if (pointsLeft < 10){
+                        plot.pointsLeft = -1;
+                        console.log ('this plot was planted, but will die');
+                        
+                    } else {
+                        pointsLeft -= 10;
+                        console.log ('this plot was planted and go enough points to grow')
+                    }
+                    MapView.updateBuilding(farm.structure);
+                    console.log ('attempting to update; pointsLeft:', pointsLeft)
+                }
+                if (State.currentMonth > 3 && State.currentMonth < 9){
                     console.log ('pointsLeft:', pointsLeft);
                     if (pointsLeft < 5){
-                        plot = State.findStructure(farm.structure);
                         plot.pointsLeft = -1;
                         console.log ('this plot will die');
                         
@@ -200,6 +214,25 @@ const DateView = {
                     }
                     MapView.updateBuilding(farm.structure);
                     console.log ('attempting to update; pointsLeft:', pointsLeft)
+                }
+                if (State.currentMonth === 9 && plot.type === "farmland_4"){
+                    console.log ('pointsLeft in October:', pointsLeft);
+                    if (pointsLeft < 10){
+                        plot.pointsLeft = -1;
+                        console.log ('this plot unable to be harvested');
+                        
+                    } else {
+                        pointsLeft -= 10;
+                        console.log ('this plot was harvested. Awesome!')
+                        State.food += 25;
+                    }
+                    
+                    MapView.updateBuilding(farm.structure);
+                    console.log ('attempting to harvest; pointsLeft:', pointsLeft)
+                }
+                if (State.currentMonth === 9 && plot.type === 'farmland_dead'){
+                    MapView.updateBuilding(farm.structure);
+                    console.log ('turning under')
                 }
             }
         }
