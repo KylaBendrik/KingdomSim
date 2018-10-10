@@ -147,11 +147,8 @@ const DateView = {
         const gatherers = State.findPeepsByJob('gatherer');
         const treePoints = 8
         for (gatherer of gatherers){
-            console.log ('this gatherer is Level: ', gatherer.gatherSkill);
             houseNum = gatherer.house;
-            console.log (houseNum);
             houseStructure = State.findStructurebyHouse(houseNum)
-            console.log (houseStructure);
             houseCol = houseStructure.originCol;
             houseRow = houseStructure.originRow;
             const trees = DateView.closestTrees(houseRow, houseCol)
@@ -167,7 +164,6 @@ const DateView = {
                     MapUtil.setWoodText(State.wood);
                     trees.splice(0, 1);
                     pointsUsed += treePoints;
-                    console.log (pointsUsed);
                 } else {
                     pointsLeft = 0;
                 }

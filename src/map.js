@@ -77,16 +77,15 @@ const MapUtil = {
         const [origin, ...rest] = tiles;
         origin.foreground = texture;
 
-        for(const tile of rest){
-            console.log (tile);
-            if (tile.foreground !== 'nothing'){
-                State.removeStructure(tile.structureNum);
-
-            }
-            
+        for(const tile of rest){        
             tile.foreground = 'structure';
         }
         for(const tile of tiles){
+            if (tile.structureNum !== undefined){
+                console.log ('going to remove:', tile.x, tile.y)
+                State.removeStructure(tile.structureNum);
+
+            }
             tile.structureNum = structureNum;
         }
     },
@@ -167,6 +166,11 @@ const MapUtil = {
         
     }
 }
+console.log ('this is a problem')
+console.log(map[3][3].foreground);
+console.log(map[3][4].foreground);
+console.log(map[4][3].foreground);
+console.log(map[4][4].foreground);
 
 MapUtil.addHouse1_complete(3,3);
 MapUtil.addHouse1_complete(3,6);
