@@ -145,7 +145,9 @@ const DateView = {
 
     gathering(MapUtil, MapView) {
         const gatherers = State.findPeepsByJob('gatherer');
+        const treePoints = 8
         for (gatherer of gatherers){
+            console.log ('this gatherer is Level: ', gatherer.gatherSkill);
             houseNum = gatherer.house;
             houseStructure = State.findStructurebyHouse(houseNum)
             houseCol = houseStructure.originCol;
@@ -154,15 +156,15 @@ const DateView = {
             pointsLeft = Math.floor(gatherer.gatherSkill + 10);
             let pointsUsed = 0;
             while (pointsLeft > 0 && trees.length > 0){
-                if (pointsLeft >= 5){
+                if (pointsLeft >= treePoints){
                     var tree = trees[0];
-                    pointsLeft -= 5;
+                    pointsLeft -= treePoints;
                     
                     MapView.updateBuilding(tree.structureNum);
                     State.wood += 2;
                     MapUtil.setWoodText(State.wood);
                     trees.splice(0, 1);
-                    pointsUsed += 5;
+                    pointsUsed += treePoints;
                     console.log (pointsUsed);
                 } else {
                     pointsLeft = 0;
