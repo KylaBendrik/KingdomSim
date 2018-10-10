@@ -180,25 +180,27 @@ const DateView = {
 
     farming(){
         const farmers = State.findPeepsByJob('farmer');
-        console.log (farmers)
+        var pointsLeft = 0;
+        for (farmer of farmers){
+            pointsLeft += Math.floor(farmer.farmSkill + 10);
+        }
+
         if (State.farmingQueue.length > 0){
             const farms = State.farmingQueue;
             for (farm of farms){
-                if (State.currentMonth > 3){
+                if (State.currentMonth > 3 && State.currentMonth < 10){
+                    console.log ('pointsLeft:', pointsLeft);
+                    if (pointsLeft < 5){
+                        plot = State.findStructure(farm.structure);
+                        plot.pointsLeft = -1;
+                        console.log ('this plot will die');
+                        
+                    } else {
+                        pointsLeft -= 5;
+                    }
                     MapView.updateBuilding(farm.structure);
-                    console.log ('attempting to update')
+                    console.log ('attempting to update; pointsLeft:', pointsLeft)
                 }
-            }
-            //grow farm plots 1- April, May, 2 - June, July, 3- August, September 4 - October
-            if (State.currentMonth === 5){
-                console.log ('grow all farm plots to farmland_2')
-                
-            }
-            if (State.currentMonth === 7){
-                console.log ('grow all farm plots to farmland_3')
-            }
-            if (State.currentMonth === 9){
-                console.log ('grow all farm plots to farmland_4')
             }
         }
     },

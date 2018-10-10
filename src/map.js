@@ -32,7 +32,7 @@ for (var y = 0; y < NUM_ROWS; y++){
     var newLine = [];
 
     for (var x = 0; x < NUM_COLS; x++){
-        ifTree = Math.floor(Math.random() * 5)
+        ifTree = Math.floor(Math.random() * 7)
         if (ifTree == 0){
             newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structureNum: structureNum})
             State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
@@ -216,6 +216,15 @@ const MapView = {
             structure.type = 'farmland_4'
 
             MapView.render(mapCanvas);
+        }
+        if (structure.type === 'farmland_1' || structure.type === 'farmland_2' || structure.type === 'farmland_3' || structure.type === 'farmland_4'){
+            if (structure.pointsLeft === -1){
+                map[structure.originRow][structure.originCol].foreground = 'farmland_dead';
+                structure.type = 'farmland_dead'
+                console.log ('a farm plot died. Not enough farmers');
+
+                MapView.render(mapCanvas);
+            }
         }
     },
 
