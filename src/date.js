@@ -149,7 +149,9 @@ const DateView = {
         for (gatherer of gatherers){
             console.log ('this gatherer is Level: ', gatherer.gatherSkill);
             houseNum = gatherer.house;
+            console.log (houseNum);
             houseStructure = State.findStructurebyHouse(houseNum)
+            console.log (houseStructure);
             houseCol = houseStructure.originCol;
             houseRow = houseStructure.originRow;
             const trees = DateView.closestTrees(houseRow, houseCol)

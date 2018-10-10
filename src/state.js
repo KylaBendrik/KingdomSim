@@ -11,12 +11,19 @@ const State = {
     wood: 50,
     food: 50,
 
+    removeStructure(id){
+        const index = State.structures.findIndex(structure => structure.structureNum === id);
+
+        State.structures.splice(index, 1);
+    },
+
     findStructure(id) {
         return State.structures.find(structure => structure.structureNum === id)
     },
 
     findStructurebyHouse(houseNum) {
         structureNum = State.findHouseByHouse(houseNum).structure;
+        console.log (structureNum);
         return State.structures.find(structure => structure.structureNum === structureNum)
     },
 

@@ -78,6 +78,12 @@ const MapUtil = {
         origin.foreground = texture;
 
         for(const tile of rest){
+            console.log (tile);
+            if (tile.foreground !== 'nothing'){
+                State.removeStructure(tile.structureNum);
+
+            }
+            
             tile.foreground = 'structure';
         }
         for(const tile of tiles){
