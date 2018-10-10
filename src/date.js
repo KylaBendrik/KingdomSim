@@ -179,6 +179,7 @@ const DateView = {
     farming(){
         const farmers = State.findPeepsByJob('farmer');
         var pointsLeft = 0;
+        var pointsUsed = 0;
         for (farmer of farmers){
             pointsLeft += Math.floor(farmer.farmSkill + 10);
         }
@@ -198,12 +199,13 @@ const DateView = {
                         
                     } else {
                         pointsLeft -= 10;
+                        pointsUsed += 10;
                         console.log ('this plot was planted and go enough points to grow')
                     }
                     MapView.updateBuilding(farm.structure);
                     console.log ('attempting to update; pointsLeft:', pointsLeft)
                 }
-                if (State.currentMonth > 3 && State.currentMonth < 9){
+                if (State.currentMonth > 3 && State.currentMonth < 9 && plot.pointsLeft === 0){
                     console.log ('pointsLeft:', pointsLeft);
                     if (pointsLeft < 5){
                         plot.pointsLeft = -1;
@@ -211,6 +213,7 @@ const DateView = {
                         
                     } else {
                         pointsLeft -= 5;
+                        pointsUsed += 5;
                     }
                     MapView.updateBuilding(farm.structure);
                     console.log ('attempting to update; pointsLeft:', pointsLeft)
@@ -223,6 +226,7 @@ const DateView = {
                         
                     } else {
                         pointsLeft -= 10;
+                        pointsUsed += 10;
                         console.log ('this plot was harvested. Awesome!')
                         State.food += 25;
                     }
@@ -234,7 +238,19 @@ const DateView = {
                     MapView.updateBuilding(farm.structure);
                     console.log ('turning under')
                 }
+                //level up farmers
+                console.log ('points used this month:', pointsUsed);
             }
+            for (const farmer of farmers){
+                //A = total points used by all the farmers
+                //B = total farmers assigned
+                //C = ridiculous equation (0.0000467346938776LEVEL^2-0.00746510204082LEVEL+0.257418367347)/10
+                var c = (((((Math.pow(farmer.farmSkill, 2)) * (0.0000467346938776)))-(0.00746510204082 * farmer.farmSkill)) + 0.257418367347)/10;
+                
+                //X = Peep[i] gets this much XP
+                farmer.farmSkill += (pointsUsed/farmers.length)*c;
+            };
+            console.log ('All the Farmers, after they level up', farmers);
         }
     },
 

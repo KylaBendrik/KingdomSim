@@ -102,7 +102,7 @@ const MapUtil = {
     },
     addHouse1(row, col) {
         var points = 20;
-        var woodRequired = 20;
+        var woodRequired = 40;
 
         const tiles = [
             map[row][col],
