@@ -151,7 +151,7 @@ const DateView = {
             houseCol = houseStructure.originCol;
             houseRow = houseStructure.originRow;
             const trees = DateView.closestTrees(houseRow, houseCol)
-            pointsLeft = gatherer.gatherSkill + 10;
+            pointsLeft = Math.floor(gatherer.gatherSkill + 10);
             let pointsUsed = 0;
             while (pointsLeft > 0 && trees.length > 0){
                 if (pointsLeft >= 5){
@@ -164,8 +164,10 @@ const DateView = {
                     trees.splice(0, 1);
                     pointsUsed += 5;
                     console.log (pointsUsed);
+                } else {
+                    pointsLeft = 0;
                 }
-
+                
             }
              //leveling up
              var c = (((((Math.pow(gatherer.gatherSkill, 2)) * (0.0000467346938776)))-(0.00746510204082 * gatherer.gatherSkill)) + 0.257418367347)/10;

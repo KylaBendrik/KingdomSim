@@ -25,13 +25,14 @@ const NUM_COLS = 20;
 var houseNum = 0;
 var structureNum= 0;
 var queueOrder = 0;
+var farmQueueOrder = 0;
 
 //making the map randomly
 for (var y = 0; y < NUM_ROWS; y++){
     var newLine = [];
 
     for (var x = 0; x < NUM_COLS; x++){
-        ifTree = Math.floor(Math.random() * 4)
+        ifTree = Math.floor(Math.random() * 5)
         if (ifTree == 0){
             newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structureNum: structureNum})
             State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
@@ -137,7 +138,7 @@ const MapUtil = {
         }
         
     },
-    addFarmland_1(row, col) {
+    addFarmland_empty(row, col) {
         var points = 0;
 
         const tiles = [
@@ -150,10 +151,13 @@ const MapUtil = {
         const isNothing = tile => tile.foreground==='nothing'
 
         if (tiles.every(isNothing)){
-            MapUtil.addStructure(tiles, 'farmland_1', structureNum);
+            MapUtil.addStructure(tiles, 'farmland_empty', structureNum);
 
-            State.structures.push({structureNum: structureNum, type: 'farmland_1', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
-           
+            State.structures.push({structureNum: structureNum, type: 'farmland_empty', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
+            
+            State.farmingQueue.push({queueOrder: farmQueueOrder, structure: structureNum})
+
+            farmQueueOrder ++;
             structureNum ++;
             console.log(structureNum)
         }
@@ -194,6 +198,12 @@ const MapView = {
 
             MapView.render(mapCanvas);
         }
+        if (structure.type === 'farmland_empty'){
+            map[structure.originRow][structure.originCol].foreground = 'farmland_1';
+            structure.type = 'farmland_1'
+
+            MapView.render(mapCanvas);
+        }
     },
 
     handleClick({layerX, layerY}, canvas){
@@ -207,10 +217,16 @@ const MapView = {
             MapView.render(canvas);
             State.buildingChoice = undefined;
         }
-        if (State.buildingChoice === 'farmland_1') {
-            MapUtil.addFarmland_1(row, col);
+        if (State.buildingChoice === 'farmland_empty') {
+            MapUtil.addFarmland_empty(row, col);
             MapView.render(canvas);
             State.buildingChoice = undefined;
+        }
+        if (map[row][col].foreground === 'farmland_empty' && State.currentMonth === 3) {
+            console.log ('attempting to plant seeds.')
+            console.log (map[row][col]);
+            MapView.updateBuilding(map[row][col].structureNum)
+            MapView.render(canvas);
         }
     },
 
@@ -220,6 +236,9 @@ const MapView = {
     },
     builderPeepsList(peeps, i){
         return (peeps[i].name + ", Level " + Math.floor(peeps[i].buildSkill));
+    },
+    farmerPeepsList(peeps, i){
+        return (peeps[i].name + ", Level " + Math.floor(peeps[i].farmSkill));
     },
 
     drawHovered(context, textures, structure) {
@@ -269,6 +288,25 @@ const MapView = {
                 context.fillText(MapView.builderPeepsList(peeps, i), originCol * 32 + 64, textBegin + ((i * 24) + 24))
             }
 
+        }
+
+        if (type === 'farmland_empty'){
+            const queueOrder = State.findFarmQueueOrder(structure.structureNum).queueOrder;
+
+            const peeps = State.findPeepsByJob('farmer');
+            context.fillStyle = 'rgb(200, 200, 200)'
+            context.fillRect(originCol * 32 + 64, rectBegin, 190, 24)
+            context.fillStyle = 'rgb(10, 10, 10)'
+            context.fillText(`${pointsLeft}/${pointsStart} Queue spot: ${queueOrder}`, originCol * 32 + 64, textBegin)
+
+            //list farmers
+            for(i=0; i < peeps.length; i++){
+                context.fillStyle = 'rgb(200, 200, 200)'
+                context.fillRect(originCol * 32 + 64, rectBegin + ((i * 24) + 24), 190, 24)
+                
+                context.fillStyle = 'rgb(10, 10, 10)'
+                context.fillText(MapView.farmerPeepsList(peeps, i), originCol * 32 + 64, textBegin + ((i * 24) + 24))
+            }
         }
         
     },

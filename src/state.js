@@ -6,6 +6,7 @@ const State = {
     peeps: [],
     structures: [],
     buildingQueue: [],
+    farmingQueue: [],
     map: [],
     wood: 50,
     food: 50,
@@ -32,18 +33,8 @@ const State = {
     findQueueOrder(structureNum){
         return State.buildingQueue.find(structure => structure.structure === structureNum)
     },
-
-    findMapCoordsByHouse(houseNum) {
-        console.log ('find map by house')
-        structureNum = State.findHouseByHouse(houseNum).structure;
-        console.log (structureNum);
-        console.log (State.map);
-        console.log(State.map.find(structure => structure.structure === structureNum));
-        return State.map.find(structure => structure.structure === structureNum);
-    },
-
-    findMapCoords(structureNum){
-        return State.map.find(structure => structure.structure === structureNum)
+    findFarmQueueOrder(structureNum){
+        return State.farmingQueue.find(structure => structure.structure === structureNum)
     },
 
     findPeepsByHouse(houseNum){
