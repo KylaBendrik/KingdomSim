@@ -20,8 +20,8 @@ State.peeps.push(
 //map stuff
 
 const map = State.map;
-const NUM_ROWS = 14;
-const NUM_COLS = 20;
+const NUM_ROWS = 24;
+const NUM_COLS = 40;
 var houseNum = 0;
 var structureNum= 0;
 var queueOrder = 0;
@@ -34,27 +34,27 @@ for (var y = 0; y < NUM_ROWS; y++){
     for (var x = 0; x < NUM_COLS; x++){
         ifTree = Math.floor(Math.random() * 7)
         if (ifTree === 0){
-            newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structureNum: structureNum})
+            newLine.push({ x: x, y: y, background: 'grass1', foreground: 'tree1', structureNum: structureNum})
             State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 1, pointsStart: 0})
             structureNum++;
         } else {
             if (ifTree === 1){
-                newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree2', structureNum: structureNum})
+                newLine.push({ x: x, y: y, background: 'grass2', foreground: 'tree2', structureNum: structureNum})
                 State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 2, pointsStart: 0})
                 structureNum++;
             } else {
                 if (ifTree === 2){
-                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree3', structureNum: structureNum})
+                    newLine.push({ x: x, y: y, background: 'grass3', foreground: 'tree3', structureNum: structureNum})
                     State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 3, pointsStart: 0})
                     structureNum++;
                 } else{
                     if (ifTree === 3){
-                        newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree0', structureNum: structureNum})
+                        newLine.push({ x: x, y: y, background: 'grass4', foreground: 'tree0', structureNum: structureNum})
                         State.structures.push({structureNum: structureNum, type: 'sapling', originRow: y, originCol: x, pointsLeft: 0, pointsStart: 0})
                         structureNum++;
                     } else{
                          
-                    newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing', structureNum: undefined})
+                    newLine.push({ x: x, y: y, background: 'grass2', foreground: 'nothing', structureNum: undefined})
                     }
                 }
             }
@@ -64,6 +64,7 @@ for (var y = 0; y < NUM_ROWS; y++){
     map.push(newLine);
 }
 
+console.log (map)
 //resources - probably a better spot
 
 document.addEventListener('DOMContentLoaded',() => {
@@ -89,7 +90,6 @@ const MapUtil = {
         }
         for(const tile of tiles){
             if (tile.structureNum !== undefined){
-                console.log ('going to remove:', tile.x, tile.y)
                 State.removeStructure(tile.structureNum);
 
             }
@@ -325,7 +325,7 @@ const MapView = {
             const peeps = State.findPeepsByHouse(house.houseNum);
 
             context.clearRect(originCol*32, originRow *32, 64, 64);
-            context.drawImage(textures.grass, originCol * 32, originRow * 32);
+            context.drawImage(textures.grass1, originCol * 32, originRow * 32);
             context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
 
             //list Peeps in this house
@@ -414,9 +414,10 @@ const MapView = {
 
     draw(context, textures) {
         
-        for (const row of range(Math.floor(NUM_ROWS / 2))) {
-            for (const col of range(Math.floor(NUM_COLS / 2))){
-                context.drawImage(textures.grass, col * 64, row * 64)
+        for (const row of range(Math.floor(NUM_ROWS / 4))) {
+            for (const col of range(Math.floor(NUM_COLS / 4))){
+                grassType = map[row][col].background;
+                context.drawImage(textures[grassType], col * 128, row * 128)
             }
         }
 
