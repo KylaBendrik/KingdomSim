@@ -416,7 +416,16 @@ const MapView = {
         
         for (const row of range(Math.floor(NUM_ROWS / 4))) {
             for (const col of range(Math.floor(NUM_COLS / 4))){
-                grassType = map[row][col].background;
+                var grassType = map[row][col].background;
+                if (State.currentMonth === 10 || State.currentMonth === 2){
+                    grassType = 'snow0';
+                }
+                if (State.currentMonth === 11 || State.currentMonth === 1){
+                    grassType = 'snow1';
+                }
+                if (State.currentMonth === 12 || State.currentMonth === 0){
+                    grassType = 'snow2';
+                }
                 context.drawImage(textures[grassType], col * 128, row * 128)
             }
         }
@@ -437,6 +446,7 @@ const MapView = {
         canvas.height = canvas.clientHeight;
 
         const context = canvas.getContext('2d');
+        console.log ('rendering canvas');
 
         return loadTextures
             .then(textures => MapView.draw(context, textures));
