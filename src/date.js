@@ -30,6 +30,8 @@ const DateView = {
         DateView.gathering(MapUtil, MapView);
         DateView.farming();
 
+        
+
         for (peep of State.peeps){
             State.food -= 1;
         }
@@ -179,6 +181,26 @@ const DateView = {
     farming(){
         const farmers = State.findPeepsByJob('farmer');
         console.log (farmers)
+        if (State.farmingQueue.length > 0){
+            const farms = State.farmingQueue;
+            for (farm of farms){
+                if (State.currentMonth > 3){
+                    MapView.updateBuilding(farm.structure);
+                    console.log ('attempting to update')
+                }
+            }
+            //grow farm plots 1- April, May, 2 - June, July, 3- August, September 4 - October
+            if (State.currentMonth === 5){
+                console.log ('grow all farm plots to farmland_2')
+                
+            }
+            if (State.currentMonth === 7){
+                console.log ('grow all farm plots to farmland_3')
+            }
+            if (State.currentMonth === 9){
+                console.log ('grow all farm plots to farmland_4')
+            }
+        }
     },
 
     displayAlerts() {

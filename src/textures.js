@@ -100,7 +100,7 @@ farmland_4.src = './textures/village_map/map/buildings/farmland_4.png';
 farmland_dead.src = './textures/village_map/map/buildings/farmland_dead.png';
 
 const allLoaded = Promise
-    .all([grassPromise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmland_emptyPromise, farmland_1Promise, farmland_2Promise, farmland_2Promise, farmland_4Promise, farmland_deadPromise])
+    .all([grassPromise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmland_emptyPromise, farmland_1Promise, farmland_2Promise, farmland_3Promise, farmland_4Promise, farmland_deadPromise])
     .then(images => Object.assign(...images));
 
 module.exports = allLoaded;

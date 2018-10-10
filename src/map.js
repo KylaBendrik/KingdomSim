@@ -99,7 +99,6 @@ const MapUtil = {
 
         houseNum ++;
         structureNum ++;
-        console.log(structureNum)
     },
     addHouse1(row, col) {
         var points = 20;
@@ -133,7 +132,6 @@ const MapUtil = {
             structureNum ++;
             State.wood -= woodRequired;
             MapUtil.setWoodText(State.wood);
-            console.log('wood: ', State.wood)
 
         }
         
@@ -159,7 +157,6 @@ const MapUtil = {
 
             farmQueueOrder ++;
             structureNum ++;
-            console.log(structureNum)
         }
         
     }
@@ -168,7 +165,6 @@ const MapUtil = {
 MapUtil.addHouse1_complete(3,3);
 MapUtil.addHouse1_complete(3,6);
 
-console.log(State.structures);
 let mapCanvas = null;
 //applying textures to the above array
 const MapView = {
@@ -193,14 +189,31 @@ const MapView = {
             map[structure.originRow][structure.originCol].foreground = 'nothing';
             index = State.structures.indexOf(structure);
             
-            console.log('tree deleted:', structure, index)
             State.structures.splice(index, 1);
 
             MapView.render(mapCanvas);
         }
-        if (structure.type === 'farmland_empty'){
+        if (structure.type === 'farmland_empty' && State.currentMonth === 3){
             map[structure.originRow][structure.originCol].foreground = 'farmland_1';
             structure.type = 'farmland_1'
+
+            MapView.render(mapCanvas);
+        }
+        if (structure.type === 'farmland_1' && State.currentMonth === 5){
+            map[structure.originRow][structure.originCol].foreground = 'farmland_2';
+            structure.type = 'farmland_2'
+
+            MapView.render(mapCanvas);
+        }
+        if (structure.type === 'farmland_2' && State.currentMonth === 7){
+            map[structure.originRow][structure.originCol].foreground = 'farmland_3';
+            structure.type = 'farmland_3'
+
+            MapView.render(mapCanvas);
+        }
+        if (structure.type === 'farmland_3' && State.currentMonth === 9){
+            map[structure.originRow][structure.originCol].foreground = 'farmland_4';
+            structure.type = 'farmland_4'
 
             MapView.render(mapCanvas);
         }
@@ -209,8 +222,6 @@ const MapView = {
     handleClick({layerX, layerY}, canvas){
         const row = Math.floor(layerY / 32);   
         const col = Math.floor(layerX / 32);
-
-        console.log(row, col, State.buildingChoice)
 
         if (State.buildingChoice === 'house1') {
             MapUtil.addHouse1(row, col);
@@ -231,7 +242,6 @@ const MapView = {
     },
 
     housePeepsList(peeps, i){
-        console.log (peeps[i]);
         return (peeps[i].name + ", " + peeps[i].job);
     },
     builderPeepsList(peeps, i){
@@ -290,7 +300,7 @@ const MapView = {
 
         }
 
-        if (type === 'farmland_empty'){
+        if (type === 'farmland_empty' || type === 'farmland_1' || type === 'farmland_2' || type === 'farmland_3' || type === 'farmland_4'){
             const queueOrder = State.findFarmQueueOrder(structure.structureNum).queueOrder;
 
             const peeps = State.findPeepsByJob('farmer');
