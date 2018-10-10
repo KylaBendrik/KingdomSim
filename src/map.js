@@ -33,22 +33,29 @@ for (var y = 0; y < NUM_ROWS; y++){
 
     for (var x = 0; x < NUM_COLS; x++){
         ifTree = Math.floor(Math.random() * 7)
-        if (ifTree == 0){
+        if (ifTree === 0){
             newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree1', structureNum: structureNum})
-            State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
+            State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 1, pointsStart: 0})
             structureNum++;
         } else {
-            if (ifTree == 1){
+            if (ifTree === 1){
                 newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree2', structureNum: structureNum})
-                State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
+                State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 2, pointsStart: 0})
                 structureNum++;
             } else {
-                if (ifTree == 2){
+                if (ifTree === 2){
                     newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree3', structureNum: structureNum})
-                    State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 5, pointsStart: 5})
+                    State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 3, pointsStart: 0})
                     structureNum++;
-                } else{    
+                } else{
+                    if (ifTree === 3){
+                        newLine.push({ x: x, y: y, background: 'grass', foreground: 'tree0', structureNum: structureNum})
+                        State.structures.push({structureNum: structureNum, type: 'sapling', originRow: y, originCol: x, pointsLeft: 0, pointsStart: 0})
+                        structureNum++;
+                    } else{
+                         
                     newLine.push({ x: x, y: y, background: 'grass', foreground: 'nothing', structureNum: undefined})
+                    }
                 }
             }
         }
@@ -166,11 +173,6 @@ const MapUtil = {
         
     }
 }
-console.log ('this is a problem')
-console.log(map[3][3].foreground);
-console.log(map[3][4].foreground);
-console.log(map[4][3].foreground);
-console.log(map[4][4].foreground);
 
 MapUtil.addHouse1_complete(3,3);
 MapUtil.addHouse1_complete(3,6);
@@ -184,6 +186,37 @@ const MapView = {
         canvas.addEventListener('mousemove', move => MapView.handleMove(move, canvas));
         MapView.render(canvas);
         mapCanvas = canvas;
+    },
+    addSapling(row, col) {
+        tile = map[row][col];
+        if (tile.foreground === 'nothing'){
+            tile.foreground = 'tree0';
+            tile.structureNum = structureNum;
+            State.structures.push({structureNum: structureNum, type: 'sapling', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 0})
+            structureNum++;
+            console.log (tile);
+            MapView.render(mapCanvas);
+        }
+    },
+    growTrees(structureNum){
+        const structure = State.findStructure(structureNum)
+        if (structure.type === 'sapling'){
+            map[structure.originRow][structure.originCol].foreground = 'tree1';
+            structure.type = 'tree'
+            console.log (structure);
+
+            MapView.render(mapCanvas);
+        }
+        if (structure.type === 'tree'){
+            if (structure.pointsLeft === 1){
+                map[structure.originRow][structure.originCol].foreground = 'tree2';
+                MapView.render(mapCanvas);
+            }
+            if (structure.pointsLeft === 2){
+                map[structure.originRow][structure.originCol].foreground = 'tree3';
+                MapView.render(mapCanvas);
+            }
+        }
     },
     
     updateBuilding(structureNum){
@@ -398,7 +431,7 @@ const MapView = {
     return textures;
     },
 
-    render(canvas) {    
+    render(canvas) { 
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 

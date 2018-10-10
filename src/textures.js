@@ -1,7 +1,10 @@
 const grass = new Image();
+
+const tree0 = new Image();
 const tree1 = new Image();
 const tree2 = new Image();
 const tree3 = new Image();
+
 const house1 = new Image();
 const house1_con = new Image();
 const house1_open = new Image();
@@ -16,6 +19,12 @@ const farmland_dead = new Image();
 const grassPromise = new Promise((resolve, _reject) => {
     grass.addEventListener('load', () => {
         resolve({ grass });
+    });
+});
+
+const tree0Promise = new Promise((resolve, _reject) => {
+    tree0.addEventListener('load', () => {
+        resolve({ tree0 });
     });
 });
 
@@ -85,9 +94,12 @@ const farmland_deadPromise = new Promise((resolve, _reject) => {
 
 
 grass.src = './textures/village_map/map/ground/grass.png';
-tree1.src = './textures/village_map/map/buildings/tree1.png';
-tree2.src = './textures/village_map/map/buildings/tree2.png';
-tree3.src = './textures/village_map/map/buildings/tree3.png';
+
+tree0.src = './textures/village_map/map/nature/tree0.png';
+tree1.src = './textures/village_map/map/nature/tree1.png';
+tree2.src = './textures/village_map/map/nature/tree2.png';
+tree3.src = './textures/village_map/map/nature/tree3.png';
+
 house1.src = './textures/village_map/map/buildings/house1.png';
 house1_con.src = './textures/village_map/map/buildings/house1_inconstruction.png';
 house1_open.src = './textures/village_map/map/buildings/house1_open.png';
@@ -100,7 +112,7 @@ farmland_4.src = './textures/village_map/map/buildings/farmland_4.png';
 farmland_dead.src = './textures/village_map/map/buildings/farmland_dead.png';
 
 const allLoaded = Promise
-    .all([grassPromise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmland_emptyPromise, farmland_1Promise, farmland_2Promise, farmland_3Promise, farmland_4Promise, farmland_deadPromise])
+    .all([grassPromise, tree0Promise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmland_emptyPromise, farmland_1Promise, farmland_2Promise, farmland_3Promise, farmland_4Promise, farmland_deadPromise])
     .then(images => Object.assign(...images));
 
 module.exports = allLoaded;

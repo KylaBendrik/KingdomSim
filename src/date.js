@@ -22,6 +22,7 @@ const DateView = {
         DateView.building(MapView);
         DateView.gathering(MapUtil, MapView);
         DateView.farming();
+        DateView.treesGrow(MapView);
 
         for (peep of State.peeps){
             State.food -= 1;
@@ -61,6 +62,48 @@ const DateView = {
             item.QueueOrder --;
         }
         return queue
+    },
+    treesGrow(MapView){
+        var trees = State.structures.filter(structure => structure.type === 'tree');
+        var saplings = State.structures.filter(structure => structure.type === 'sapling');
+        for (const sapling of saplings){
+            if (sapling.pointsStart === 12){
+                MapView.growTrees(sapling.structureNum);
+                sapling.pointsLeft += 1;
+                sapling.pointsStart = -1
+            }
+            sapling.pointsStart += 1;
+        }
+        for (const tree of trees){
+            //if a spot around the tree is empty, place a sapling.
+            const y = tree.originRow;
+            const x = tree.originCol;
+            let rand = Math.floor(Math.random() * 90)
+            if (x > 0 && x < 19){
+                if (State.map[y][x + 1].foreground === 'nothing' && rand === 0){
+                    MapView.addSapling(y, x + 1 );
+                }
+                if (State.map[y][x - 1].foreground === 'nothing' && rand === 1){
+                    MapView.addSapling(y, x - 1 );
+                }
+            }
+            if (y > 0 && y < 11){
+                if (State.map[y + 1][x].foreground === 'nothing' && rand === 2){
+                    MapView.addSapling(y + 1, x );
+                }
+                if (State.map[y -1 ][x].foreground === 'nothing' && rand === 3){
+                    MapView.addSapling(y - 1, x );
+                }
+            }
+            
+            if (tree.pointsStart === 12){
+                MapView.growTrees(tree.structureNum);
+                tree.pointsLeft += 1;
+                tree.pointsStart = -1;
+            }
+            tree.pointsStart += 1;
+            
+        }
     },
 
     building(MapView){
@@ -160,7 +203,8 @@ const DateView = {
                     pointsLeft -= treePoints;
                     
                     MapView.updateBuilding(tree.structureNum);
-                    State.wood += 2;
+                    State.wood += tree.pointsLeft;
+                    console.log ('got ', tree.pointsLeft, 'wood')
                     MapUtil.setWoodText(State.wood);
                     trees.splice(0, 1);
                     pointsUsed += treePoints;

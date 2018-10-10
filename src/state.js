@@ -23,7 +23,6 @@ const State = {
 
     findStructurebyHouse(houseNum) {
         structureNum = State.findHouseByHouse(houseNum).structure;
-        console.log (structureNum);
         return State.structures.find(structure => structure.structureNum === structureNum)
     },
 
