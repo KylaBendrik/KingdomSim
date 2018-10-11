@@ -322,11 +322,17 @@ const MapView = {
                 State.buildingChoice = undefined;
             }
         }
-        if (map[row][col].foreground === 'farmland_empty' && State.currentMonth === 3) {
-            console.log ('attempting to plant seeds.')
-            console.log (map[row][col]);
-            MapView.updateBuilding(map[row][col].structureNum)
-            MapView.render(canvas);
+        if (map[row][col].structureNum !== undefined){
+            const structure = State.findStructure(map[row][col].structureNum);
+        
+        
+            if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
+                console.log (structure.type)
+                console.log ('attempting to plant seeds.')
+                console.log (map[row][col]);
+                MapView.updateBuilding(map[row][col].structureNum)
+                MapView.render(canvas);
+            }
         }
     },
 
