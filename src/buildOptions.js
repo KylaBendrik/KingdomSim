@@ -8,12 +8,12 @@ const BuildOptions = {
 
     chooseHouse() {
         console.log("clicked 'house");
-        State.buildingChoice = 'house1';
+        State.buildingChoice = {type: 'house1', rows: 2, cols: 2};
     },
 
     chooseFarm() {
         console.log("clicked 'farmland");
-        State.buildingChoice = 'farmland_empty';
+        State.buildingChoice = {type: 'farmland_empty', rows: 2, cols: 2};
     }
 }
 

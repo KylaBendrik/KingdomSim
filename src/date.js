@@ -4,8 +4,8 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 const elements = {};
 const alerts = {
-    3: "It's April! Make sure you seed your fields this month.",
-    9: "It's October! Make sure you harvest your fields this month."
+    3: "It's April! Click your empty fields to seed your crops.",
+    9: "It's October! Make sure you have enough farmers assigned to harvest your crops!"
 }
 
 const DateView = {
@@ -301,6 +301,7 @@ const DateView = {
     displayAlerts() {
         if (State.currentMonth in alerts) {
             elements.alertElement.textContent = alerts[State.currentMonth];
+            window.alert(alerts[State.currentMonth]);
         } else {
             elements.alertElement.textContent = '';
         }
@@ -309,6 +310,7 @@ const DateView = {
         }
         if (State.food < 0){
             elements.alertElement.textContent = 'Your people have died of starvation. Game Over.';
+            window.alert('Your people have died of starvation. Game Over.');
         }
     },
 

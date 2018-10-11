@@ -97,15 +97,13 @@ const MapUtil = {
         }
     },
     newTiles(rows, cols, row, col){
-        console.log ('newTiles running')
+        console.log ('newTiles running. rows: ', rows, 'cols:', cols);
         var R = 0;
         const tiles = [];
         while (R < rows){
             var C = 0;
             while (C < cols){
                 tiles.push(map[row + R][col + C])
-                
-                console.log ('new tile at row:', R, ', col:', C)
                 C ++;
             }
             R ++;
@@ -312,16 +310,17 @@ const MapView = {
     handleClick({layerX, layerY}, canvas){
         const row = Math.floor(layerY / 32);   
         const col = Math.floor(layerX / 32);
-
-        if (State.buildingChoice === 'house1') {
-            MapUtil.addHouse1(row, col);
-            MapView.render(canvas);
-            State.buildingChoice = undefined;
-        }
-        if (State.buildingChoice === 'farmland_empty') {
-            MapUtil.addFarmland_empty(row, col);
-            MapView.render(canvas);
-            State.buildingChoice = undefined;
+        if (State.buildingChoice !== undefined){
+            if (State.buildingChoice.type === 'house1') {
+                MapUtil.addHouse1(row, col);
+                MapView.render(canvas);
+                State.buildingChoice = undefined;
+            }
+            if (State.buildingChoice.type === 'farmland_empty') {
+                MapUtil.addFarmland_empty(row, col);
+                MapView.render(canvas);
+                State.buildingChoice = undefined;
+            }
         }
         if (map[row][col].foreground === 'farmland_empty' && State.currentMonth === 3) {
             console.log ('attempting to plant seeds.')
@@ -426,10 +425,23 @@ const MapView = {
                 .then(textures => {
                     if (structure){
                         MapView.drawHovered(context, textures, structure);
-                    }
-                                            
+                    }                        
                     if (State.buildingChoice !== undefined){
-                        context.strokeRect(col * 32, row *32, 64, 64);
+                        rows = State.buildingChoice.rows
+                        cols = State.buildingChoice.cols
+                        //if buildingChoice is farmland, check if there are trees, then color red if yes.
+                        if (State.buildingChoice.type === 'farmland_empty'){
+                            console.log ('you are building farmland');
+                            const tiles = MapUtil.newTiles(rows, cols, row, col);
+                            const isNothing = tile => tile.foreground==='nothing';
+                            console.log (tiles);
+                            if (tiles.every(isNothing)){
+                                console.log ('you can build here')
+                            } else {
+                                context.strokeStyle="rgb(200, 0, 0)";
+                            }
+                        }
+                        context.strokeRect(col * 32, row *32, (32 * cols), (32 * rows));
                     } else {
                         context.strokeRect(col * 32, row *32, 32, 32);
                     }
@@ -485,8 +497,6 @@ const MapView = {
         canvas.height = canvas.clientHeight;
 
         const context = canvas.getContext('2d');
-        console.log ('rendering canvas');
-
         return loadTextures
             .then(textures => MapView.draw(context, textures));
     }
