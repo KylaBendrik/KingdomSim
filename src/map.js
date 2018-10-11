@@ -96,6 +96,37 @@ const MapUtil = {
             tile.structureNum = structureNum;
         }
     },
+    newTiles(rows, cols, row, col){
+        console.log ('newTiles running')
+        var R = 0;
+        const tiles = [];
+        while (R < rows){
+            var C = 0;
+            while (C < cols){
+                tiles.push(map[row + R][col + C])
+                
+                console.log ('new tile at row:', R, ', col:', C)
+                C ++;
+            }
+            R ++;
+        }
+        return tiles;
+    },
+    addMountain1_0(row, col) {
+        const rows = 8;
+        const cols = 16;
+        console.log (row, ', ', col);
+        tiles = MapUtil.newTiles(rows, cols, row, col);
+        console.log ('tiles: ', tiles);
+        
+        MapUtil.addStructure(tiles, 'mountain1_0', structureNum);
+        
+        State.houses.push({houseNum: houseNum, structure: structureNum})
+        State.structures.push({structureNum: structureNum, type: 'mountain1_0', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 20})
+
+        houseNum ++;
+        structureNum ++;
+    },
     addHouse1_complete(row, col) {
         const tiles = [
             map[row][col],
@@ -173,9 +204,9 @@ const MapUtil = {
         
     }
 }
-
-MapUtil.addHouse1_complete(3,3);
-MapUtil.addHouse1_complete(3,6);
+MapUtil.addMountain1_0(0,0);
+MapUtil.addHouse1_complete(8,6);
+MapUtil.addHouse1_complete(8,8);
 
 let mapCanvas = null;
 //applying textures to the above array
@@ -413,7 +444,7 @@ const MapView = {
     },
 
     draw(context, textures) {
-        
+        //grass
         for (const row of range(Math.floor(NUM_ROWS / 4))) {
             for (const col of range(Math.floor(NUM_COLS / 4))){
                 var grassType = map[row][col].background;
@@ -429,11 +460,19 @@ const MapView = {
                 context.drawImage(textures[grassType], col * 128, row * 128)
             }
         }
-
+        //all other structures
         for (const row of map) {
             for (const tile of row) {
-                if (tile.foreground in textures){                    
-                    context.drawImage(textures[tile.foreground], tile.x * 32, tile.y * 32)
+                if (tile.foreground in textures){
+                    var print = tile.foreground
+                    //snowfall on mountains
+                    if ((State.currentMonth === 11 ||  State.currentMonth === 1) && print === 'mountain1_0'){
+                        print = 'mountain1_1';
+                    }
+                    if ((State.currentMonth === 12 ||  State.currentMonth === 0) && print === 'mountain1_0'){
+                        print = 'mountain1_2';
+                    }                    
+                    context.drawImage(textures[print], tile.x * 32, tile.y * 32)
                 }
             }
         }

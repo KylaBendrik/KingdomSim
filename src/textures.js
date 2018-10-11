@@ -8,6 +8,10 @@ const snow0 = new Image();
 const snow1 = new Image();
 const snow2 = new Image();
 
+const mountain1_0 = new Image();
+const mountain1_1 = new Image();
+const mountain1_2 = new Image();
+
 const tree0 = new Image();
 const tree1 = new Image();
 const tree2 = new Image();
@@ -57,6 +61,21 @@ const snow1Promise = new Promise((resolve, _reject) => {
 const snow2Promise = new Promise((resolve, _reject) => {
     snow2.addEventListener('load', () => {
         resolve({ snow2 });
+    });
+});
+const mountain1_0Promise = new Promise((resolve, _reject) => {
+    mountain1_0.addEventListener('load', () => {
+        resolve({ mountain1_0 });
+    });
+});
+const mountain1_1Promise = new Promise((resolve, _reject) => {
+    mountain1_1.addEventListener('load', () => {
+        resolve({ mountain1_1 });
+    });
+});
+const mountain1_2Promise = new Promise((resolve, _reject) => {
+    mountain1_2.addEventListener('load', () => {
+        resolve({ mountain1_2 });
     });
 });
 
@@ -140,6 +159,10 @@ snow0.src = './textures/village_map/map/ground/snow0.png';
 snow1.src = './textures/village_map/map/ground/snow1.png';
 snow2.src = './textures/village_map/map/ground/snow2.png';
 
+mountain1_0.src = './textures/village_map/map/nature/mountain1_0.png';
+mountain1_1.src = './textures/village_map/map/nature/mountain1_1.png';
+mountain1_2.src = './textures/village_map/map/nature/mountain1_2.png';
+
 tree0.src = './textures/village_map/map/nature/tree0.png';
 tree1.src = './textures/village_map/map/nature/tree1.png';
 tree2.src = './textures/village_map/map/nature/tree2.png';
@@ -157,7 +180,17 @@ farmland_4.src = './textures/village_map/map/buildings/farmland_4.png';
 farmland_dead.src = './textures/village_map/map/buildings/farmland_dead.png';
 
 const allLoaded = Promise
-    .all([grass1Promise, grass2Promise, grass3Promise, grass4Promise, snow0Promise, snow1Promise, snow2Promise, tree0Promise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmland_emptyPromise, farmland_1Promise, farmland_2Promise, farmland_3Promise, farmland_4Promise, farmland_deadPromise])
+    .all([
+        grass1Promise, 
+        grass2Promise, 
+        grass3Promise, 
+        grass4Promise, 
+        snow0Promise, 
+        snow1Promise, 
+        snow2Promise, 
+        mountain1_0Promise,
+        mountain1_1Promise,
+        mountain1_2Promise, tree0Promise, tree1Promise, tree2Promise, tree3Promise, house1Promise, house1_conPromise, house1_openPromise, farmland_emptyPromise, farmland_1Promise, farmland_2Promise, farmland_3Promise, farmland_4Promise, farmland_deadPromise])
     .then(images => Object.assign(...images));
 
 module.exports = allLoaded;
