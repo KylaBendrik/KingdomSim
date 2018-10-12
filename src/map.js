@@ -406,7 +406,8 @@ const MapView = {
         }
         if (map[row][col].structureNum !== undefined){
             const structure = State.findStructure(map[row][col].structureNum);
-        
+            console.log ('structureNum:', map[row][col].structureNum);
+            console.log (structure);
         
             if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
                 console.log (structure.type)
