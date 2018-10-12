@@ -398,7 +398,9 @@ const MapView = {
         }
         if (map[row][col].structureNum !== undefined){
             const structure = State.findStructure(map[row][col].structureNum);
-            console.log ('structure Im trying to click on', structureNum)
+            console.log ('clicking on grid:', col, ',', row);
+            console.log ('structure Im trying to click on', map[row][col].structureNum);
+            console.log ('structure type Im trying to click on', structure.type);
         
             if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
                 MapView.updateBuilding(map[row][col].structureNum)
