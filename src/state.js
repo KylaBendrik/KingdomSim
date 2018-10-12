@@ -28,9 +28,40 @@ const State = {
 
     // maptiles: {x, y, background, foreground, structureNum}
     // structures:{structureNum, type, originRow, originCol, pointsLeft, pointsStart}
-    // houses: {houseNum, structure}
+    // houses: {houseNum, structure, peepSpots}
     // farmingQueue: {queueOrder, structure}
     // buildingQueue: {queueOrder, structure}
+    findEmptyHouses(){
+        const emptyHouses = []
+        for (house of State.houses){
+            const peepsInHouse = State.peepsInHouse();
+            if (peepsInHouse === 0){
+                emptyHouses.push(house);
+            }
+        }
+        console.log ('emptyHouses: ', emptyHouses)
+        return emptyHouses;
+    },
+    findAvailableHouses(){
+        const availableHouses = [];
+        for (house of State.houses){
+            const peepsInHouse = State.peepsInHouse();
+            if (peepsInHouse < house.peepSpots){
+                availableHouses.push(house)
+            }
+        }
+        console.log('available houses:', availableHouses)
+        return availableHouses;
+    },
+    peepsInHouse(){
+        var peepsInHouse = 0;
+            for (peep of State.peeps){
+                if (peep.house === house.houseNum){
+                    peepsInHouse ++;
+                }
+            }
+        return peepsInHouse;
+    },
     countPeepSpots(){
         var peepSpots = 0;
         for (house of State.houses){

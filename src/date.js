@@ -34,15 +34,32 @@ const DateView = {
         }
         //add new peeps
         peepSpots = State.countPeepSpots();
-        if (peepSpots > 0){
-            const ifNewPeep = Math.floor(Math.random() * 10);
-            if (ifNewPeep === 0){
-                console.log ('new peep incoming!');
-                console.log (State.randPeeps);
-                const newPeep = Math.floor(Math.random() * State.randPeeps.length);
-                State.peeps.push(State.randPeeps[newPeep])
-                State.randPeeps.splice(newPeep, 1);
+        if (peepSpots > 0 && State.food === State.peeps.length * 2){
+            emptyHouses = State.findEmptyHouses();
+            const ifNewPeep = Math.floor(Math.random() * 20);
+
+            if (emptyHouses.length > 0){
+                //pick random empty house
+                const peepHouse = Math.floor(Math.random() * emptyHouses.length);
+                const peepID = Math.floor(Math.random() * State.randPeeps.length)
+                const newPeep = State.randPeeps[peepID];
+                State.randPeeps.splice(peepID, 1);
+                newPeep.house = peepHouse;
+                State.peeps.push(newPeep)
+            } else {
+                if (ifNewPeep === 1){
+                    //pick random AVAILABLE house
+                    const availableHouses = State.findAvailableHouses();
+                    console.log ('available houses:', availableHouses);
+                    const peepHouse = Math.floor(Math.random() * availableHouses.length);
+                    const peepID = Math.floor(Math.random() * State.randPeeps.length)
+                    const newPeep = State.randPeeps[peepID];
+                    State.randPeeps.splice(peepID, 1);
+                    newPeep.house = peepHouse;
+                    State.peeps.push(newPeep)
+                }
             }
+            console.log ('peeps:', State.peeps)
             
         }
 
@@ -222,7 +239,6 @@ const DateView = {
                     
                     MapView.updateBuilding(tree.structureNum);
                     State.wood += tree.pointsLeft;
-                    console.log ('got ', tree.pointsLeft, 'wood')
                     MapUtil.setWoodText(State.wood);
                     trees.splice(0, 1);
                     pointsUsed += treePoints;
@@ -251,58 +267,42 @@ const DateView = {
             
             for (farm of farms){
                 var plot = State.findStructure(farm.structure);
-                console.log ('currentMonth: ', State.currentMonth);
-                console.log (plot);
-                console.log ('farm.type: ', plot.type)
                 if (State.currentMonth === 3 && plot.type === "farmland_1"){
-                    console.log ('pointsLeft in April:', pointsLeft);
                     if (pointsLeft < 10){
                         plot.pointsLeft = -1;
-                        console.log ('this plot was planted, but will die');
                         
                     } else {
                         pointsLeft -= 10;
                         pointsUsed += 10;
-                        console.log ('this plot was planted and go enough points to grow')
                     }
                     MapView.updateBuilding(farm.structure);
-                    console.log ('attempting to update; pointsLeft:', pointsLeft)
                 }
                 if (State.currentMonth > 3 && State.currentMonth < 9 && plot.pointsLeft === 0){
-                    console.log ('pointsLeft:', pointsLeft);
                     if (pointsLeft < 5){
                         plot.pointsLeft = -1;
-                        console.log ('this plot will die');
                         
                     } else {
                         pointsLeft -= 5;
                         pointsUsed += 5;
                     }
                     MapView.updateBuilding(farm.structure);
-                    console.log ('attempting to update; pointsLeft:', pointsLeft)
                 }
                 if (State.currentMonth === 9 && plot.type === "farmland_4"){
-                    console.log ('pointsLeft in October:', pointsLeft);
                     if (pointsLeft < 10){
                         plot.pointsLeft = -1;
-                        console.log ('this plot unable to be harvested');
                         
                     } else {
                         pointsLeft -= 10;
                         pointsUsed += 10;
-                        console.log ('this plot was harvested. Awesome!')
                         State.food += 25;
                     }
                     
                     MapView.updateBuilding(farm.structure);
-                    console.log ('attempting to harvest; pointsLeft:', pointsLeft)
                 }
                 if (State.currentMonth === 9 && plot.type === 'farmland_dead'){
                     MapView.updateBuilding(farm.structure);
-                    console.log ('turning under')
                 }
                 //level up farmers
-                console.log ('points used this month:', pointsUsed);
             }
             for (const farmer of farmers){
                 //A = total points used by all the farmers
@@ -313,7 +313,6 @@ const DateView = {
                 //X = Peep[i] gets this much XP
                 farmer.farmSkill += (pointsUsed/farmers.length)*c;
             };
-            console.log ('All the Farmers, after they level up', farmers);
         }
     },
 

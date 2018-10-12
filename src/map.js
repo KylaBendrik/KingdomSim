@@ -132,7 +132,7 @@ const MapUtil = {
         ]
 
         const maxWood = 5
-        const maxFood = 20
+        const maxFood = 25
         const peepSpots = 4
 
         MapUtil.addStructure(tiles, 'house1', structureNum);
@@ -265,7 +265,6 @@ const MapView = {
             tile.structureNum = structureNum;
             State.structures.push({structureNum: structureNum, type: 'sapling', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 0})
             structureNum++;
-            console.log (tile);
             MapView.render(mapCanvas);
         }
     },
@@ -298,7 +297,7 @@ const MapView = {
             structure.type = 'house1'
             //storage push - probably can be separated into function
             const maxWood = 5
-            const maxFood = 20
+            const maxFood = 25
             State.storages.push({structure: structureNum, maxWood: maxWood, curWood: 0, maxFood: maxFood, curFood: 0})
             State.maxWood += maxWood;
             State.maxFood += maxFood;
