@@ -45,6 +45,7 @@ const State = {
         const availableHouses = [];
         for (house of State.houses){
             const peepsInHouse = State.peepsInHouse();
+            console.log ('peeps in house', house.houseNum, ': ', peepsInHouse);
             if (peepsInHouse < house.peepSpots){
                 availableHouses.push(house)
             }

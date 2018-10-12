@@ -18,6 +18,10 @@ const DateView = {
     },
 
     nextMonth(MapView, MapUtil) {
+        console.log ('new Month: ', MONTHS[State.currentMonth])
+        console.log (State.map)
+        console.log (State.structures);
+
          //apply points for all the jobs
         DateView.building(MapView);
         if (State.wood < State.maxWood){
@@ -33,42 +37,42 @@ const DateView = {
             State.food -= 1;
         }
         //add new peeps
-        peepSpots = State.countPeepSpots();
-        console.log ('peeps length', State.peeps.length);
-        console.log ('State.food: ', State.food)
-        console.log ('peepSpots', peepSpots)
-        console.log ('houses:', State.houses)
+        const peepSpots = State.countPeepSpots();
         
-        emptyHouses = State.findEmptyHouses();
-        console.log ('empty houses:', emptyHouses);
+        var emptyHouses = State.findEmptyHouses();
 
-        if ((peepSpots - peeps.length) > 0 && State.food >= State.peeps.length * 2){
+        console.log ('(peepSpots - peeps.length) > 0: ', (peepSpots - State.peeps.length) > 0);
+        console.log ('State.food >= State.peeps.length * 2: ', State.food >= State.peeps.length * 2)
+
+        if ((peepSpots - State.peeps.length) > 0 && State.food >= State.peeps.length * 2){
             emptyHouses = State.findEmptyHouses();
-            console.log ('empty houses:', emptyHouses);
+            console.log ('we can now add a peep');
 
             const ifNewPeep = Math.floor(Math.random() * 5);
 
             if (emptyHouses.length > 0){
                 //pick random empty house
-                
                 console.log ('empty houses:', emptyHouses);
-                const peepHouse = Math.floor(Math.random() * emptyHouses.length);
+                const peepHouse = emptyHouses[Math.floor(Math.random() * emptyHouses.length)];
                 const peepID = Math.floor(Math.random() * State.randPeeps.length)
                 const newPeep = State.randPeeps[peepID];
+                console.log ('putting peep into house:', peepHouse.houseNum)
                 State.randPeeps.splice(peepID, 1);
-                newPeep.house = peepHouse;
+                newPeep.house = peepHouse.houseNum;
                 State.peeps.push(newPeep)
+                emptyHouses = State.findEmptyHouses();
             } else {
                 console.log ('there are no empty houses');
-                if (ifNewPeep === 1){
+                if (ifNewPeep === 1 && State.food >= State.peeps.length * 10){
                     //pick random AVAILABLE house
                     const availableHouses = State.findAvailableHouses();
                     console.log ('available houses:', availableHouses);
-                    const peepHouse = Math.floor(Math.random() * availableHouses.length);
+                    const peepHouse = availableHouses[Math.floor(Math.random() * availableHouses.length)];
                     const peepID = Math.floor(Math.random() * State.randPeeps.length)
                     const newPeep = State.randPeeps[peepID];
+                    console.log ('putting peep into house:', peepHouse.houseNum)
                     State.randPeeps.splice(peepID, 1);
-                    newPeep.house = peepHouse;
+                    newPeep.house = peepHouse.houseNum;
                     State.peeps.push(newPeep)
                 }
             }
