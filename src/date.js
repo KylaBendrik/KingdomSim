@@ -311,7 +311,7 @@ const DateView = {
                     } else {
                         pointsLeft -= 10;
                         pointsUsed += 10;
-                        State.food += 25;
+                        State.food += 30;
                     }
                     
                     MapView.updateBuilding(farm.structure);

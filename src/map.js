@@ -198,6 +198,7 @@ const MapUtil = {
             State.structures.push({structureNum: structureNum, type: 'farmland_empty', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
             console.log('new farmland placed. Structure: ', structureNum)
             console.log('structures:', State.structures)
+            console.log('trying really hard to find structure in list:', State.findStructure(structureNum))
             State.farmingQueue.push({queueOrder: farmQueueOrder, structure: structureNum})
 
             farmQueueOrder ++;
@@ -397,7 +398,7 @@ const MapView = {
         }
         if (map[row][col].structureNum !== undefined){
             const structure = State.findStructure(map[row][col].structureNum);
-            console.log ('structure Im trying to click on', structure)
+            console.log ('structure Im trying to click on', structureNum)
         
             if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
                 MapView.updateBuilding(map[row][col].structureNum)
