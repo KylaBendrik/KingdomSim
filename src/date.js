@@ -34,12 +34,24 @@ const DateView = {
         }
         //add new peeps
         peepSpots = State.countPeepSpots();
-        if (peepSpots > 0 && State.food === State.peeps.length * 2){
+        console.log ('peeps length', State.peeps.length);
+        console.log ('State.food: ', State.food)
+        console.log ('peepSpots', peepSpots)
+        console.log ('houses:', State.houses)
+        
+        emptyHouses = State.findEmptyHouses();
+        console.log ('empty houses:', emptyHouses);
+
+        if ((peepSpots - peeps.length) > 0 && State.food >= State.peeps.length * 2){
             emptyHouses = State.findEmptyHouses();
-            const ifNewPeep = Math.floor(Math.random() * 20);
+            console.log ('empty houses:', emptyHouses);
+
+            const ifNewPeep = Math.floor(Math.random() * 5);
 
             if (emptyHouses.length > 0){
                 //pick random empty house
+                
+                console.log ('empty houses:', emptyHouses);
                 const peepHouse = Math.floor(Math.random() * emptyHouses.length);
                 const peepID = Math.floor(Math.random() * State.randPeeps.length)
                 const newPeep = State.randPeeps[peepID];
@@ -47,6 +59,7 @@ const DateView = {
                 newPeep.house = peepHouse;
                 State.peeps.push(newPeep)
             } else {
+                console.log ('there are no empty houses');
                 if (ifNewPeep === 1){
                     //pick random AVAILABLE house
                     const availableHouses = State.findAvailableHouses();

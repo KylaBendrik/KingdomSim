@@ -39,7 +39,6 @@ const State = {
                 emptyHouses.push(house);
             }
         }
-        console.log ('emptyHouses: ', emptyHouses)
         return emptyHouses;
     },
     findAvailableHouses(){
@@ -50,7 +49,6 @@ const State = {
                 availableHouses.push(house)
             }
         }
-        console.log('available houses:', availableHouses)
         return availableHouses;
     },
     peepsInHouse(){
@@ -67,7 +65,6 @@ const State = {
         for (house of State.houses){
             peepSpots += house.peepSpots;
         }
-        console.log('available room for people: ', (peepSpots - State.peeps.length))
         return peepSpots;
     },
     removeStructure(id){

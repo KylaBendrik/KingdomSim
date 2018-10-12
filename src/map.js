@@ -64,7 +64,6 @@ for (var y = 0; y < NUM_ROWS; y++){
     map.push(newLine);
 }
 
-console.log (map)
 //resources - probably a better spot
 
 document.addEventListener('DOMContentLoaded',() => {
@@ -113,9 +112,7 @@ const MapUtil = {
     addMountain1_0(row, col) {
         const rows = 8;
         const cols = 16;
-        console.log (row, ', ', col);
         tiles = MapUtil.newTiles(rows, cols, row, col);
-        console.log ('tiles: ', tiles);
         
         MapUtil.addStructure(tiles, 'mountain1_0', structureNum);
         
@@ -151,7 +148,6 @@ const MapUtil = {
     addHouse1(row, col) {
         var points = 20;
         var woodRequired = 40;
-        const peepSpots = 0;
 
         const tiles = [
             map[row][col],
@@ -172,13 +168,11 @@ const MapUtil = {
 
             MapUtil.addStructure(tiles, 'house1_con', structureNum);
 
-            State.houses.push({houseNum: houseNum, structure: structureNum, peepSpots: peepSpots})
             State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
             State.buildingQueue.push({queueOrder: queueOrder, structure: structureNum})
             
 
             queueOrder ++;
-            houseNum ++;        
             structureNum ++;
             State.wood -= woodRequired;
             MapUtil.setWoodText(State.wood, State.maxWood);
@@ -273,7 +267,6 @@ const MapView = {
         if (structure.type === 'sapling'){
             map[structure.originRow][structure.originCol].foreground = 'tree1';
             structure.type = 'tree'
-            console.log (structure);
 
             MapView.render(mapCanvas);
         }
@@ -298,14 +291,15 @@ const MapView = {
             //storage push - probably can be separated into function
             const maxWood = 5
             const maxFood = 25
+            const peepSpots = 4;
+
             State.storages.push({structure: structureNum, maxWood: maxWood, curWood: 0, maxFood: maxFood, curFood: 0})
+            State.houses.push({houseNum: houseNum, structure: structureNum, peepSpots: peepSpots})
+
             State.maxWood += maxWood;
             State.maxFood += maxFood;
 
             //peeps can now live in house
-            const peepSpots = 4;
-            var house = State.findHouse(structureNum);
-            house.peepSpots = peepSpots;
 
             MapUtil.setWoodText(State.wood, State.maxWood);
             MapUtil.setFoodText(State.Food);
@@ -370,7 +364,6 @@ const MapView = {
             if (structure.pointsLeft === -1){
                 map[structure.originRow][structure.originCol].foreground = 'farmland_dead';
                 structure.type = 'farmland_dead'
-                console.log ('a farm plot died. Not enough farmers');
 
                 MapView.render(mapCanvas);
             }
@@ -381,19 +374,16 @@ const MapView = {
         const row = Math.floor(layerY / 32);   
         const col = Math.floor(layerX / 32);
         if (State.buildingChoice !== undefined){
-            console.log (State.buildingChoice);
             if (State.buildingChoice.type === 'house1') {
                 MapUtil.addHouse1(row, col);
                 MapView.render(canvas);
                 State.buildingChoice = undefined;
             } else {
-                console.log('not house?')
                 if (State.buildingChoice.type === 'farmland_empty') {
                     MapUtil.addFarmland_empty(row, col);
                     MapView.render(canvas);
                     State.buildingChoice = undefined;
                 } else {
-                    console.log('not farmland?')
                     if (State.buildingChoice.type === 'stockpileW_con') {
                         MapUtil.addStockpileW(row, col);
                         MapView.render(canvas);
@@ -406,13 +396,8 @@ const MapView = {
         }
         if (map[row][col].structureNum !== undefined){
             const structure = State.findStructure(map[row][col].structureNum);
-            console.log ('structureNum:', map[row][col].structureNum);
-            console.log (structure);
         
             if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
-                console.log (structure.type)
-                console.log ('attempting to plant seeds.')
-                console.log (map[row][col]);
                 MapView.updateBuilding(map[row][col].structureNum)
                 MapView.render(canvas);
             }
