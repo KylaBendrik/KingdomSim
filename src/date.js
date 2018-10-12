@@ -32,6 +32,13 @@ const DateView = {
         for (peep of State.peeps){
             State.food -= 1;
         }
+        //add new peeps
+        peepSpots = State.countPeepSpots();
+        if (peepSpots > 0){
+            console.log ('new peep incoming!');
+            const newPeep = Math.floor(Math.random() * State.randPeeps.length);
+            State.peeps.push(State.randPeeps[newPeep])
+        }
 
         State.currentMonth++;
 
@@ -239,6 +246,7 @@ const DateView = {
             for (farm of farms){
                 var plot = State.findStructure(farm.structure);
                 console.log ('currentMonth: ', State.currentMonth);
+                console.log (plot);
                 console.log ('farm.type: ', plot.type)
                 if (State.currentMonth === 3 && plot.type === "farmland_1"){
                     console.log ('pointsLeft in April:', pointsLeft);

@@ -98,7 +98,6 @@ const MapUtil = {
         }
     },
     newTiles(rows, cols, row, col){
-        console.log ('newTiles running. rows: ', rows, 'cols:', cols);
         var R = 0;
         const tiles = [];
         while (R < rows){
@@ -120,7 +119,6 @@ const MapUtil = {
         
         MapUtil.addStructure(tiles, 'mountain1_0', structureNum);
         
-        State.houses.push({houseNum: houseNum, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'mountain1_0', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 20})
         
         structureNum ++;
@@ -135,10 +133,11 @@ const MapUtil = {
 
         const maxWood = 5
         const maxFood = 20
+        const peepSpots = 4
 
         MapUtil.addStructure(tiles, 'house1', structureNum);
         
-        State.houses.push({houseNum: houseNum, structure: structureNum})
+        State.houses.push({houseNum: houseNum, structure: structureNum, peepSpots: peepSpots})
         State.structures.push({structureNum: structureNum, type: 'house1', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 20})
         State.storages.push({structure: structureNum, maxWood: maxWood, curWood: maxWood, maxFood: maxFood, curFood: maxFood})
         
@@ -152,6 +151,7 @@ const MapUtil = {
     addHouse1(row, col) {
         var points = 20;
         var woodRequired = 40;
+        const peepSpots = 0;
 
         const tiles = [
             map[row][col],
@@ -172,7 +172,7 @@ const MapUtil = {
 
             MapUtil.addStructure(tiles, 'house1_con', structureNum);
 
-            State.houses.push({houseNum: houseNum, structure: structureNum})
+            State.houses.push({houseNum: houseNum, structure: structureNum, peepSpots: peepSpots})
             State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
             State.buildingQueue.push({queueOrder: queueOrder, structure: structureNum})
             
@@ -303,6 +303,11 @@ const MapView = {
             State.maxWood += maxWood;
             State.maxFood += maxFood;
 
+            //peeps can now live in house
+            const peepSpots = 4;
+            var house = State.findHouse(structureNum);
+            house.peepSpots = peepSpots;
+
             MapUtil.setWoodText(State.wood, State.maxWood);
             MapUtil.setFoodText(State.Food);
 
@@ -377,21 +382,28 @@ const MapView = {
         const row = Math.floor(layerY / 32);   
         const col = Math.floor(layerX / 32);
         if (State.buildingChoice !== undefined){
+            console.log (State.buildingChoice);
             if (State.buildingChoice.type === 'house1') {
                 MapUtil.addHouse1(row, col);
                 MapView.render(canvas);
                 State.buildingChoice = undefined;
+            } else {
+                console.log('not house?')
+                if (State.buildingChoice.type === 'farmland_empty') {
+                    MapUtil.addFarmland_empty(row, col);
+                    MapView.render(canvas);
+                    State.buildingChoice = undefined;
+                } else {
+                    console.log('not farmland?')
+                    if (State.buildingChoice.type === 'stockpileW_con') {
+                        MapUtil.addStockpileW(row, col);
+                        MapView.render(canvas);
+                        State.buildingChoice = undefined;
+                    }
+                }
             }
-            if (State.buildingChoice.type === 'farmland_empty') {
-                MapUtil.addFarmland_empty(row, col);
-                MapView.render(canvas);
-                State.buildingChoice = undefined;
-            }
-            if (State.buildingChoice.type === 'stockpileW_con') {
-                MapUtil.addStockpileW(row, col);
-                MapView.render(canvas);
-                State.buildingChoice = undefined;
-            }
+            
+            
         }
         if (map[row][col].structureNum !== undefined){
             const structure = State.findStructure(map[row][col].structureNum);

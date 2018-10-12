@@ -14,12 +14,27 @@ const State = {
     food: 0,
     maxFood: 0,
 
+    //will get rid of later. Temporary...
+    randPeeps: [
+        {name: 'Andrew', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20}, 
+        {name: 'Anna', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20}, 
+        {name: 'Burt', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20}, 
+        {name: 'Barbara', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20}, 
+    ],
+
     // maptiles: {x, y, background, foreground, structureNum}
     // structures:{structureNum, type, originRow, originCol, pointsLeft, pointsStart}
     // houses: {houseNum, structure}
     // farmingQueue: {queueOrder, structure}
     // buildingQueue: {queueOrder, structure}
-
+    countPeepSpots(){
+        var peepSpots = 0;
+        for (house of State.houses){
+            peepSpots += house.peepSpots;
+        }
+        console.log('available room for people: ', (peepSpots - State.peeps.length))
+        return peepSpots;
+    },
     removeStructure(id){
         const index = State.structures.findIndex(structure => structure.structureNum === id);
 

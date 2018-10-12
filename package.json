@@ -1,6 +1,7 @@
 {
   "name": "kingdomsim",
-  "version": "0.0.1",
+  "productName": "KingdonSim",
+  "version": "0.1.5",
   "description": "Lead a kingdom to glory and beyond!",
   "main": "index.js",
   "scripts": {
