@@ -5,16 +5,28 @@ const State = {
     houses: [],
     peeps: [],
     structures: [],
+    storages: [],
     buildingQueue: [],
     farmingQueue: [],
     map: [],
-    wood: 50,
-    food: 50,
+    wood: 0,
+    maxWood: 0,
+    food: 0,
+    maxFood: 0,
+
+    // maptiles: {x, y, background, foreground, structureNum}
+    // structures:{structureNum, type, originRow, originCol, pointsLeft, pointsStart}
+    // houses: {houseNum, structure}
+    // farmingQueue: {queueOrder, structure}
+    // buildingQueue: {queueOrder, structure}
 
     removeStructure(id){
         const index = State.structures.findIndex(structure => structure.structureNum === id);
 
         State.structures.splice(index, 1);
+    },
+    findStorage(structure) {
+        return State.storages.find(storage => storage.structure === structure)
     },
 
     findStructure(id) {

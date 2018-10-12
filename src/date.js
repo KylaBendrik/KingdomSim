@@ -20,7 +20,12 @@ const DateView = {
     nextMonth(MapView, MapUtil) {
          //apply points for all the jobs
         DateView.building(MapView);
-        DateView.gathering(MapUtil, MapView);
+        if (State.wood < State.maxWood){
+            DateView.gathering(MapUtil, MapView);
+            if (State.wood > State.maxWood){
+                State.wood = State.maxWood;
+            }
+        }
         DateView.farming();
         DateView.treesGrow(MapView);
 

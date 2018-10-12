@@ -1,9 +1,10 @@
 const State = require('./state');
 
 const BuildOptions = {
-    init(houseButton, farmButton) {
+    init(houseButton, farmButton, stockpileWButton) {
         houseButton.addEventListener('click', BuildOptions.chooseHouse);
         farmButton.addEventListener('click', BuildOptions.chooseFarm);
+        stockpileWButton.addEventListener('click', BuildOptions.chooseStockpileW);
     },
 
     chooseHouse() {
@@ -14,6 +15,10 @@ const BuildOptions = {
     chooseFarm() {
         console.log("clicked 'farmland");
         State.buildingChoice = {type: 'farmland_empty', rows: 2, cols: 2};
+    },
+    chooseStockpileW() {
+        console.log("clicked 'wood stockpile");
+        State.buildingChoice = {type: 'stockpileW_con', rows: 2, cols: 2};
     }
 }
 

@@ -68,15 +68,16 @@ console.log (map)
 //resources - probably a better spot
 
 document.addEventListener('DOMContentLoaded',() => {
-    MapUtil.setWoodText(State.wood);
+    MapUtil.setWoodText(State.wood, State.maxWood);
     MapUtil.setFoodText(State.food);
 });
 
 
 //adding default houses
 const MapUtil = {
-    setWoodText(wood) {   
-        document.getElementById("wood").innerHTML = wood;
+    setWoodText(wood, maxWood) {
+        //`./textures/village_map/map/${path}.png`
+        document.getElementById("wood").innerHTML = `${State.wood}/${State.maxWood}`;
     },
     setFoodText(food) {   
         document.getElementById("food").innerHTML = food;
@@ -121,8 +122,7 @@ const MapUtil = {
         
         State.houses.push({houseNum: houseNum, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'mountain1_0', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 20})
-
-        houseNum ++;
+        
         structureNum ++;
     },
     addHouse1_complete(row, col) {
@@ -133,11 +133,19 @@ const MapUtil = {
             map[row + 1][col + 1]
         ]
 
+        const maxWood = 5
+        const maxFood = 20
+
         MapUtil.addStructure(tiles, 'house1', structureNum);
         
         State.houses.push({houseNum: houseNum, structure: structureNum})
         State.structures.push({structureNum: structureNum, type: 'house1', originRow: row, originCol: col, pointsLeft: 0, pointsStart: 20})
-
+        State.storages.push({structure: structureNum, maxWood: maxWood, curWood: maxWood, maxFood: maxFood, curFood: maxFood})
+        
+        State.maxWood += maxWood;
+        State.maxFood += maxFood;
+        State.wood += maxWood;
+        State.food += maxFood;
         houseNum ++;
         structureNum ++;
     },
@@ -168,11 +176,12 @@ const MapUtil = {
             State.structures.push({structureNum: structureNum, type: 'house1_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
             State.buildingQueue.push({queueOrder: queueOrder, structure: structureNum})
             
+
             queueOrder ++;
             houseNum ++;        
             structureNum ++;
             State.wood -= woodRequired;
-            MapUtil.setWoodText(State.wood);
+            MapUtil.setWoodText(State.wood, State.maxWood);
 
         }
         
@@ -199,12 +208,45 @@ const MapUtil = {
             farmQueueOrder ++;
             structureNum ++;
         }
-        
+    },
+    addStockpileW(row, col) {
+        var points = 10;
+        var woodRequired = 10;
+
+        const tiles = [
+            map[row][col],
+            map[row][col + 1],
+            map[row + 1][col],
+            map[row + 1][col + 1]
+        ]
+
+        const structureList = tiles.map(tile => State.findStructure(tile.structureNum));
+
+        for (const structure of structureList){
+            if (structure !== undefined && structure.type === 'tree'){
+                points += 5;
+                woodRequired -= 2;
+            }
+        }
+        if (State.wood >= woodRequired){
+            MapUtil.addStructure(tiles, 'stockpileW_con', structureNum);
+
+            State.structures.push({structureNum: structureNum, type: 'stockpileW_con', originRow: row, originCol: col, pointsLeft: points, pointsStart: points})
+            
+            State.buildingQueue.push({queueOrder: queueOrder, structure: structureNum})
+
+            queueOrder ++;
+            houseNum ++;        
+            structureNum ++;
+            State.wood -= woodRequired;
+            MapUtil.setWoodText(State.wood, State.maxWood);
+        }
     }
 }
 MapUtil.addMountain1_0(0,0);
 MapUtil.addHouse1_complete(8,6);
 MapUtil.addHouse1_complete(8,8);
+
 
 let mapCanvas = null;
 //applying textures to the above array
@@ -254,6 +296,30 @@ const MapView = {
 
             map[structure.originRow][structure.originCol].foreground = 'house1';
             structure.type = 'house1'
+            //storage push - probably can be separated into function
+            const maxWood = 5
+            const maxFood = 20
+            State.storages.push({structure: structureNum, maxWood: maxWood, curWood: 0, maxFood: maxFood, curFood: 0})
+            State.maxWood += maxWood;
+            State.maxFood += maxFood;
+
+            MapUtil.setWoodText(State.wood, State.maxWood);
+            MapUtil.setFoodText(State.Food);
+
+            MapView.render(mapCanvas);
+        }
+        if (structure.type === 'stockpileW_con'){
+
+            map[structure.originRow][structure.originCol].foreground = 'stockpileW_0';
+            structure.type = 'stockpileW'
+            //storage push - probably can be separated into function
+            const maxWood = 50
+            const maxFood = 0
+            State.storages.push({structure: structureNum, maxWood: maxWood, curWood: 0, maxFood: maxFood, curFood: 0})
+            State.maxWood += maxWood;
+            State.maxFood += maxFood;
+
+            MapUtil.setWoodText(State.wood, State.maxWood);
 
             MapView.render(mapCanvas);
         }
@@ -321,6 +387,11 @@ const MapView = {
                 MapView.render(canvas);
                 State.buildingChoice = undefined;
             }
+            if (State.buildingChoice.type === 'stockpileW_con') {
+                MapUtil.addStockpileW(row, col);
+                MapView.render(canvas);
+                State.buildingChoice = undefined;
+            }
         }
         if (map[row][col].structureNum !== undefined){
             const structure = State.findStructure(map[row][col].structureNum);
@@ -344,6 +415,9 @@ const MapView = {
     },
     farmerPeepsList(peeps, i){
         return (peeps[i].name + ", Level " + Math.floor(peeps[i].farmSkill));
+    },
+    gatherPeepsList(peeps, i){
+        return (peeps[i].name + ", Level " + Math.floor(peeps[i].gatherSkill));
     },
 
     drawHovered(context, textures, structure) {
@@ -375,7 +449,7 @@ const MapView = {
             }
         }
 
-        if (type === 'house1_con') {
+        if (type === 'house1_con' || type === 'stockpileW_con') {
             const queueOrder = State.findQueueOrder(structure.structureNum).queueOrder;
 
             const peeps = State.findPeepsByJob('builder');
@@ -395,6 +469,21 @@ const MapView = {
 
         }
 
+        if (type === 'stockpileW'){
+            const peeps = State.findPeepsByJob('gatherer');
+            // context.fillStyle = 'rgb(200, 200, 200)'
+            // context.fillRect(originCol * 32 + 64, rectBegin, 190, 24)
+            // context.fillStyle = 'rgb(10, 10, 10)'
+            
+            //list gatherers
+            for(i=0; i < peeps.length; i++){
+                context.fillStyle = 'rgb(200, 200, 200)'
+                context.fillRect(originCol * 32 + 64, rectBegin + ((i * 24)), 190, 24)
+                
+                context.fillStyle = 'rgb(10, 10, 10)'
+                context.fillText(MapView.gatherPeepsList(peeps, i), originCol * 32 + 64, textBegin + ((i * 24)))
+            }
+        }
         if (type === 'farmland_empty' || type === 'farmland_1' || type === 'farmland_2' || type === 'farmland_3' || type === 'farmland_4'){
             const queueOrder = State.findFarmQueueOrder(structure.structureNum).queueOrder;
 
@@ -437,12 +526,9 @@ const MapView = {
                         cols = State.buildingChoice.cols
                         //if buildingChoice is farmland, check if there are trees, then color red if yes.
                         if (State.buildingChoice.type === 'farmland_empty'){
-                            console.log ('you are building farmland');
                             const tiles = MapUtil.newTiles(rows, cols, row, col);
                             const isNothing = tile => tile.foreground==='nothing';
-                            console.log (tiles);
                             if (tiles.every(isNothing)){
-                                console.log ('you can build here')
                             } else {
                                 context.strokeStyle="rgb(200, 0, 0)";
                             }
@@ -489,6 +575,26 @@ const MapView = {
                     }
                     if ((State.currentMonth === 12 ||  State.currentMonth === 0) && print === 'mountain1_0'){
                         print = 'mountain1_2';
+                    }
+                    if ((print === 'stockpileW_0')){
+                        console.log ('I found a stockpile')
+                        const arr = [
+                            'stockpileW_0',
+                            'stockpileW_1',
+                            'stockpileW_2',
+                            'stockpileW_3',
+                            'stockpileW_4',
+                            'stockpileW_5',
+                            'stockpileW_6',
+                            'stockpileW_7',
+                        ]
+                        var result = Math.floor(((State.wood / State.maxWood)*8)-1)
+                        if (result < 0){
+                            result = 0
+                        }
+                        console.log (result)
+                        print = arr[result];
+                        console.log (print)
                     }                    
                     context.drawImage(textures[print], tile.x * 32, tile.y * 32)
                 }

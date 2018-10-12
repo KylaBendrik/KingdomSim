@@ -6,40 +6,50 @@ const setupTexture = function setupTexture([name, path]) {
         });
     });
 
-    image.src = `./textures/${path}.png`;
+    image.src = `./textures/village_map/map/${path}.png`;
 
     return promise;
 };
 
 const images = {
-    grass1: 'village_map/map/ground/grass1',
-    grass2: 'village_map/map/ground/grass2',
-    grass3: 'village_map/map/ground/grass3',
-    grass4: 'village_map/map/ground/grass4',
+    grass1: 'ground/grass1',
+    grass2: 'ground/grass2',
+    grass3: 'ground/grass3',
+    grass4: 'ground/grass4',
 
-    snow0: 'village_map/map/ground/snow0',
-    snow1: 'village_map/map/ground/snow1',
-    snow2: 'village_map/map/ground/snow2',
+    snow0: 'ground/snow0',
+    snow1: 'ground/snow1',
+    snow2: 'ground/snow2',
 
-    mountain1_0: 'village_map/map/nature/mountain1_0',
-    mountain1_1: 'village_map/map/nature/mountain1_1',
-    mountain1_2: 'village_map/map/nature/mountain1_2',
+    mountain1_0: 'nature/mountain1_0',
+    mountain1_1: 'nature/mountain1_1',
+    mountain1_2: 'nature/mountain1_2',
 
-    tree0: 'village_map/map/nature/tree0',
-    tree1: 'village_map/map/nature/tree1',
-    tree2: 'village_map/map/nature/tree2',
-    tree3: 'village_map/map/nature/tree3',
+    tree0: 'nature/tree0',
+    tree1: 'nature/tree1',
+    tree2: 'nature/tree2',
+    tree3: 'nature/tree3',
 
-    house1: 'village_map/map/buildings/house1',
-    house1_con: 'village_map/map/buildings/house1_inconstruction',
-    house1_open: 'village_map/map/buildings/house1_open',
+    house1: 'buildings/house1',
+    house1_con: 'buildings/house1_inconstruction',
+    house1_open: 'buildings/house1_open',
 
-    farmland_empty: 'village_map/map/buildings/farmland_empty',
-    farmland_1: 'village_map/map/buildings/farmland_1',
-    farmland_2: 'village_map/map/buildings/farmland_2',
-    farmland_3: 'village_map/map/buildings/farmland_3',
-    farmland_4: 'village_map/map/buildings/farmland_4',
-    farmland_dead: 'village_map/map/buildings/farmland_dead',
+    farmland_empty: 'buildings/farmland_empty',
+    farmland_1: 'buildings/farmland_1',
+    farmland_2: 'buildings/farmland_2',
+    farmland_3: 'buildings/farmland_3',
+    farmland_4: 'buildings/farmland_4',
+    farmland_dead: 'buildings/farmland_dead',
+
+    stockpileW_con: 'buildings/storage/stockpileW_con',
+    stockpileW_0: 'buildings/storage/stockpileW_0',
+    stockpileW_1: 'buildings/storage/stockpileW_1',
+    stockpileW_2: 'buildings/storage/stockpileW_2',
+    stockpileW_3: 'buildings/storage/stockpileW_3',
+    stockpileW_4: 'buildings/storage/stockpileW_4',
+    stockpileW_5: 'buildings/storage/stockpileW_5',
+    stockpileW_6: 'buildings/storage/stockpileW_6',
+    stockpileW_7: 'buildings/storage/stockpileW_7',
 
 };
 

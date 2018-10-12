@@ -12,7 +12,8 @@ const IDs= [
     'month_button',
     'alert',
     'buildChoiceHouse1',
-    'buildChoiceFarmland'
+    'buildChoiceFarmland',
+    'buildChoiceStockpileW'
 ];
 
 const getElements = function getElements(elements, id) {
@@ -26,6 +27,6 @@ document.addEventListener('DOMContentLoaded',() => {
 
     MapView.init(elements.map);
     DateView.init(elements.date, elements.month_button, elements.alert, MapView, MapUtil);
-    BuildOptions.init(elements.buildChoiceHouse1, elements.buildChoiceFarmland);
+    BuildOptions.init(elements.buildChoiceHouse1, elements.buildChoiceFarmland, elements.buildChoiceStockpileW);
 
 });
