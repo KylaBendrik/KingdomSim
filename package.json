@@ -5,12 +5,13 @@
   "description": "Lead a kingdom to glory and beyond!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ava",
     "start": "electron ."
   },
   "author": "Beth Jackson",
   "license": "UNLICENSED",
   "devDependencies": {
+    "ava": "1.0.0-beta.8",
     "electron": "^3.0.2"
   }
 }
