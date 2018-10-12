@@ -589,7 +589,6 @@ const MapView = {
                         print = 'mountain1_2';
                     }
                     if ((print === 'stockpileW_0')){
-                        console.log ('I found a stockpile')
                         const arr = [
                             'stockpileW_0',
                             'stockpileW_1',
@@ -604,9 +603,7 @@ const MapView = {
                         if (result < 0){
                             result = 0
                         }
-                        console.log (result)
                         print = arr[result];
-                        console.log (print)
                     }                    
                     context.drawImage(textures[print], tile.x * 32, tile.y * 32)
                 }

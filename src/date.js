@@ -35,9 +35,15 @@ const DateView = {
         //add new peeps
         peepSpots = State.countPeepSpots();
         if (peepSpots > 0){
-            console.log ('new peep incoming!');
-            const newPeep = Math.floor(Math.random() * State.randPeeps.length);
-            State.peeps.push(State.randPeeps[newPeep])
+            const ifNewPeep = Math.floor(Math.random() * 10);
+            if (ifNewPeep === 0){
+                console.log ('new peep incoming!');
+                console.log (State.randPeeps);
+                const newPeep = Math.floor(Math.random() * State.randPeeps.length);
+                State.peeps.push(State.randPeeps[newPeep])
+                State.randPeeps.splice(newPeep, 1);
+            }
+            
         }
 
         State.currentMonth++;
