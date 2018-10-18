@@ -2,7 +2,7 @@
   "name": "kingdomsim",
   "productName": "KingdomSim",
   "version": "0.1.5",
-  "description": " land!",
+  "description": "Lead your people to thrive in this new land!",
   "main": "./src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -30,12 +30,12 @@
       },
       "electronPackagerConfig": {
         "packageManager": "npm",
-        "icon": ".textures/icon",
-        "out": ".releases"
+        "icon": "./textures/icon",
+        "out": "./releases"
       },
       "electronWinstallerConfig": {
         "name": "kingdomsim",
-        "setupIcon": ".textures/icon"
+        "setupIcon": "./textures/icon"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
