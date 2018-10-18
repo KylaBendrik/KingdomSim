@@ -1,9 +1,9 @@
 {
   "name": "kingdomsim",
-  "productName": "",
-  "version": "",
+  "productName": "KingdomSim",
+  "version": "0.1.5",
   "description": " land!",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -64,3 +64,4 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.11.1"
   }
+}

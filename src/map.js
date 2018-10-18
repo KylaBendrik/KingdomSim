@@ -32,7 +32,7 @@ for (var y = 0; y < NUM_ROWS; y++){
     var newLine = [];
 
     for (var x = 0; x < NUM_COLS; x++){
-        ifTree = Math.floor(Math.random() * 7)
+        const ifTree = Math.floor(Math.random() * 7)
         if (ifTree === 0){
             newLine.push({ x: x, y: y, background: 'grass1', foreground: 'tree1', structureNum: structureNum})
             State.structures.push({structureNum: structureNum, type: 'tree', originRow: y, originCol: x, pointsLeft: 1, pointsStart: 0})
@@ -112,7 +112,7 @@ const MapUtil = {
     addMountain1_0(row, col) {
         const rows = 8;
         const cols = 16;
-        tiles = MapUtil.newTiles(rows, cols, row, col);
+        const tiles = MapUtil.newTiles(rows, cols, row, col);
         
         MapUtil.addStructure(tiles, 'mountain1_0', structureNum);
         

@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron');
 
 const Window = {
     create() {
-        const win = new BrowserWindow({ width: 1460, height: 826, fullscreen: true});
+        const win = new BrowserWindow({ width: 1460, height: 826, fullscreen: false});
 
         win.loadFile('index.html');
         //win.webContents.openDevTools();
