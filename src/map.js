@@ -553,7 +553,7 @@ const MapView = {
             context.fillText(`${pointsLeft}/${pointsStart} Queue spot: ${queueOrder}`, originCol * 32 + 64, textBegin)
 
             //list farmers
-            for(i=0; i < peeps.length; i++){
+            for(var i=0; i < peeps.length; i++){
                 context.fillStyle = 'rgb(200, 200, 200)'
                 context.fillRect(originCol * 32 + 64, rectBegin + ((i * 24) + 24), 190, 24)
                 
@@ -579,10 +579,12 @@ const MapView = {
                 .then(textures => {
                     if (structure){
                         MapView.drawHovered(context, textures, structure);
+                        
+                        console.log ('is a structure');
                     }               
                     if (State.buildingChoice !== undefined){
-                        rows = State.buildingChoice.rows
-                        cols = State.buildingChoice.cols
+                        var rows = State.buildingChoice.rows
+                        var cols = State.buildingChoice.cols
                         //if buildingChoice is farmland, check if there are trees, then color red if yes.
                         if (State.buildingChoice.type === 'farmland_empty'){
                             const tiles = MapUtil.newTiles(rows, cols, row, col);
