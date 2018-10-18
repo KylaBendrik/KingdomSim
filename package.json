@@ -35,7 +35,7 @@
       },
       "electronWinstallerConfig": {
         "name": "kingdomsim",
-        "setupIcon": "./textures/icon"
+        "setupIcon": "./textures/icon.ico"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
