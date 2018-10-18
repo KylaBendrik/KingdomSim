@@ -271,7 +271,7 @@ const DateView = {
         const farmers = State.findPeepsByJob('farmer');
         var pointsLeft = 0;
         var pointsUsed = 0;
-        for (farmer of farmers){
+        for (var farmer of farmers){
             pointsLeft += Math.floor(farmer.farmSkill + 10);
         }
 

@@ -1,10 +1,10 @@
-const MapMethods = require('./src/map');
+const MapMethods = require('./map');
 const MapView = MapMethods.MapView;
 const MapUtil = MapMethods.MapUtil;
 
 
-const DateView = require('./src/date');
-const BuildOptions = require('./src/buildOptions');
+const DateView = require('./date');
+const BuildOptions = require('./buildOptions');
 
 const IDs= [
     'map',

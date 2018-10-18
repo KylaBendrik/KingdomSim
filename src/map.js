@@ -290,7 +290,7 @@ const MapView = {
         mapCanvas = canvas;
     },
     addSapling(row, col) {
-        tile = map[row][col];
+        var tile = map[row][col];
         if (tile.foreground === 'nothing'){
             tile.foreground = 'tree0';
             tile.structureNum = structureNum;
@@ -676,6 +676,7 @@ const MapView = {
     },
 
     render(canvas) { 
+        console.log ('rendering now')
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
