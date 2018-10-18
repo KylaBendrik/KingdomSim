@@ -360,7 +360,7 @@ const MapView = {
     if (structure.type === 'tree') {
       map[structure.originRow][structure.originCol].foreground = 'nothing';
       map[structure.originRow][structure.originCol].structureNum = undefined;
-      index = State.structures.indexOf(structure);
+      const index = State.structures.indexOf(structure);
 
       State.structures.splice(index, 1);
 

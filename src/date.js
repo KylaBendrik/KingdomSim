@@ -207,9 +207,9 @@ const DateView = {
   },
     // distance between two points
   distance(x1, x2, y1, y2) {
-    xDiff = (x2 - x1);
-    yDiff = (y2 - y1);
-    distance = Math.sqrt((Math.pow(xDiff, 2)) + (Math.pow(yDiff, 2)));
+    const xDiff = (x2 - x1);
+    const yDiff = (y2 - y1);
+    const distance = Math.sqrt((Math.pow(xDiff, 2)) + (Math.pow(yDiff, 2)));
     return distance;
   },
 
