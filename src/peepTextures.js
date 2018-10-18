@@ -1,9 +1,9 @@
 const defaultPortrait = new Image();
 
 const defaultPortraitPromise = new Promise((resolve, _reject) => {
-    defaultPortrait.addEventListener('load', () => {
-        resolve({ defaultPortrait });
-    });
+  defaultPortrait.addEventListener('load', () => {
+    resolve({ defaultPortrait });
+  });
 });
 
 defaultPortrait.src = './textures/peeps/defaultportrait.png';

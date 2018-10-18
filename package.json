@@ -30,7 +30,8 @@
       },
       "electronPackagerConfig": {
         "packageManager": "npm",
-        "icon": ".textures/icon"
+        "icon": ".textures/icon",
+        "out": ".releases"
       },
       "electronWinstallerConfig": {
         "name": "kingdomsim",
