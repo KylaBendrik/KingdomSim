@@ -676,7 +676,6 @@ const MapView = {
     },
 
     render(canvas) { 
-        console.log ('rendering now')
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 

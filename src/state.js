@@ -39,7 +39,7 @@ const State = {
     findEmptyHouses(){
         const emptyHouses = []
         for (var house of State.houses){
-            const peepsInHouse = State.peepsInHouse();
+            const peepsInHouse = State.peepsInHouse(house);
             if (peepsInHouse === 0){
                 emptyHouses.push(house);
             }
@@ -49,7 +49,7 @@ const State = {
     findAvailableHouses(){
         const availableHouses = [];
         for (var house of State.houses){
-            const peepsInHouse = State.peepsInHouse();
+            const peepsInHouse = State.peepsInHouse(house);
             console.log ('peeps in house', house.houseNum, ': ', peepsInHouse);
             if (peepsInHouse < house.peepSpots){
                 availableHouses.push(house)
@@ -57,7 +57,7 @@ const State = {
         }
         return availableHouses;
     },
-    peepsInHouse(){
+    peepsInHouse(house){
         var peepsInHouse = 0;
             for (var peep of State.peeps){
                 if (peep.house === house.houseNum){

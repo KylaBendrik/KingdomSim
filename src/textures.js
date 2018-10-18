@@ -6,7 +6,7 @@ const setupTexture = function setupTexture([name, path]) {
         });
     });
 
-    image.src = `./textures/village_map/map/${path}.png`;
+    image.src = `../textures/village_map/map/${path}.png`;
 
     return promise;
 };
