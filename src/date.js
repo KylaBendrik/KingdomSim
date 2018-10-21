@@ -34,6 +34,9 @@ const DateView = {
     if (State.food > State.maxFood) {
       State.food = State.maxFood;
     }
+    if (State.wood > State.maxWood) {
+      State.wood = State.maxWood;
+    }
         // add new peeps
     const peepSpots = State.countPeepSpots();
 
@@ -50,7 +53,8 @@ const DateView = {
         const peepID = Math.floor(Math.random() * State.randPeeps.length);
         const newPeep = State.randPeeps[peepID];
         const newPeepJob = State.randPeepJob[Math.floor(Math.random() * State.randPeepJob.length)];
-        State.randPeeps.splice(peepID, 1);
+        newPeep.birthMonth = State.currentMonth;
+        newPeep.birthYear = (State.currentYear - 20);
         newPeep.house = peepHouse.houseNum;
         console.log('peeps job used to be:', newPeep.job);
         newPeep.job = newPeepJob;
@@ -59,6 +63,8 @@ const DateView = {
         if (confirm === true){ 
           State.peeps.push(newPeep);
           emptyHouses = State.findEmptyHouses();
+          
+          State.randPeeps.splice(peepID, 1);
         }
       } else if (ifNewPeep === 1 && State.food >= State.peeps.length * 10) {
                     // pick random AVAILABLE house
@@ -67,7 +73,8 @@ const DateView = {
         const peepID = Math.floor(Math.random() * State.randPeeps.length);
         const newPeep = State.randPeeps[peepID];
         const newPeepJob = State.randPeepJob[Math.floor(Math.random() * State.randPeepJob.length)];
-        State.randPeeps.splice(peepID, 1);
+        newPeep.birthMonth = State.currentMonth;
+        newPeep.birthYear = (State.currentYear - 20);
         newPeep.house = peepHouse.houseNum;
         console.log('peeps job used to be:', newPeep.job);
         newPeep.job = newPeepJob;
@@ -75,6 +82,7 @@ const DateView = {
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
+          State.randPeeps.splice(peepID, 1);
         }
       }
     }
@@ -85,6 +93,9 @@ const DateView = {
       State.currentMonth = 0;
       State.currentYear ++;
     }
+
+    //age up peeps
+    DateView.agePeeps();
 
     MapUtil.setFoodText(State.food);
     DateView.setDateText();
@@ -112,6 +123,13 @@ const DateView = {
       item.QueueOrder --;
     }
     return queue;
+  },
+  agePeeps() {
+    for (const peep of State.peeps){
+      if (State.currentMonth === peep.birthMonth){
+        peep.age ++;
+      }
+    }
   },
   treesGrow(MapView) {
     const trees = State.structures.filter(structure => structure.type === 'tree');
@@ -263,9 +281,7 @@ const DateView = {
       gatherer.gatherSkill += (pointsUsed) * c;
     }
     
-    if (State.wood > State.maxWood) {
-      State.wood = State.maxWood;
-    }
+    
   },
 
   farming() {

@@ -8,10 +8,10 @@ const range = function range(n) {
 // initialize
 
 State.peeps.push(
-    { name: 'Adam', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20 },
-    { name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20 },
-    { name: 'Bob', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20 },
-    { name: 'Martha', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20 },
+    { name: 'Adam', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { name: 'Bob', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { name: 'Martha', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
 );
 
 
@@ -443,7 +443,7 @@ const MapView = {
   },
 
   housePeepsList(peeps, i) {
-    return (`${peeps[i].name}, ${peeps[i].job}`);
+    return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}`);
   },
   builderPeepsList(peeps, i) {
     return (`${peeps[i].name}, Level ${Math.floor(peeps[i].buildSkill)}`);
@@ -474,10 +474,11 @@ const MapView = {
       context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
 
             // list Peeps in this house
+      const textBoxWidth =220;
 
       for (i = 0; i < peeps.length; i++) {
         context.fillStyle = 'rgb(200, 200, 200)';
-        context.fillRect(originCol * 32 + 64, rectBegin + (i * 24), 140, 24);
+        context.fillRect(originCol * 32 + 64, rectBegin + (i * 24), textBoxWidth, 24);
 
         context.fillStyle = 'rgb(10, 10, 10)';
         context.fillText(MapView.housePeepsList(peeps, i), originCol * 32 + 64, textBegin + (i * 24));
