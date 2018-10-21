@@ -26,9 +26,6 @@ const DateView = {
     DateView.building(MapView);
     if (State.wood < State.maxWood) {
       DateView.gathering(MapUtil, MapView);
-      if (State.wood > State.maxWood) {
-        State.wood = State.maxWood;
-      }
     }
     DateView.farming();
     DateView.treesGrow(MapView);
@@ -45,7 +42,7 @@ const DateView = {
     if ((peepSpots - State.peeps.length) > 0 && State.food >= State.peeps.length * 2) {
       emptyHouses = State.findEmptyHouses();
 
-      const ifNewPeep = Math.floor(Math.random() * 5);
+      const ifNewPeep = Math.floor(Math.random() * 6);
 
       if (emptyHouses.length > 0) {
                 // pick random empty house
@@ -58,8 +55,11 @@ const DateView = {
         console.log('peeps job used to be:', newPeep.job);
         newPeep.job = newPeepJob;
         console.log('peeps job is now:', newPeep.job);
-        State.peeps.push(newPeep);
-        emptyHouses = State.findEmptyHouses();
+        var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
+        if (confirm === true){ 
+          State.peeps.push(newPeep);
+          emptyHouses = State.findEmptyHouses();
+        }
       } else if (ifNewPeep === 1 && State.food >= State.peeps.length * 10) {
                     // pick random AVAILABLE house
         const availableHouses = State.findAvailableHouses();
@@ -72,7 +72,10 @@ const DateView = {
         console.log('peeps job used to be:', newPeep.job);
         newPeep.job = newPeepJob;
         console.log('peeps job is now:', newPeep.job);
-        State.peeps.push(newPeep);
+        var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
+        if (confirm === true){ 
+          State.peeps.push(newPeep);
+        }
       }
     }
 
@@ -231,6 +234,7 @@ const DateView = {
   gathering(MapUtil, MapView) {
     const gatherers = State.findPeepsByJob('gatherer');
     const treePoints = 8;
+    const storages = State.storages;
     for (const gatherer of gatherers) {
       const houseNum = gatherer.house;
       const houseStructure = State.findStructurebyHouse(houseNum);
@@ -257,6 +261,10 @@ const DateView = {
       const c = (((((Math.pow(gatherer.gatherSkill, 2)) * (0.0000467346938776))) - (0.00746510204082 * gatherer.gatherSkill)) + 0.257418367347) / 10;
 
       gatherer.gatherSkill += (pointsUsed) * c;
+    }
+    
+    if (State.wood > State.maxWood) {
+      State.wood = State.maxWood;
     }
   },
 

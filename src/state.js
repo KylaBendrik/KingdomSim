@@ -34,8 +34,12 @@ const State = {
     // maptiles: {x, y, background, foreground, structureNum}
     // structures:{structureNum, type, originRow, originCol, pointsLeft, pointsStart}
     // houses: {houseNum, structure, peepSpots}
+    // storages: {structure, maxWood, curWood, maxFood, curFood}
     // farmingQueue: {queueOrder, structure}
     // buildingQueue: {queueOrder, structure}
+  findStorageForWood(storages) {
+    //find storage with most open wood spots. Compare MaxWood to CurWood.
+  },
   findEmptyHouses() {
     const emptyHouses = [];
     for (const house of State.houses) {
