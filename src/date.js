@@ -34,6 +34,9 @@ const DateView = {
     DateView.treesGrow(MapView);
 
     State.food -= State.peeps.length;
+    if (State.food > State.maxFood) {
+      State.food = State.maxFood;
+    }
         // add new peeps
     const peepSpots = State.countPeepSpots();
 
