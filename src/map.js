@@ -8,10 +8,10 @@ const range = function range(n) {
 // initialize
 
 State.peeps.push(
-    { name: 'Adam', gender: 'male', marriageID: 0, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Eve', gender: 'female', marriageID: 0, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Bob', gender: 'male', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Martha', gender: 'female', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { peepNum: 0, name: 'Adam', gender: 'male', marriageID: 0, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { peepNum: 1, name: 'Eve', gender: 'female', marriageID: 0, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { peepNum: 2, name: 'Bob', gender: 'male', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { peepNum: 3, name: 'Martha', gender: 'female', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
 );
 
 
@@ -24,6 +24,7 @@ let houseNum = 0;
 let structureNum = 0;
 let queueOrder = 0;
 let farmQueueOrder = 0;
+
 
 // making the map randomly
 for (let y = 0; y < NUM_ROWS; y++) {
@@ -438,8 +439,12 @@ const MapView = {
   },
 
   housePeepsList(peeps, i) {
-    State.findSpouse(peeps[i], i);
-    return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}, Spouse: `);
+    const spouse = State.findSpouse(peeps[i]);
+    if (spouse !== undefined){
+      return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}, Spouse: ${spouse.name}`);
+    } else { 
+      return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}`);
+    }
   },
   builderPeepsList(peeps, i) {
     return (`${peeps[i].name}, Level ${Math.floor(peeps[i].buildSkill)}`);
@@ -459,21 +464,18 @@ const MapView = {
     const rectBegin = (originRow * 32 - 4);
     const textBegin = (originRow * 32 + 16);
 
-    context.font = '20px Arial';
+    context.font = '18px Arial';
 
     if (type === 'house1') {
-      console.log('structureNum', structure.structureNum)
       const house = State.findHouse(structure.structureNum);
       const peeps = State.findPeepsByHouse(house.houseNum);
-      console.log('house', house)
-      console.log('houses: ', State.houses);
 
       context.clearRect(originCol * 32, originRow * 32, 64, 64);
       context.drawImage(textures.grass1, originCol * 32, originRow * 32);
       context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
 
             // list Peeps in this house
-      const textBoxWidth =220;
+      const textBoxWidth =320;
 
       for (i = 0; i < peeps.length; i++) {
         context.fillStyle = 'rgb(200, 200, 200)';

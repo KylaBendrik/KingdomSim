@@ -49,12 +49,14 @@ const DateView = {
         newPeep.birthYear = (State.currentYear - 20);
         newPeep.house = peepHouse.houseNum;
         newPeep.job = newPeepJob;
+        newPeep.peepNum = State.peepNum;
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
           emptyHouses = State.findEmptyHouses();
           
           State.randPeeps.splice(peepID, 1);
+          State.peepNum ++;
         }
       } else if (ifNewPeep === 1 && State.food >= State.peeps.length * 10) {
                     // pick random AVAILABLE house
@@ -67,10 +69,13 @@ const DateView = {
         newPeep.birthYear = (State.currentYear - 20);
         newPeep.house = peepHouse.houseNum;
         newPeep.job = newPeepJob;
+        
+        newPeep.peepNum = State.peepNum;
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
           State.randPeeps.splice(peepID, 1);
+          State.peepNum ++;
         }
       }
     }
