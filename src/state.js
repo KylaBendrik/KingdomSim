@@ -16,14 +16,14 @@ const State = {
 
     // will get rid of later. Temporary...
   randPeeps: [
-        { name: 'Andrew', job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { name: 'Anna', job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { name: 'Burt', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { name: 'Barbara', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { name: 'Charles', job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { name: 'Catherine', job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { name: 'Daniel', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { name: 'Danielle', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Andrew', gender: 'male', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Anna', gender: 'female', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Burt', gender: 'male', marriageID: undefined, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Barbara', gender: 'female', marriageID: undefined, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Charles', gender: 'male', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Catherine', gender: 'female', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Daniel', gender: 'male', marriageID: undefined, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
+        { name: 'Danielle', gender: 'female', marriageID: undefined, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
   ],
   randPeepJob: [
     'farmer',
@@ -39,6 +39,10 @@ const State = {
     // buildingQueue: {queueOrder, structure}
   findStorageForWood(storages) {
     //find storage with most open wood spots. Compare MaxWood to CurWood.
+  },
+  findSpouse(peep, index) {
+    let tempPeeps = State.peeps;
+    console.log (tempPeeps, "index of peep:", index)
   },
   findEmptyHouses() {
     const emptyHouses = [];

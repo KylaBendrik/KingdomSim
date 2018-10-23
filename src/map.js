@@ -8,10 +8,10 @@ const range = function range(n) {
 // initialize
 
 State.peeps.push(
-    { name: 'Adam', job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Eve', job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Bob', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Martha', job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { name: 'Adam', gender: 'male', marriageID: 0, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { name: 'Eve', gender: 'female', marriageID: 0, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { name: 'Bob', gender: 'male', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+    { name: 'Martha', gender: 'female', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
 );
 
 
@@ -443,7 +443,8 @@ const MapView = {
   },
 
   housePeepsList(peeps, i) {
-    return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}`);
+    State.findSpouse(peeps[i], i);
+    return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}, Spouse: `);
   },
   builderPeepsList(peeps, i) {
     return (`${peeps[i].name}, Level ${Math.floor(peeps[i].buildSkill)}`);
