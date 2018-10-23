@@ -168,8 +168,6 @@ const MapUtil = {
     }
   },
   addFarmland_empty(row, col) {
-    console.log('-------------------');
-    console.log('adding new farmland');
     const points = 0;
 
     const tiles = [
@@ -185,9 +183,7 @@ const MapUtil = {
       MapUtil.addStructure(tiles, 'farmland_empty', structureNum);
 
       State.structures.push({ structureNum, type: 'farmland_empty', originRow: row, originCol: col, pointsLeft: points, pointsStart: points });
-      console.log('new farmland placed. Structure: ', structureNum);
-      console.log('structures:', State.structures);
-      console.log('trying really hard to find structure in list:', State.findStructure(structureNum));
+
       State.farmingQueue.push({ queueOrder: farmQueueOrder, structure: structureNum });
 
       farmQueueOrder++;
@@ -434,6 +430,7 @@ const MapView = {
       console.log('clicking on grid:', col, ',', row);
       console.log('structure Im trying to click on', map[row][col].structureNum);
       console.log('structure type Im trying to click on', structure.type);
+      console.log('structures:', State.structures)
 
       if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
         MapView.updateBuilding(map[row][col].structureNum);
@@ -467,8 +464,10 @@ const MapView = {
     context.font = '20px Arial';
 
     if (type === 'house1') {
+      console.log('structureNum', structure.structureNum)
       const house = State.findHouse(structure.structureNum);
       const peeps = State.findPeepsByHouse(house.houseNum);
+      console.log('house', house)
 
       context.clearRect(originCol * 32, originRow * 32, 64, 64);
       context.drawImage(textures.grass1, originCol * 32, originRow * 32);
@@ -555,8 +554,6 @@ const MapView = {
                 .then((textures) => {
                   if (structure) {
                     MapView.drawHovered(context, textures, structure);
-
-                    console.log('is a structure');
                   }
                   if (State.buildingChoice !== undefined) {
                     const rows = State.buildingChoice.rows;

@@ -18,9 +18,6 @@ const DateView = {
   },
 
   nextMonth(MapView, MapUtil) {
-    console.log('new Month: ', MONTHS[State.currentMonth]);
-    console.log(State.map);
-    console.log(State.structures);
 
          // apply points for all the jobs
     DateView.building(MapView);
@@ -31,12 +28,7 @@ const DateView = {
     DateView.treesGrow(MapView);
 
     State.food -= State.peeps.length;
-    if (State.food > State.maxFood) {
-      State.food = State.maxFood;
-    }
-    if (State.wood > State.maxWood) {
-      State.wood = State.maxWood;
-    }
+    
         // add new peeps
     const peepSpots = State.countPeepSpots();
 
@@ -56,9 +48,7 @@ const DateView = {
         newPeep.birthMonth = State.currentMonth;
         newPeep.birthYear = (State.currentYear - 20);
         newPeep.house = peepHouse.houseNum;
-        console.log('peeps job used to be:', newPeep.job);
         newPeep.job = newPeepJob;
-        console.log('peeps job is now:', newPeep.job);
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
@@ -76,9 +66,7 @@ const DateView = {
         newPeep.birthMonth = State.currentMonth;
         newPeep.birthYear = (State.currentYear - 20);
         newPeep.house = peepHouse.houseNum;
-        console.log('peeps job used to be:', newPeep.job);
         newPeep.job = newPeepJob;
-        console.log('peeps job is now:', newPeep.job);
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
@@ -93,10 +81,16 @@ const DateView = {
       State.currentMonth = 0;
       State.currentYear ++;
     }
+    if (State.food > State.maxFood) {
+      State.food = State.maxFood;
+    }
+    if (State.wood > State.maxWood) {
+      State.wood = State.maxWood;
+    }
 
     //age up peeps
     DateView.agePeeps();
-
+    MapUtil.setWoodText(State.wood);
     MapUtil.setFoodText(State.food);
     DateView.setDateText();
     DateView.displayAlerts();

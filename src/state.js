@@ -42,7 +42,6 @@ const State = {
   },
   findSpouse(peep, index) {
     let tempPeeps = State.peeps;
-    console.log (tempPeeps, "index of peep:", index)
   },
   findEmptyHouses() {
     const emptyHouses = [];
@@ -58,7 +57,6 @@ const State = {
     const availableHouses = [];
     for (const house of State.houses) {
       const peepsInHouse = State.peepsInHouse(house);
-      console.log('peeps in house', house.houseNum, ': ', peepsInHouse);
       if (peepsInHouse < house.peepSpots) {
         availableHouses.push(house);
       }
