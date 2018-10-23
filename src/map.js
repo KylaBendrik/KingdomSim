@@ -1,9 +1,6 @@
 const loadTextures = require('./textures');
 const State = require('./state');
-
-const range = function range(n) {
-  return [...Array(n).keys()];
-};
+const range = require('./util/range');
 
 // initialize
 
