@@ -6,33 +6,10 @@
         
         <link rel="stylesheet" href="main.css">
         
+        <script src="pages/map.js"></script>
         <script src="app.js"></script>
     </head>
     <body>
-        <canvas id="map"></canvas>
-        <div id="menu">
-            <span id="date"></span><br>
-            <button class="menubtn" id="month_button">Next Month</button><br>
-            <button class="menubtn" id="peeps" onclick="window.location.href='./peeps.html'">Peeps</button><br>
-
-            <div class="dropdown">
-                <button class="dropbtn">Build</button>
-                <div class="dropdown-content">
-                  <a href="#" id="buildChoiceHouse1">House<br>(Wood: 40)</a>
-                  <a href="#" id="buildChoiceFarmland">Farmland<br>(Wood: 0)</a>
-                  <a href="#" id="buildChoiceStockpileW">Wood Stockpile<br>(Wood: 10)</a>
-                  <a href="#" id="buildChoiceSmallBarn">Small Barn<br>(Wood: 20)</a>
-                </div>
-            </div>
-            <div class="resources">   
-                Wood: <span id="wood"></span><br>
-                Food: <span id="food"></span>
-            </div>
-
-            
- 
-            <div id="alert"></div>
-            <div id="window"></div>
-        </div>
+        <map-page></map-page>
     </body>
 </html>

@@ -51,6 +51,7 @@
     }
   },
   "dependencies": {
+    "component": "github:Jwashton/component",
     "electron-compile": "^6.4.3",
     "electron-squirrel-startup": "^1.0.0"
   },
