@@ -217,7 +217,6 @@ const MapUtil = {
       State.buildingQueue.push({ queueOrder, structure: structureNum });
 
       queueOrder++;
-      houseNum++;
       structureNum++;
       State.wood -= woodRequired;
       MapUtil.setWoodText(State.wood, State.maxWood);
@@ -250,7 +249,6 @@ const MapUtil = {
       State.buildingQueue.push({ queueOrder, structure: structureNum });
 
       queueOrder++;
-      houseNum++;
       structureNum++;
       State.wood -= woodRequired;
       MapUtil.setWoodText(State.wood, State.maxWood);
@@ -317,6 +315,7 @@ const MapView = {
 
       State.maxWood += maxWood;
       State.maxFood += maxFood;
+      houseNum ++;
 
             // peeps can now live in house
 
@@ -430,7 +429,6 @@ const MapView = {
       console.log('clicking on grid:', col, ',', row);
       console.log('structure Im trying to click on', map[row][col].structureNum);
       console.log('structure type Im trying to click on', structure.type);
-      console.log('structures:', State.structures)
 
       if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
         MapView.updateBuilding(map[row][col].structureNum);
@@ -468,6 +466,7 @@ const MapView = {
       const house = State.findHouse(structure.structureNum);
       const peeps = State.findPeepsByHouse(house.houseNum);
       console.log('house', house)
+      console.log('houses: ', State.houses);
 
       context.clearRect(originCol * 32, originRow * 32, 64, 64);
       context.drawImage(textures.grass1, originCol * 32, originRow * 32);
