@@ -18,9 +18,6 @@ const DateView = {
   },
 
   nextMonth(MapView, MapUtil) {
-    console.log('new Month: ', MONTHS[State.currentMonth]);
-    console.log(State.map);
-    console.log(State.structures);
 
          // apply points for all the jobs
     DateView.building(MapView);
@@ -31,12 +28,7 @@ const DateView = {
     DateView.treesGrow(MapView);
 
     State.food -= State.peeps.length;
-    if (State.food > State.maxFood) {
-      State.food = State.maxFood;
-    }
-    if (State.wood > State.maxWood) {
-      State.wood = State.maxWood;
-    }
+    
         // add new peeps
     const peepSpots = State.countPeepSpots();
 
@@ -45,45 +37,56 @@ const DateView = {
     if ((peepSpots - State.peeps.length) > 0 && State.food >= State.peeps.length * 2) {
       emptyHouses = State.findEmptyHouses();
 
-      const ifNewPeep = Math.floor(Math.random() * 6);
+      const ifNewPeep = Math.floor(Math.random() * 10);
 
       if (emptyHouses.length > 0) {
                 // pick random empty house
         const peepHouse = emptyHouses[Math.floor(Math.random() * emptyHouses.length)];
-        const peepID = Math.floor(Math.random() * State.randPeeps.length);
-        const newPeep = State.randPeeps[peepID];
-        const newPeepJob = State.randPeepJob[Math.floor(Math.random() * State.randPeepJob.length)];
-        newPeep.birthMonth = State.currentMonth;
-        newPeep.birthYear = (State.currentYear - 20);
+        
+        const newPeep = State.addPeep('adult');
+
         newPeep.house = peepHouse.houseNum;
-        console.log('peeps job used to be:', newPeep.job);
-        newPeep.job = newPeepJob;
-        console.log('peeps job is now:', newPeep.job);
+
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
           emptyHouses = State.findEmptyHouses();
-          
-          State.randPeeps.splice(peepID, 1);
         }
       } else if (ifNewPeep === 1 && State.food >= State.peeps.length * 10) {
                     // pick random AVAILABLE house
         const availableHouses = State.findAvailableHouses();
         const peepHouse = availableHouses[Math.floor(Math.random() * availableHouses.length)];
-        const peepID = Math.floor(Math.random() * State.randPeeps.length);
-        const newPeep = State.randPeeps[peepID];
-        const newPeepJob = State.randPeepJob[Math.floor(Math.random() * State.randPeepJob.length)];
-        newPeep.birthMonth = State.currentMonth;
-        newPeep.birthYear = (State.currentYear - 20);
+
+        const newPeep = State.addPeep('adult', undefined);        
+        
         newPeep.house = peepHouse.houseNum;
-        console.log('peeps job used to be:', newPeep.job);
-        newPeep.job = newPeepJob;
-        console.log('peeps job is now:', newPeep.job);
+        newPeep.peepNum = State.peepNum;
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
-          State.randPeeps.splice(peepID, 1);
         }
+      } else if (ifNewPeep === 2) {
+        console.log ("someone might have a baby");
+        //select family from list of marriages where pregCountdown: 0 *and there's room in the house*
+        const families = State.findAvailableFamilies();
+        console.log('families', families);
+        if (families.length > 0){
+          const family = families[Math.floor(Math.random() * families.length)];
+          console.log('the family chosen:', family);
+          //find house of mother
+          const mother = family.wife;
+          const house = mother.house;
+          //reset pregCountdown: 12
+          family.pregCountdown = 12;
+          //add baby
+          const newPeep = State.addPeep('baby', undefined);  
+          //assign father, mother, and house
+          newPeep.father = family.husband;
+          newPeep.mother = mother;
+          newPeep.house = house;
+          State.peeps.push(newPeep);
+        }
+        
       }
     }
 
@@ -93,10 +96,16 @@ const DateView = {
       State.currentMonth = 0;
       State.currentYear ++;
     }
+    if (State.food > State.maxFood) {
+      State.food = State.maxFood;
+    }
+    if (State.wood > State.maxWood) {
+      State.wood = State.maxWood;
+    }
 
     //age up peeps
     DateView.agePeeps();
-
+    MapUtil.setWoodText(State.wood);
     MapUtil.setFoodText(State.food);
     DateView.setDateText();
     DateView.displayAlerts();

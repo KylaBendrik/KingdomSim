@@ -3,13 +3,36 @@ const State = require('./state');
 const range = require('./util/range');
 
 // initialize
+State.peeps.push(State.addPeep('adult', 'male'));
+State.peeps.push(State.addPeep('adult', 'female'));
+State.peeps.push(State.addPeep('adult', 'male'));
+State.peeps.push(State.addPeep('adult', 'female'));
 
-State.peeps.push(
-    { name: 'Adam', gender: 'male', marriageID: 0, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Eve', gender: 'female', marriageID: 0, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Bob', gender: 'male', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { name: 'Martha', gender: 'female', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-);
+State.peeps[0].marriageID = State.marriageNum;
+State.peeps[1].marriageID = State.marriageNum;
+State.marriages.push({marriageNum: State.marriageNum, husband: State.peeps[0], wife: State.peeps[1], children:[], pregCountdown: 0});
+State.marriageNum ++;
+State.peeps[2].marriageID = State.marriageNum;
+State.peeps[3].marriageID = State.marriageNum;
+State.marriages.push({marriageNum: State.marriageNum, husband: State.peeps[2], wife: State.peeps[3], children:[], pregCountdown: 0});
+State.marriageNum ++;
+
+State.peeps[0].house= 0;
+State.peeps[1].house= 0;
+State.peeps[2].house= 1;
+State.peeps[3].house= 1;
+
+State.peeps[0].job= 'builder';
+State.peeps[1].job= 'gatherer';
+State.peeps[2].job= 'farmer';
+State.peeps[3].job= 'farmer';
+
+// State.peeps.push(
+//     { peepNum: 0, name: 'Adam', gender: 'male', marriageID: 0, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+//     { peepNum: 1, name: 'Eve', gender: 'female', marriageID: 0, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+//     { peepNum: 2, name: 'Bob', gender: 'male', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+//     { peepNum: 3, name: 'Martha', gender: 'female', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+// );
 
 
 // map stuff
@@ -21,6 +44,7 @@ let houseNum = 0;
 let structureNum = 0;
 let queueOrder = 0;
 let farmQueueOrder = 0;
+
 
 // making the map randomly
 for (let y = 0; y < NUM_ROWS; y++) {
@@ -165,8 +189,6 @@ const MapUtil = {
     }
   },
   addFarmland_empty(row, col) {
-    console.log('-------------------');
-    console.log('adding new farmland');
     const points = 0;
 
     const tiles = [
@@ -182,9 +204,7 @@ const MapUtil = {
       MapUtil.addStructure(tiles, 'farmland_empty', structureNum);
 
       State.structures.push({ structureNum, type: 'farmland_empty', originRow: row, originCol: col, pointsLeft: points, pointsStart: points });
-      console.log('new farmland placed. Structure: ', structureNum);
-      console.log('structures:', State.structures);
-      console.log('trying really hard to find structure in list:', State.findStructure(structureNum));
+
       State.farmingQueue.push({ queueOrder: farmQueueOrder, structure: structureNum });
 
       farmQueueOrder++;
@@ -218,7 +238,6 @@ const MapUtil = {
       State.buildingQueue.push({ queueOrder, structure: structureNum });
 
       queueOrder++;
-      houseNum++;
       structureNum++;
       State.wood -= woodRequired;
       MapUtil.setWoodText(State.wood, State.maxWood);
@@ -251,7 +270,6 @@ const MapUtil = {
       State.buildingQueue.push({ queueOrder, structure: structureNum });
 
       queueOrder++;
-      houseNum++;
       structureNum++;
       State.wood -= woodRequired;
       MapUtil.setWoodText(State.wood, State.maxWood);
@@ -318,6 +336,7 @@ const MapView = {
 
       State.maxWood += maxWood;
       State.maxFood += maxFood;
+      houseNum ++;
 
             // peeps can now live in house
 
@@ -428,9 +447,6 @@ const MapView = {
     }
     if (map[row][col].structureNum !== undefined) {
       const structure = State.findStructure(map[row][col].structureNum);
-      console.log('clicking on grid:', col, ',', row);
-      console.log('structure Im trying to click on', map[row][col].structureNum);
-      console.log('structure type Im trying to click on', structure.type);
 
       if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
         MapView.updateBuilding(map[row][col].structureNum);
@@ -440,8 +456,12 @@ const MapView = {
   },
 
   housePeepsList(peeps, i) {
-    State.findSpouse(peeps[i], i);
-    return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}, Spouse: `);
+    const spouse = State.findSpouse(peeps[i]);
+    if (spouse !== undefined){
+      return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}, Spouse: ${spouse.name}`);
+    } else { 
+      return (`${peeps[i].name}, ${peeps[i].job}, Age: ${peeps[i].age}`);
+    }
   },
   builderPeepsList(peeps, i) {
     return (`${peeps[i].name}, Level ${Math.floor(peeps[i].buildSkill)}`);
@@ -461,7 +481,7 @@ const MapView = {
     const rectBegin = (originRow * 32 - 4);
     const textBegin = (originRow * 32 + 16);
 
-    context.font = '20px Arial';
+    context.font = '18px Arial';
 
     if (type === 'house1') {
       const house = State.findHouse(structure.structureNum);
@@ -472,7 +492,7 @@ const MapView = {
       context.drawImage(textures.house1_open, originCol * 32, originRow * 32);
 
             // list Peeps in this house
-      const textBoxWidth =220;
+      const textBoxWidth =320;
 
       for (i = 0; i < peeps.length; i++) {
         context.fillStyle = 'rgb(200, 200, 200)';
@@ -552,8 +572,6 @@ const MapView = {
                 .then((textures) => {
                   if (structure) {
                     MapView.drawHovered(context, textures, structure);
-
-                    console.log('is a structure');
                   }
                   if (State.buildingChoice !== undefined) {
                     const rows = State.buildingChoice.rows;
