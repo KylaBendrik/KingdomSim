@@ -13,18 +13,7 @@ const State = {
   maxWood: 0,
   food: 0,
   maxFood: 0,
-  peepNum: 4, 
-    // will get rid of later. Temporary...
-  randPeeps: [
-        { peepNum: undefined, name: 'Andrew', gender: 'male', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { peepNum: undefined, name: 'Anna', gender: 'female', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { peepNum: undefined, name: 'Burt', gender: 'male', marriageID: undefined, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { peepNum: undefined, name: 'Barbara', gender: 'female', marriageID: undefined, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { peepNum: undefined, name: 'Charles', gender: 'male', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { peepNum: undefined, name: 'Catherine', gender: 'female', marriageID: undefined, job: 'farmer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { peepNum: undefined, name: 'Daniel', gender: 'male', marriageID: undefined, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-        { peepNum: undefined, name: 'Danielle', gender: 'female', marriageID: undefined, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
-  ],
+  peepNum: 0,
   randPeepMName: [
     'Adam', 'Aldus', 'Amis', 'Bate', 'Col', 'Daw', 'Dicun', 'Elis', 'Elric', 'Firmin', 'Hamon', 'Hankin', 'Hann', 'Herry', 'Hob', 'Hopkin', 'Hudde', 'Jackin', 'John', 'Jankin', 'Larkin', 'Law', 'Mack', 'Morris', 'Nichol', 'Noll', 'Ode', 'Pate', 'Randel', 'Roul', 'Tenney', 'Wilkin', 'Wilmot', 'Wybert', 'Wymond', 'Wyot',
     'Eudes', 'Garnier', 'Geoffroi', 'Gidie', 'Guarin', 'Jehan', 'Josse', 'Onfroi', 'Piers', 'Roland', 'Roul',
@@ -54,19 +43,55 @@ const State = {
   findSpouse(peep) {
     let marriageID = peep.marriageID;
     let spouse = undefined
-    const index = State.peeps.findIndex(IDpeep => IDpeep.peepNum === peep.peepNum);
-    console.log('index of peep: ', index, ' = ', peep.peepNum);
-    for (var i = 0; i < State.peeps.length; i++){
-      let tempPeep = State.peeps[i];
-      if (tempPeep.marriageID === marriageID && i !== index){
-        console.log('spouse index: ', i);
-        spouse = tempPeep;
+    console.log(State.peeps);
+    if (marriageID !== undefined){
+      const index = State.peeps.findIndex(IDpeep => IDpeep.peepNum === peep.peepNum);
+      console.log('index of peep: ', index, ' = ', peep.peepNum);
+      for (var i = 0; i < State.peeps.length; i++){
+        let tempPeep = State.peeps[i];
+        if (tempPeep.marriageID === marriageID && i !== index){
+          console.log('spouse index: ', i);
+          spouse = tempPeep;
       }
     }
     
     console.log('peep: ', peep);
     console.log('spouse: ', spouse);
+    }
+    
     return spouse;
+  },
+  addPeep(ageGroup, gender){
+    const newPeep = { peepNum: undefined, name: undefined, gender: undefined, marriageID: undefined, job: undefined, house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined }
+    //peepNum
+    newPeep.peepNum = State.peepNum;
+    //name and gender
+    let genderNum = undefined
+    if (gender === undefined){
+      genderNum = Math.floor(Math.random() * 2);
+      if (genderNum === 0){
+        gender = 'male';
+      } else {
+        gender = 'female';
+      }
+    }
+    if (gender === 'male'){
+      newPeep.gender = 'male';
+      newPeep.name = State.randPeepMName[Math.floor(Math.random() * State.randPeepMName.length)];
+    } else {
+      newPeep.gender = 'female';
+      newPeep.name = State.randPeepFName[Math.floor(Math.random() * State.randPeepFName.length)];
+    }
+
+    if (ageGroup === 'adult'){
+      //job
+      newPeep.job = State.randPeepJob[Math.floor(Math.random() * State.randPeepJob.length)];
+      //birthday
+      newPeep.birthMonth = Math.floor(Math.random() * 12);
+      newPeep.birthYear = (State.currentYear - 20);
+    }
+    State.peepNum ++
+    return newPeep;
   },
   findEmptyHouses() {
     const emptyHouses = [];

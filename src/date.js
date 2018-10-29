@@ -43,7 +43,7 @@ const DateView = {
                 // pick random empty house
         const peepHouse = emptyHouses[Math.floor(Math.random() * emptyHouses.length)];
         
-        const newPeep = DateView.addPeep('adult');
+        const newPeep = State.addPeep('adult');
 
         newPeep.house = peepHouse.houseNum;
 
@@ -51,22 +51,19 @@ const DateView = {
         if (confirm === true){ 
           State.peeps.push(newPeep);
           emptyHouses = State.findEmptyHouses();
-          
-          State.peepNum ++;
         }
       } else if (ifNewPeep === 1 && State.food >= State.peeps.length * 10) {
                     // pick random AVAILABLE house
         const availableHouses = State.findAvailableHouses();
         const peepHouse = availableHouses[Math.floor(Math.random() * availableHouses.length)];
 
-        const newPeep = DateView.addPeep('adult');        
+        const newPeep = State.addPeep('adult', undefined);        
         
         newPeep.house = peepHouse.houseNum;
         newPeep.peepNum = State.peepNum;
         var confirm = window.confirm("New Peep - " + newPeep.name + ": " + newPeep.job + "\n May they join your village?");
         if (confirm === true){ 
           State.peeps.push(newPeep);
-          State.peepNum ++;
         }
       }
     }
@@ -90,30 +87,6 @@ const DateView = {
     MapUtil.setFoodText(State.food);
     DateView.setDateText();
     DateView.displayAlerts();
-  },
-  addPeep(ageGroup){
-    const newPeep = { peepNum: undefined, name: undefined, gender: undefined, marriageID: undefined, job: undefined, house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined }
-    //peepNum
-    newPeep.peepNum = State.peepNum;
-    //name and gender
-    const genderNum = Math.floor(Math.random() * 2);
-    if (genderNum === 0){
-      newPeep.gender = 'male';
-      newPeep.name = State.randPeepMName[Math.floor(Math.random() * State.randPeepMName.length)];
-    } else {
-      newPeep.gender = 'female';
-      newPeep.name = State.randPeepFName[Math.floor(Math.random() * State.randPeepFName.length)];
-    }
-
-    if (ageGroup === 'adult'){
-      //job
-      newPeep.job = State.randPeepJob[Math.floor(Math.random() * State.randPeepJob.length)];
-      //birthday
-      newPeep.birthMonth = Math.floor(Math.random() * 12);
-      newPeep.birthYear = (State.currentYear - 20);
-    }
-    
-    return newPeep;
   },
 
   minBy(values, callback) {

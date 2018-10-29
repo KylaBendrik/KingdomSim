@@ -6,13 +6,32 @@ const range = function range(n) {
 };
 
 // initialize
+State.peeps.push(State.addPeep('adult', 'male'));
+State.peeps.push(State.addPeep('adult', 'female'));
+State.peeps.push(State.addPeep('adult', 'male'));
+State.peeps.push(State.addPeep('adult', 'female'));
 
-State.peeps.push(
-    { peepNum: 0, name: 'Adam', gender: 'male', marriageID: 0, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { peepNum: 1, name: 'Eve', gender: 'female', marriageID: 0, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { peepNum: 2, name: 'Bob', gender: 'male', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-    { peepNum: 3, name: 'Martha', gender: 'female', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
-);
+State.peeps[0].marriageID = 0;
+State.peeps[1].marriageID = 0;
+State.peeps[2].marriageID = 1;
+State.peeps[3].marriageID = 1;
+
+State.peeps[0].house= 0;
+State.peeps[1].house= 0;
+State.peeps[2].house= 1;
+State.peeps[3].house= 1;
+
+State.peeps[0].job= 'builder';
+State.peeps[1].job= 'gatherer';
+State.peeps[2].job= 'farmer';
+State.peeps[3].job= 'farmer';
+
+// State.peeps.push(
+//     { peepNum: 0, name: 'Adam', gender: 'male', marriageID: 0, job: 'builder', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+//     { peepNum: 1, name: 'Eve', gender: 'female', marriageID: 0, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+//     { peepNum: 2, name: 'Bob', gender: 'male', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+//     { peepNum: 3, name: 'Martha', gender: 'female', marriageID: 1, job: 'farmer', house: 1, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: 0, birthYear: -20 },
+// );
 
 
 // map stuff
