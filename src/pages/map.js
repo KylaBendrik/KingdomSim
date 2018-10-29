@@ -1,6 +1,11 @@
 /* eslint-disable */
 const Component = require('component');
-const { a, br, button, canvas, div, span, text } = require('component/src/html');
+const { a, br, button, canvas, div, span, text, style } = require('component/src/html');
+
+const fs = require('fs');
+
+console.log(process.cwd());
+const styles = fs.readFileSync('src/pages/map.css');
 
 const MapPage = {
   init() {
@@ -10,9 +15,12 @@ const MapPage = {
     };
   },
 
+  useShadow: true,
+
   render: model =>
-    div({},
+    div({ id: 'frame' },
        [ 
+       , style({}, [ text(styles) ])
        , canvas({ id: 'map' }, [])
        , div({ id: 'menu' },
             [ span({ id: 'date' }, [])
@@ -47,6 +55,9 @@ const MapPage = {
        , span({ id: 'wood' }, [ text(model.wood) ])
        , text('Food: ')
        , span({ id: 'food' }, [ text(model.food) ])])
+  ,
+  
+  goToPeeps: (model, event) => undefined
 };
 
 Component.define('map-page', MapPage);
