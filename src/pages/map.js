@@ -1,10 +1,10 @@
 /* eslint-disable */
 const Component = require('component');
-const { a, br, button, canvas, div, span, text, style } = require('component/src/html');
+const { a, br, button, canvas, div, span, text, style, mkElement } = require('component/src/html');
+
+require('./components/currentDate');
 
 const fs = require('fs');
-
-console.log(process.cwd());
 const styles = fs.readFileSync('src/pages/map.css');
 
 const MapPage = {
@@ -23,7 +23,7 @@ const MapPage = {
        , style({}, [ text(styles) ])
        , canvas({ id: 'map' }, [])
        , div({ id: 'menu' },
-            [ span({ id: 'date' }, [])
+            [ mkElement('current-date', { id: 'date' }, [])
             , br()
             , button({ class: 'menubtn', id: 'month_button' }, [ text('Next Month') ])
             , br()
