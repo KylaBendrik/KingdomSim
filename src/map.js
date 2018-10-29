@@ -11,10 +11,14 @@ State.peeps.push(State.addPeep('adult', 'female'));
 State.peeps.push(State.addPeep('adult', 'male'));
 State.peeps.push(State.addPeep('adult', 'female'));
 
-State.peeps[0].marriageID = 0;
-State.peeps[1].marriageID = 0;
-State.peeps[2].marriageID = 1;
-State.peeps[3].marriageID = 1;
+State.peeps[0].marriageID = State.marriageNum;
+State.peeps[1].marriageID = State.marriageNum;
+State.marriages.push({marriageNum: State.marriageNum, husband: State.peeps[0], wife: State.peeps[1], children:[], pregCountdown: 0});
+State.marriageNum ++;
+State.peeps[2].marriageID = State.marriageNum;
+State.peeps[3].marriageID = State.marriageNum;
+State.marriages.push({marriageNum: State.marriageNum, husband: State.peeps[2], wife: State.peeps[3], children:[], pregCountdown: 0});
+State.marriageNum ++;
 
 State.peeps[0].house= 0;
 State.peeps[1].house= 0;
@@ -446,9 +450,6 @@ const MapView = {
     }
     if (map[row][col].structureNum !== undefined) {
       const structure = State.findStructure(map[row][col].structureNum);
-      console.log('clicking on grid:', col, ',', row);
-      console.log('structure Im trying to click on', map[row][col].structureNum);
-      console.log('structure type Im trying to click on', structure.type);
 
       if (structure.type === 'farmland_empty' && State.currentMonth === 3) {
         MapView.updateBuilding(map[row][col].structureNum);

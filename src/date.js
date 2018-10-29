@@ -37,7 +37,7 @@ const DateView = {
     if ((peepSpots - State.peeps.length) > 0 && State.food >= State.peeps.length * 2) {
       emptyHouses = State.findEmptyHouses();
 
-      const ifNewPeep = Math.floor(Math.random() * 6);
+      const ifNewPeep = Math.floor(Math.random() * 10);
 
       if (emptyHouses.length > 0) {
                 // pick random empty house
@@ -65,6 +65,28 @@ const DateView = {
         if (confirm === true){ 
           State.peeps.push(newPeep);
         }
+      } else if (ifNewPeep === 2) {
+        console.log ("someone might have a baby");
+        //select family from list of marriages where pregCountdown: 0 *and there's room in the house*
+        const families = State.findAvailableFamilies();
+        console.log('families', families);
+        if (families.length > 0){
+          const family = families[Math.floor(Math.random() * families.length)];
+          console.log('the family chosen:', family);
+          //find house of mother
+          const mother = family.wife;
+          const house = mother.house;
+          //reset pregCountdown: 12
+          family.pregCountdown = 12;
+          //add baby
+          const newPeep = State.addPeep('baby', undefined);  
+          //assign father, mother, and house
+          newPeep.father = family.husband;
+          newPeep.mother = mother;
+          newPeep.house = house;
+          State.peeps.push(newPeep);
+        }
+        
       }
     }
 
