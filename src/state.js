@@ -25,6 +25,17 @@ const State = {
         { peepNum: undefined, name: 'Daniel', gender: 'male', marriageID: undefined, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
         { peepNum: undefined, name: 'Danielle', gender: 'female', marriageID: undefined, job: 'gatherer', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0, age: 20, birthMonth: undefined, birthYear: undefined },
   ],
+  randPeepMName: [
+    'Adam', 'Aldus', 'Amis', 'Bate', 'Col', 'Daw', 'Dicun', 'Elis', 'Elric', 'Firmin', 'Hamon', 'Hankin', 'Hann', 'Herry', 'Hob', 'Hopkin', 'Hudde', 'Jackin', 'John', 'Jankin', 'Larkin', 'Law', 'Mack', 'Morris', 'Nichol', 'Noll', 'Ode', 'Pate', 'Randel', 'Roul', 'Tenney', 'Wilkin', 'Wilmot', 'Wybert', 'Wymond', 'Wyot',
+    'Eudes', 'Garnier', 'Geoffroi', 'Gidie', 'Guarin', 'Jehan', 'Josse', 'Onfroi', 'Piers', 'Roland', 'Roul',
+    'Tielo', 'Jurian', 'Bogdan', 'Bogumil', 'Borislav', 'Borisu'
+  ],
+  
+  randPeepFName: [
+    'Aldith', 'Aldreda', 'Amice', 'Diot', 'Dye', 'Eda', 'Isabel', 'Isolde', 'Malle', 'Matty', 'Meggy', 'Molle', 'Rohese', 'Rohesia', 'Stace',
+    'Aalis', 'Amee', 'Cateline', 'Johanne', 'Melisende',
+    'Elena', 'Lyudmila', 'Militsa'
+  ],
   randPeepJob: [
     'farmer',
     'builder',
