@@ -28,7 +28,7 @@ const DateView = {
     DateView.treesGrow(MapView);
 
     for (const peep of State.peeps){
-      if (peep.age > 1){
+      if (peep.age > 0){
         State.food --;
       }
     }
@@ -41,7 +41,7 @@ const DateView = {
     if ((peepSpots - State.peeps.length) > 0 && State.food >= State.peeps.length * 2) {
       emptyHouses = State.findEmptyHouses();
 
-      const ifNewPeep = Math.floor(Math.random() * 10);
+      const ifNewPeep = Math.floor(Math.random() * 20);
 
       if (emptyHouses.length > 0) {
                 // pick random empty house
@@ -80,8 +80,8 @@ const DateView = {
           //find house of mother
           const mother = family.wife;
           const house = mother.house;
-          //reset pregCountdown: 12
-          family.pregCountdown = 12;
+          //reset pregCountdown: 14
+          family.pregCountdown = 14;
           //add baby
           const newPeep = State.addPeep('baby', undefined);  
           //assign father, mother, and house
@@ -141,7 +141,13 @@ const DateView = {
     for (const peep of State.peeps){
       if (State.currentMonth === peep.birthMonth){
         peep.age ++;
+        if (peep.age === 12){
+          peep.job = 'farmer';
+        }
       }
+    }
+    for (const family of State.marriages){
+      family.pregCountdown --;
     }
   },
   treesGrow(MapView) {

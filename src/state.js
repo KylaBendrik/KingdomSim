@@ -109,7 +109,7 @@ const State = {
       const mother = family.wife;
       //const house = mother.house;
       console.log ('family: ', family)
-      if (family.pregCountdown === 0){
+      if (family.pregCountdown <= 0){
         families.push(family);
       }
     }
