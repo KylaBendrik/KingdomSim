@@ -39,12 +39,13 @@ body {
     background-color: rgb(209, 209, 209);
 
 }
+#dateView {
+    height: 30px;
+    width: 140px;
+}
 #alert {
     font-size: 14pt;
     color: darkred;
-}
-#date {
-    font-size: 22pt;
 }
 .menubtn {
     background-color: rgb(190, 190, 190);

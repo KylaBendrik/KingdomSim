@@ -27,7 +27,11 @@ const DateView = {
     DateView.farming();
     DateView.treesGrow(MapView);
 
-    State.food -= State.peeps.length;
+    for (const peep of State.peeps){
+      if (peep.age > 1){
+        State.food --;
+      }
+    }
     
         // add new peeps
     const peepSpots = State.countPeepSpots();
@@ -369,6 +373,15 @@ const DateView = {
   },
 
   setDateText() {
+    if (State.currentYear < 10){
+      elements.date.style.fontSize = "28px"
+    } else if (State.currentYear > 9 && State.currentYear < 100){
+      elements.date.style.fontSize = "26px"
+    } else if (State.currentYear > 99 && State.currentYear < 1000){
+      elements.date.style.fontSize = "24px"
+    } else {
+      elements.date.style.fontSize = "21px"
+    }
     elements.date.textContent = (`${MONTHS[State.currentMonth]}, Year ${State.currentYear}`);
   },
 };
