@@ -1,7 +1,7 @@
 {
   "name": "kingdomsim",
   "productName": "KingdomSim",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "Lead your people to thrive in this new land!",
   "main": "./src/index.js",
   "scripts": {

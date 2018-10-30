@@ -115,6 +115,61 @@ const State = {
     }
     return families;
   },
+  findEligibleCouple(){
+    var couple = {husband: undefined, wife: undefined}
+    var lookingH = true;
+    var lookingW = true;
+    var coupleFound = true;
+    var hFather = undefined;
+    var wFather = undefined;
+    console.log ('looking for eligible couple')
+    while (lookingH === true){
+      for (const peep of State.peeps){
+        if (peep.gender === 'male' && peep.marriageID === undefined && peep.age > 17){
+          console.log ('found a man')
+          couple.husband = peep;
+          hFather = peep.father;
+          lookingH = false
+        }
+      }
+      if (lookingH === true){
+        console.log ('could not find man, quitting.')
+        lookingH = false;
+        coupleFound = false;
+      }
+    }
+
+    while (lookingW === true && coupleFound === true){
+      for (const peep of State.peeps){
+        wFather = peep.father;
+        if (peep.gender === 'female' && peep.marriageID === undefined && peep.age > 17){
+          if (hFather === undefined){
+            console.log ('found a woman')
+            couple.wife = peep;
+            lookingW = false
+          } else if (hFather !== wFather){
+            console.log ('found a woman')
+            couple.wife = peep;
+            lookingW = false
+          }
+        }
+      }
+      if (lookingW === true){
+        console.log ('could not find woman, quitting')
+        lookingW = false;
+        coupleFound = false;
+      }
+    }
+
+    if (coupleFound === true){
+      console.log ('found couple: ', couple.husband.name, ' and ', couple.wife.name)
+      return couple;
+    } else {
+      console.log ('unsucessful. returning undefined')
+      return undefined;
+    }
+    
+  },
   findEmptyHouses() {
     const emptyHouses = [];
     for (const house of State.houses) {

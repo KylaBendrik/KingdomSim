@@ -38,12 +38,39 @@ const DateView = {
 
     let emptyHouses = State.findEmptyHouses();
 
+    //if there are empty houses and an eligible couple, confirm to be married and move in
+    let couple = State.findEligibleCouple();
+    if (couple !== undefined && emptyHouses.length > 0){
+      let hDisplay = `${couple.husband.name}`;
+      let wDisplay = `${couple.wife.name}`;
+      if (couple.husband.father !== undefined){
+        hDisplay =   `${couple.husband.name}, son of ${couple.husband.father.name},`
+      }
+      if (couple.wife.father !== undefined){
+        wDisplay =   `${couple.wife.name}, daughter of ${couple.wife.father.name},`
+      }
+
+      var confirm = window.confirm(hDisplay + " and " + wDisplay + " would like to get married. \nMay they?");
+
+      if (confirm === true){
+        couple.husband.marriageID = State.marriageNum;
+        couple.wife.marriageID = State.marriageNum;
+        State.marriages.push({marriageNum: State.marriageNum, husband: couple.husband, wife: couple.wife, children:[], pregCountdown: 10});
+
+        couple.husband.house = emptyHouses[0].houseNum;
+        couple.wife.house = emptyHouses[0].houseNum;
+
+        State.marriageNum ++;
+        console.log (State.marriages);
+      }
+    }
+
     if ((peepSpots - State.peeps.length) > 0 && State.food >= State.peeps.length * 2) {
       emptyHouses = State.findEmptyHouses();
 
       const ifNewPeep = Math.floor(Math.random() * 20);
 
-      if (emptyHouses.length > 0) {
+      if (emptyHouses.length > 0 && State.food >= State.peeps.length * 10 && ifNewPeep === 2) {
                 // pick random empty house
         const peepHouse = emptyHouses[Math.floor(Math.random() * emptyHouses.length)];
         
@@ -69,7 +96,7 @@ const DateView = {
         if (confirm === true){ 
           State.peeps.push(newPeep);
         }
-      } else if (ifNewPeep === 2) {
+      } else if (ifNewPeep > 17 && State.food >= State.peeps.length * 4) {
         console.log ("someone might have a baby");
         //select family from list of marriages where pregCountdown: 0 *and there's room in the house*
         const families = State.findAvailableFamilies();
@@ -79,16 +106,24 @@ const DateView = {
           console.log('the family chosen:', family);
           //find house of mother
           const mother = family.wife;
-          const house = mother.house;
-          //reset pregCountdown: 14
-          family.pregCountdown = 14;
-          //add baby
-          const newPeep = State.addPeep('baby', undefined);  
-          //assign father, mother, and house
-          newPeep.father = family.husband;
-          newPeep.mother = mother;
-          newPeep.house = house;
-          State.peeps.push(newPeep);
+          const houseNum = mother.house;
+          const house = State.findHouseByHouse(houseNum)
+          const peepsInHouse = State.peepsInHouse(house);
+          console.log('peepsInHouse: ', peepsInHouse);
+          console.log('peepSpots: ', house.peepSpots)
+          
+          if (peepsInHouse < house.peepSpots){
+            //reset pregCountdown: 14
+            family.pregCountdown = 14;
+            //add baby
+            const newPeep = State.addPeep('baby', undefined);  
+            //assign father, mother, and house
+            newPeep.father = family.husband;
+            newPeep.mother = mother;
+            newPeep.house = houseNum;
+            State.peeps.push(newPeep);
+          }
+          
         }
         
       }
@@ -111,6 +146,7 @@ const DateView = {
     DateView.agePeeps();
     MapUtil.setWoodText(State.wood);
     MapUtil.setFoodText(State.food);
+    MapUtil.setPeepText(State.peeps);
     DateView.setDateText();
     DateView.displayAlerts();
   },
@@ -141,8 +177,17 @@ const DateView = {
     for (const peep of State.peeps){
       if (State.currentMonth === peep.birthMonth){
         peep.age ++;
+        //growing to adult-hood
         if (peep.age === 12){
-          peep.job = 'farmer';
+          const peepJob = Math.floor(Math.random() * 6)
+          if (peepJob === 1){
+            peep.job = 'gatherer';
+          }else if (peepJob === 2){
+            peep.job = 'builder';
+          } else {
+
+            peep.job = 'farmer';
+          }
         }
       }
     }
@@ -340,7 +385,7 @@ const DateView = {
           } else {
             pointsLeft -= 10;
             pointsUsed += 10;
-            State.food += 30;
+            State.food += 32;
           }
 
           MapView.updateBuilding(farm.structure);

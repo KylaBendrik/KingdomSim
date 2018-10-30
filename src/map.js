@@ -84,6 +84,7 @@ for (let y = 0; y < NUM_ROWS; y++) {
 document.addEventListener('DOMContentLoaded', () => {
   MapUtil.setWoodText(State.wood, State.maxWood);
   MapUtil.setFoodText(State.food);
+  MapUtil.setPeepText(State.peeps);
 });
 
 
@@ -95,6 +96,9 @@ const MapUtil = {
   },
   setFoodText(food) {
     document.getElementById('food').innerHTML = `${State.food}/${State.maxFood}`;
+  },
+  setPeepText(peeps) {
+    document.getElementById('peeps').innerHTML = `${State.peeps.length}`;
   },
   addStructure(tiles, texture, structureNum) {
     const [origin, ...rest] = tiles;
