@@ -32,6 +32,7 @@ const State = {
     'builder',
     'gatherer',
   ],
+  eyeAlleles: ['L', 'R', 'G'],
 
     // maptiles: {x, y, background, foreground, structureNum}
     // structures:{structureNum, type, originRow, originCol, pointsLeft, pointsStart}
@@ -39,6 +40,54 @@ const State = {
     // storages: {structure, maxWood, curWood, maxFood, curFood}
     // farmingQueue: {queueOrder, structure}
     // buildingQueue: {queueOrder, structure}
+
+  //GENETICS
+  //Two kinds of genes: Number based, and Trait Based
+  //Trait Based genes are basic Mendelian genes, usually color-focused
+  //TraitBased: EyeCol, HairHue, HairLig
+    //EyeCol - Alleles: Green (recessive), bLue (recessive), bRown (dominant)
+    //Phenotypes:
+      // GG - Green
+      // GL - Green
+      // GR - Hazel
+      // LL - Blue
+      // LR - Brown
+      // RR - Brown
+    //HairHue - Alleles: Blond (recessive), Red (Dominent)
+    //HairLig - Alleles: Black (Dominent), Grey (Dominent), White (Recessive)
+    //Hair Phenotypes:
+      // BB
+        // BB - Black
+        // BG - Brown
+        // BW - Brown
+        // GG - Brown
+        // GW - Dark Blond
+        // WW - Blond
+      // BR && RR
+        // BB - Black
+        // BG - Brown
+        // BW - Auburn
+        // GG - Brown
+        // GW - Auburn
+        // WW - Ginger
+  // Number Based Genes (all of the morph targets) are similar, but instead of letters, they are given numbers
+    // These numbers are averaged to get the phenotype
+    // EXAMPLE:
+    // Eye Width
+      // Father [0.2, 0.6] - Visual Result: 0.4
+      // Mother [0, 1] - Visual Result: 0.5
+      // Possible Child [0, 0.2] - Visual Result: 0.1
+
+  punnetSquare(father, mother){
+    //input is array of two : [A, B]
+    //output is another array of two: [A, B]
+    //select random from father, random from mother
+    const child = [];
+    const A = Math.floor(Math.random() * 2)
+    const B = Math.floor(Math.random() * 2)
+    child.push (father[A], mother[B]);
+    return child
+  },
   findStorageForWood(storages) {
     //find storage with most open wood spots. Compare MaxWood to CurWood.
   },
@@ -57,10 +106,11 @@ const State = {
     
     return spouse;
   },
-  addPeep(ageGroup, gender){
+  addPeep(ageGroup, gender, father, mother){
     const newPeep = { peepNum: undefined, name: undefined, gender: undefined,
       age: 0, birthMonth: undefined, birthYear: undefined, 
-      father: undefined, mother: undefined, 
+      father: undefined, mother: undefined,
+      genes: {eyeCol: []}, 
       marriageID: undefined, job: undefined, house: 0, 
       buildSkill: 0, 
       farmSkill: 0, 
@@ -92,14 +142,22 @@ const State = {
       newPeep.age = (Math.floor(Math.random() * 11) + 18);
       newPeep.birthMonth = Math.floor(Math.random() * 12);
       newPeep.birthYear = (State.currentYear - newPeep.age);
+      newPeep.genes.eyeCol.push(State.eyeAlleles[Math.floor(Math.random() * State.eyeAlleles.length)])
+      newPeep.genes.eyeCol.push(State.eyeAlleles[Math.floor(Math.random() * State.eyeAlleles.length)])
       
     }
     if (ageGroup === 'baby'){
       newPeep.age = 0
       newPeep.birthMonth = State.currentMonth;
       newPeep.birthYear = State.currentYear;
+      newPeep.father = father;
+      newPeep.mother = mother;
+      console.log('Fathers eyeCol: ', newPeep.father.genes.eyeCol)
+      console.log('Mothers eyeCol: ', newPeep.mother.genes.eyeCol)
+      newPeep.genes.eyeCol.push(State.punnetSquare(newPeep.father.genes.eyeCol, newPeep.mother.genes.eyeCol))
     }
     State.peepNum ++
+    console.log('eyeCol: ', newPeep.genes.eyeCol)
     return newPeep;
   },
   findAvailableFamilies(){

@@ -116,11 +116,10 @@ const DateView = {
             //reset pregCountdown: 14
             family.pregCountdown = 14;
             //add baby
-            const newPeep = State.addPeep('baby', undefined);  
-            //assign father, mother, and house
-            newPeep.father = family.husband;
-            newPeep.mother = mother;
+            const newPeep = State.addPeep('baby', undefined, family.husband, family.wife);  
+            //assign house
             newPeep.house = houseNum;
+            console.log('newPeep: ', newPeep)
             State.peeps.push(newPeep);
           }
           
