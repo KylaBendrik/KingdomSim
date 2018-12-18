@@ -1,64 +1,23 @@
-const loadTextures = require('./src/peepTextures');
+
 const State = require('./state');
+//const peepsMenu = document.getElementById(peepsMenu)
 
-document.addEventListener('DOMContentLoaded', () => {
-  const peepTable = document.getElementById('peepList');
 
-  PeepList.init(peepTable);
-});
-State.peeps.push({ name: 'Adam', job: 'unassigned', house: 0, buildSkill: 0, farmSkill: 0, gatherSkill: 0 });
+const PeepsView = {
 
-const PeepList = {
-  init(peepTable) {
-    for (const peep of State.peeps) {
-      const row = document.createElement('tr');
+  init(peeps_button, peepsMenu){
+    peeps_button.addEventListener('click', PeepsView.toggleMenu(peepsMenu))
+  },
 
-      const portraitCanvas = document.createElement('canvas');
-      const portraitCell = document.createElement('td');
-      portraitCell.appendChild(portraitCanvas);
-      PortraitView.init(portraitCanvas);
-
-      row.appendChild(portraitCell);
-      row.appendChild(PeepList.buildCell(peep.name));
-      row.appendChild(PeepList.buildCell(peep.job));
-      row.appendChild(PeepList.buildCell(peep.house));
-      row.appendChild(PeepList.buildCell(peep.buildSkill));
-      row.appendChild(PeepList.buildCell(peep.farmSkill));
-      row.appendChild(PeepList.buildCell(peep.gatherSkill));
-
-      peepTable.appendChild(row);
+  toggleMenu(peepsMenu){
+    console.log ("button pressed");
+    if (peepsMenu.style.display === "none"){
+      peepsMenu.style.display = "block"
+    } else {
+      peepsMenu.style.display = "none"
     }
-  },
+  }
 
-  buildCell(text) {
-    const cell = document.createElement('td');
-    cell.textContent = text;
-    return cell;
-  },
+}
 
-};
-
-
-const PortraitView = {
-  init(portrait) {
-    window.addEventListener('resize', () => PortraitView.render(portrait));
-    PortraitView.render(portrait);
-  },
-
-  draw(context, textures) {
-    context.drawImage(textures.defaultPortrait, 1, 1, 99, 132);
-    return textures;
-  },
-
-  render(portrait) {
-    const context = portrait.getContext('2d');
-    portrait.width = 99;
-    portrait.height = 132;
-
-    return loadTextures
-            .then(textures => PortraitView.draw(context, textures));
-  },
-};
-
-module.exports = PortraitView;
-
+module.exports = PeepsView;
